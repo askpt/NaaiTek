@@ -2,32 +2,14 @@
 
 isConnected(PersonA,PersonB):-connects(PersonA,PersonB,_);connects(PersonB,PersonA,_).
 
-%Predicate to test if PersonA is friend of PersonB
+%Predicate to test if PersonA is colleague of PersonB
 
+isColleague(PersonA,PersonB):-connects(PersonA,PersonB,1);connects(PersonB,PersonA,1).
 
-% isFriend(PersonA,PersonB):-connects(PersonA,PersonB);connects(PersonB,PersonA).
-%
+%Predicate to test if PersonA is friend of personB
 
-%Predicate to test if PersonA is common friend of PersonB
-
-% commonFriend(PersonA,PersonB,PersonC):-isFriend(PersonA,PersonB),isFriend(PersonB,PersonC).
-%
-
-%Predicate to build a list of every friends of a single person
-
-%listFriends(PersonA,Friends):-
-
-
-%Precicate to list every common friends between PersonA and PersonB
-
-
+isFriend(PersonA,PersonB):-connects(PersonA,PersonB,2);connects(PersonB,PersonA,2).
 
 %Predicate to test if PersonA is family of PersonB
 
-
-
-
-%Predicate to test if PersonA is colleague of PersonB
-
-%Predicate to test if PersonA is connected to PersonB
-
+isFamily(PersonA,PersonB):-connects(PersonA,PersonB,3);connects(PersonB,PersonA,3).
