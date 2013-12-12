@@ -18,6 +18,20 @@ isFamily(PersonA,PersonB):-connects(PersonA,PersonB,3);connects(PersonB,PersonA,
 
 listAllConnections(PersonA,L):-findall(PersonB,(isConnected(PersonA,PersonB)),L).
 
+%Predicate to list all colleagues of a certain person
+
+listAllColleagues(PersonA,L):-findall(PersonB,(isColleague(PersonA,PersonB)),L).
+
+%Predicate to list all friends of a certain person
+
+listAllFriends(PersonA,L):-findall(PersonB,(isFriend(PersonA,PersonB)),L).
+
+%Predicate to list every family members of a certain person
+
+listAllFamily(PersonA,L):-findall(PersonB,(isFamily(PersonA,PersonB)),L).
+
+
+
 
 
 
