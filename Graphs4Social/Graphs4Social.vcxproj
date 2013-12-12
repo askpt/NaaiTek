@@ -10,6 +10,12 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="graphs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="graphs.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0620958B-CBCE-4BED-AA54-B73E2A940420}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
