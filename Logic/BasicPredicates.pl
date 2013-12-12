@@ -13,3 +13,12 @@ isFriend(PersonA,PersonB):-connects(PersonA,PersonB,2);connects(PersonB,PersonA,
 %Predicate to test if PersonA is family of PersonB
 
 isFamily(PersonA,PersonB):-connects(PersonA,PersonB,3);connects(PersonB,PersonA,3).
+
+%Predicate to list all connections of a certain person
+
+listAllConnections(PersonA,L):-findall(PersonB,(isConnected(PersonA,PersonB)),L).
+
+
+
+
+
