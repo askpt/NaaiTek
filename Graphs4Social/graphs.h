@@ -1,3 +1,4 @@
+
 #ifndef _GRAPH_INCLUDE
 #define _GRAPH_INCLUDE
 
@@ -8,6 +9,7 @@
 
 typedef struct Node{
 	float x, y, z, width;
+	int user;
 }Node;
 
 typedef struct Path{
@@ -23,7 +25,7 @@ void addNode(Node);
 void deleteNode(int);
 void printNode(Node);
 void listNodes();
-Node createNode(float, float, float);
+Node createNode(float, float, float, int);
 
 void addPath(Path);
 void deletePath(int);

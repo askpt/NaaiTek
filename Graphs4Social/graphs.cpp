@@ -1,12 +1,15 @@
-#include "graphs.h"nrNodes
+#include "graphs.h"
 #include <iostream>
 #include <fstream>
+#include "User.h"
+
 
 #define __GRAFO__FILE__ "example.graph"
 
 Node nodes[_MAX_NODES_GRAPH];
 Path paths[_MAX_PATHS_GRAPH];
 int numNodes = 0, numPaths = 0;
+User users[_MAX_NODES_GRAPH];
 
 using namespace std;
 
@@ -40,11 +43,12 @@ void printNodes(){
 	for (int i = 0; i<numNodes; printNode(nodes[i++]));
 }
 
-Node createNode(float x, float y, float z){
+Node createNode(float x, float y, float z, int user){
 	Node node;
 	node.x = x;
 	node.y = y;
 	node.z = z;
+	node.user = user;
 	return node;
 }
 
