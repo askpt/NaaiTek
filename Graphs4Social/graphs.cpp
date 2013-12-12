@@ -115,7 +115,7 @@ void readGraph(){
 
 	myfile.open(__GRAFO__FILE__, ios::in);
 	if (!myfile.is_open()) {
-		cout << "Erro ao abrir " << __GRAFO__FILE__ << "para ler" << endl;
+		cout << "Error oppening " << __GRAFO__FILE__ << " to write" << endl;
 		exit(1);
 	}
 	myfile >> numNodes;
@@ -125,7 +125,7 @@ void readGraph(){
 	for (int i = 0; i<numPaths; i++)
 		myfile >> paths[i].nodei >> paths[i].nodef >> paths[i].weight >> paths[i].width;
 	myfile.close();
-	// calcula a largura de cada no = maior largura dos arcos que divergem/convergem desse/nesse no	
+	// calculates the width of each node = bigger width of the paths that diverge/converge from/to that node	
 	for (int i = 0; i<numNodes; i++){
 		nodes[i].width = 0;
 		for (int j = 0; j<numPaths; j++)

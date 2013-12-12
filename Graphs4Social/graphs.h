@@ -5,7 +5,7 @@
 #define _MAX_NODES_GRAPH 100
 #define _MAX_PATHS_GRAPH 200
 
-#define INFINITESIMAL 0.0001
+#define INFINITESIMAL 0.001
 
 typedef struct Node{
 	float x, y, z, width;
