@@ -9,8 +9,7 @@ using namespace std;
 
 #define degrees(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
-#define K_CONNECTION 1.1
-#define K_CIRCLE 2.1
+#define K_CIRCLE 1.5
 
 // luzes e materiais
 
@@ -271,7 +270,7 @@ void drawNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], material_
 	glEnable(GL_LIGHTING);
 }
 
-void drawCircle(GLint n, Node node)
+void drawCircumference(GLint n, Node node)
 {
 	GLfloat x0 = node.x;
 	GLfloat y0 = node.y;
@@ -279,23 +278,18 @@ void drawCircle(GLint n, Node node)
 
 	GLfloat r = K_CIRCLE * node.width / 2.0;
 
-	GLint i;
-	GLfloat t, x, y;
-	t = 0.0;
+	glPushMatrix();
+	glTranslatef(x0, y0, z0);
 
 	glBegin(GL_POLYGON);
-	glNormal3f(0, 0, 1);
-	for (i = 0; i < n; i++)
-	{
-		x = r * cos(t) + x0;
-		y = r * sin(t) + y0;
-		glVertex3f(x, y, z0);
-		t += 2.0*M_PI / n;
-	}
+	GLUquadricObj* pQuadric = gluNewQuadric();
+	gluSphere(pQuadric, r, n, n*4.0);
+
 	glEnd();
+	glPopMatrix();
 }
 
-void drawFloor(Node noi, Node nof, Path p)
+void drawCylinder(Node noi, Node nof, Path p)
 {
 	GLfloat xf = nof.x;
 	GLfloat yf = nof.y;
@@ -305,31 +299,23 @@ void drawFloor(Node noi, Node nof, Path p)
 	GLfloat yi = noi.y;
 	GLfloat zi = noi.z;
 
-	GLfloat si = K_CONNECTION*K_CIRCLE*noi.width / 2.0;
-	GLfloat sj = K_CONNECTION*K_CIRCLE*noi.width / 2.0;
-	GLfloat pij = sqrtf((xf - xi)*(xf - xi) + (yf - yi)*(yf - yi)) - si - sj;
+	GLfloat pij = sqrtf((xf - xi)*(xf - xi) + (yf - yi)*(yf - yi));
 	GLfloat hij = zf - zi;
 	GLfloat sij = sqrt(pij*pij + hij*hij);
 	GLfloat wij = p.width;
+	GLfloat r = wij / 2.0;
 	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
 	GLfloat bij = degrees(atan2(hij, pij));
 
 	glPushMatrix();
 	glTranslatef(xi, yi, zi);
 	glRotatef(aij, 0, 0, 1.0);
-	glTranslatef(si, 0.0, 0.0);
-	glRotatef(-bij, 0.0, 1.0, 0.0);
-	glTranslatef(sij / 2.0, 0.0, 0.0);
+	glRotatef(90 - bij, 0.0, 1.0, 0.0);
 
 	material(red_plastic);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0, 0.0, 1.0);
-
-	glVertex3f(-sij / 2.0, -wij / 2.0, 0.0);
-	glVertex3f(sij / 2.0, -wij / 2.0, 0.0);
-	glVertex3f(sij / 2.0, wij / 2.0, 0.0);
-	glVertex3f(-sij / 2.0, wij / 2.0, 0.0);
-	glEnd();
+	GLUquadricObj* pQuadric = gluNewQuadric();
+	gluCylinder(pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
+	gluDeleteQuadric(pQuadric);
 	glPopMatrix();
 
 }
@@ -340,43 +326,43 @@ void drawNode(int no){
 
 	material(blue);
 	for (int i = 0; i < numNodes; i++){
-		drawCircle(32, nodes[no]);
+		drawCircumference(32, nodes[no]);
 	}
 
 }
 
-void drawConnectionElement(Node noi, Node nof, Path path)
-{
-	GLfloat xf = nof.x;
-	GLfloat yf = nof.y;
-	GLfloat zf = nof.z;
-
-	GLfloat xi = noi.x;
-	GLfloat yi = noi.y;
-	GLfloat zi = noi.z;
-
-	GLfloat ri = K_CIRCLE * noi.width / 2.0;
-	GLfloat si = K_CONNECTION * ri;
-
-	GLfloat wij = path.width;
-	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
-
-	glPushMatrix();
-	glTranslatef(xi, yi, zi);
-	glRotatef(aij, 0.0, 0.0, 1.0);
-	glTranslatef(si / 2.0, 0.0, 0.0);
-
-	material(red_plastic);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0, 0.0, 1.0);
-
-	glVertex3f(-si / 2.0, -wij / 2.0, 0.0);
-	glVertex3f(si / 2.0, -wij / 2.0, 0.0);
-	glVertex3f(si / 2.0, wij / 2.0, 0.0);
-	glVertex3f(-si / 2.0, wij / 2.0, 0.0);
-	glEnd();
-	glPopMatrix();
-}
+//void drawConnectionElement(Node noi, Node nof, Path path)
+//{
+//	GLfloat xf = nof.x;
+//	GLfloat yf = nof.y;
+//	GLfloat zf = nof.z;
+//
+//	GLfloat xi = noi.x;
+//	GLfloat yi = noi.y;
+//	GLfloat zi = noi.z;
+//
+//	GLfloat ri = K_CIRCLE * noi.width / 2.0;
+//	GLfloat si = K_CONNECTION * ri;
+//
+//	GLfloat wij = path.width;
+//	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
+//
+//	glPushMatrix();
+//	glTranslatef(xi, yi, zi);
+//	glRotatef(aij, 0.0, 0.0, 1.0);
+//	glTranslatef(si / 2.0, 0.0, 0.0);
+//
+//	material(red_plastic);
+//	glBegin(GL_QUADS);
+//	glNormal3f(0.0, 0.0, 1.0);
+//
+//	glVertex3f(-si / 2.0, -wij / 2.0, 0.0);
+//	glVertex3f(si / 2.0, -wij / 2.0, 0.0);
+//	glVertex3f(si / 2.0, wij / 2.0, 0.0);
+//	glVertex3f(-si / 2.0, wij / 2.0, 0.0);
+//	glEnd();
+//	glPopMatrix();
+//}
 
 void drawPath(Path path){
 	Node *noi, *nof;
@@ -390,12 +376,8 @@ void drawPath(Path path){
 		noi = &nodes[path.nodef];
 	}
 
-	//drawConnectionElement (at Beginnig)
-	drawConnectionElement(*noi, *nof, path);
-	//drawConnectionElement (at End)
-	drawConnectionElement(*nof, *noi, path);
-	//drawRamp
-	drawFloor(*noi, *nof, path);
+	//drawCilinder
+	drawCylinder(*noi, *nof, path);
 
 }
 
