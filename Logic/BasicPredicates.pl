@@ -1,6 +1,6 @@
 %Predicate to test if personA is connected with personB
 
-isConnected(PersonA,PersonB):-connects(PersonA,PersonB,_);connects(PersonB,PersonA,_).
+isConnected(PersonA,PersonB):-connects(PersonA,PersonB,_);connects(PersonB,PersonA,_),PersonA\=PersonB.
 
 %Predicate to test if PersonA is colleague of PersonB
 
@@ -32,14 +32,42 @@ listAllFamily(PersonA,L):-findall(PersonB,(isFamily(PersonA,PersonB)),L).
 
 %Predicate to test if PersonA has common connections with personB
 
-hasCommonConnection(PersonA,PersonB):-isConnected(PersonA,PersonB),isConnected(PersonB,PersonC).
+hasCommonConnections(PersonA,PersonB):-isConnected(PersonA,PersonC),isConnected(PersonB,PersonC).
 
 %Predicate to test if PersonA has common colleagues with personB
 
-hasCommonColleagues(PersonA,PersonB):-isColleague(PersonA,PersonB),isColleague(PersonB,PersonC).
+hasCommonColleagues(PersonA,PersonB):-isColleague(PersonA,PersonC),isColleague(PersonB,PersonC).
 
+%Predicate to test if PersonA has common friends with PersonB
 
+hasCommonFriends(PersonA,PersonB):-isFriend(PersonA,PersonC),isFriend(PersonB,PersonC).
 
+%Predicate to test if PersonA has common family with PersonB
+
+hasCommonFamily(PersonA,PersonB):-isFamily(PersonA,PersonC),isFamily(PersonB,PersonC).
+
+%Predicate to search common elements between two different lists
+
+intersection([],_,[]).
+intersection([X|L1],L2,[X|LI]):-member(X,L2),!,intersection(L1,L2,LI).
+intersection([_|L1],L2,LI):-intersection(L1,L2,LI).
+
+% Predicate to list every common connections between two persons
+% (PersonA and PersonB)
+
+listCommonConnections(PersonA,PersonB,L):-findall(PersonC,(isConnected(PersonA,PersonC),isConnected(PersonB,PersonC)),L).
+
+%Predicate to list every common colleagues between PersonA and PersonB
+
+listCommonColleagues(PersonA,PersonB,L):-findall(PersonC,(isColleague(PersonA,PersonC),isColleague(PersonB,PersonC)),L).
+
+%Precicate to list every common friends between PersonA and PersonB
+
+listCommonFrieds(PersonA,PersonB,L):-findall(PersonC,(isFriend(PersonA,PersonC),isFriend(PersonB,PersonC)),L).
+
+%Prediate to list every common family between PersonA and PersonB
+
+listCommonFamily(PersonA,PersonB,L):-findall(PersonC,(isFamily(PersonA,PersonC),isFamily(PersonB,PersonC)),L).
 
 
 
