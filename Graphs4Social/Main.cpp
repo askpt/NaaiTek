@@ -9,6 +9,8 @@ using namespace std;
 
 #define degrees(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
+#define K_CONNECTION 1.1
+#define K_CIRCLE 2.1
 
 // luzes e materiais
 
@@ -269,8 +271,14 @@ void drawNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], material_
 	glEnable(GL_LIGHTING);
 }
 
-void drawCircle(GLint n, GLfloat x0, GLfloat y0, GLfloat z0, GLfloat r)
+void drawCircle(GLint n, Node node)
 {
+	GLfloat x0 = node.x;
+	GLfloat y0 = node.y;
+	GLfloat z0 = node.z + INFINITESIMAL;
+
+	GLfloat r = K_CIRCLE * node.width / 2.0;
+
 	GLint i;
 	GLfloat t, x, y;
 	t = 0.0;
@@ -287,9 +295,8 @@ void drawCircle(GLint n, GLfloat x0, GLfloat y0, GLfloat z0, GLfloat r)
 	glEnd();
 }
 
-//inclination: 0 -> inclina norte-sul; 1 -> inclina este-oeste; 3 -> inclina na diagonal; default -> não inclina;
-void drawFloor(Node noi, Node nof, Path p){
-
+void drawFloor(Node noi, Node nof, Path p)
+{
 	GLfloat xf = nof.x;
 	GLfloat yf = nof.y;
 	GLfloat zf = nof.z;
@@ -298,8 +305,8 @@ void drawFloor(Node noi, Node nof, Path p){
 	GLfloat yi = noi.y;
 	GLfloat zi = noi.z;
 
-	GLfloat si = 0.5*noi.width;
-	GLfloat sj = 0.5*nof.width;
+	GLfloat si = K_CONNECTION*K_CIRCLE*noi.width / 2.0;
+	GLfloat sj = K_CONNECTION*K_CIRCLE*noi.width / 2.0;
 	GLfloat pij = sqrtf((xf - xi)*(xf - xi) + (yf - yi)*(yf - yi)) - si - sj;
 	GLfloat hij = zf - zi;
 	GLfloat sij = sqrt(pij*pij + hij*hij);
@@ -333,9 +340,42 @@ void drawNode(int no){
 
 	material(blue);
 	for (int i = 0; i < numNodes; i++){
-		drawCircle(32, nodes[no].x, nodes[no].y, nodes[no].z + INFINITESIMAL, nodes[no].width);
+		drawCircle(32, nodes[no]);
 	}
 
+}
+
+void drawConnectionElement(Node noi, Node nof, Path path)
+{
+	GLfloat xf = nof.x;
+	GLfloat yf = nof.y;
+	GLfloat zf = nof.z;
+
+	GLfloat xi = noi.x;
+	GLfloat yi = noi.y;
+	GLfloat zi = noi.z;
+
+	GLfloat ri = K_CIRCLE * noi.width / 2.0;
+	GLfloat si = K_CONNECTION * ri;
+
+	GLfloat wij = path.width;
+	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
+
+	glPushMatrix();
+	glTranslatef(xi, yi, zi);
+	glRotatef(aij, 0.0, 0.0, 1.0);
+	glTranslatef(si / 2.0, 0.0, 0.0);
+
+	material(red_plastic);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0, 0.0, 1.0);
+
+	glVertex3f(-si / 2.0, -wij / 2.0, 0.0);
+	glVertex3f(si / 2.0, -wij / 2.0, 0.0);
+	glVertex3f(si / 2.0, wij / 2.0, 0.0);
+	glVertex3f(-si / 2.0, wij / 2.0, 0.0);
+	glEnd();
+	glPopMatrix();
 }
 
 void drawPath(Path path){
@@ -351,7 +391,9 @@ void drawPath(Path path){
 	}
 
 	//drawConnectionElement (at Beginnig)
+	drawConnectionElement(*noi, *nof, path);
 	//drawConnectionElement (at End)
+	drawConnectionElement(*nof, *noi, path);
 	//drawRamp
 	drawFloor(*noi, *nof, path);
 
