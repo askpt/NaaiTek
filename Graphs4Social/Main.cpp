@@ -287,86 +287,48 @@ void drawCircle(GLint n, GLfloat x0, GLfloat y0, GLfloat z0, GLfloat r)
 	glEnd();
 }
 
-//angle: 0 -> inclina norte-sul; 1 -> inclina este-oeste; default -> não inclina;
-void drawFloor(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int angle){
-	GLdouble v1[3], v2[3], cross[3];
-	GLdouble length;
-	v1[0] = xf - xi;
-	v1[1] = 0;
-	v2[0] = 0;
-	v2[1] = yf - yi;
+//inclination: 0 -> inclina norte-sul; 1 -> inclina este-oeste; 3 -> inclina na diagonal; default -> não inclina;
+void drawFloor(Node noi, Node nof, Path p){
 
-	switch (angle) {
-	case 0:
-		v1[2] = 0;
-		v2[2] = zf - zi;
-		CrossProduct(v1, v2, cross);
-		//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-		length = VectorNormalize(cross);
-		//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
+	GLfloat xf = nof.x;
+	GLfloat yf = nof.y;
+	GLfloat zf = nof.z;
 
-		material(red_plastic);
-		glBegin(GL_QUADS);
-		glNormal3dv(cross);
-		glVertex3f(xi, yi, zi);
-		glVertex3f(xf, yi, zi);
-		glVertex3f(xf, yf, zf);
-		glVertex3f(xi, yf, zf);
-		glEnd();
-		if (state.showNormals) {
-			drawNormal(xi, yi, zi, cross, red_plastic);
-			drawNormal(xf, yi, zi, cross, red_plastic);
-			drawNormal(xf, yf, zf, cross, red_plastic);
-			drawNormal(xi, yi, zf, cross, red_plastic);
-		}
-		break;
-	case 1:
-		v1[2] = zf - zi;
-		v2[2] = 0;
-		CrossProduct(v1, v2, cross);
-		//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-		length = VectorNormalize(cross);
-		//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-		material(red_plastic);
-		glBegin(GL_QUADS);
-		glNormal3dv(cross);
-		glVertex3f(xi, yi, zi);
-		glVertex3f(xf, yi, zf);
-		glVertex3f(xf, yf, zf);
-		glVertex3f(xi, yf, zi);
-		glEnd();
-		if (state.showNormals) {
-			drawNormal(xi, yi, zi, cross, red_plastic);
-			drawNormal(xf, yi, zf, cross, red_plastic);
-			drawNormal(xf, yf, zf, cross, red_plastic);
-			drawNormal(xi, yi, zi, cross, red_plastic);
-		}
-		break;
-	default:
-		cross[0] = 0;
-		cross[1] = 0;
-		cross[2] = 1;
-		material(red_plastic);
-		glBegin(GL_QUADS);
-		glNormal3f(0, 0, 1);
-		glVertex3f(xi, yi, zi);
-		glVertex3f(xf, yi, zf);
-		glVertex3f(xf, yf, zf);
-		glVertex3f(xi, yf, zi);
-		glEnd();
+	GLfloat xi = noi.x;
+	GLfloat yi = noi.y;
+	GLfloat zi = noi.z;
 
-		if (state.showNormals) {
-			drawNormal(xi, yi, zi, cross, red_plastic);
-			drawNormal(xf, yi, zf, cross, red_plastic);
-			drawNormal(xf, yf, zf, cross, red_plastic);
-			drawNormal(xi, yi, zi, cross, red_plastic);
-		}
-		break;
-	}
+	GLfloat si = 0.5*noi.width;
+	GLfloat sj = 0.5*nof.width;
+	GLfloat pij = sqrtf((xf - xi)*(xf - xi) + (yf - yi)*(yf - yi)) - si - sj;
+	GLfloat hij = zf - zi;
+	GLfloat sij = sqrt(pij*pij + hij*hij);
+	GLfloat wij = p.width;
+	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
+	GLfloat bij = degrees(atan2(hij, pij));
+
+	glPushMatrix();
+	glTranslatef(xi, yi, zi);
+	glRotatef(aij, 0, 0, 1.0);
+	glTranslatef(si, 0.0, 0.0);
+	glRotatef(-bij, 0.0, 1.0, 0.0);
+	glTranslatef(sij / 2.0, 0.0, 0.0);
+
+	material(red_plastic);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0, 0.0, 1.0);
+
+	glVertex3f(-sij / 2.0, -wij / 2.0, 0.0);
+	glVertex3f(sij / 2.0, -wij / 2.0, 0.0);
+	glVertex3f(sij / 2.0, wij / 2.0, 0.0);
+	glVertex3f(-sij / 2.0, wij / 2.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
 }
 
 void drawNode(int no){
-	Path arco = paths[0];
+	Path path = paths[0];
 	Node *noi = &nodes[no], *nof;
 
 	material(blue);
@@ -376,64 +338,23 @@ void drawNode(int no){
 
 }
 
-void drawPath(Path arco){
+void drawPath(Path path){
 	Node *noi, *nof;
 
-	if (nodes[arco.nodei].x == nodes[arco.nodef].x){
-		// vertical path
-		if (nodes[arco.nodei].y < nodes[arco.nodef].y){
-			noi = &nodes[arco.nodei];
-			nof = &nodes[arco.nodef];
-		}
-		else{
-			nof = &nodes[arco.nodei];
-			noi = &nodes[arco.nodef];
-		}
-
-		//nof->x + 0.5*arco.width, nof->y - nof->width,     nof->z  --END LOCATION BEFORE
-		//nof->x - 0.5*arco.width, nof->y - 0.5*nof->width, nof->z  --END LOCATION AFTER
-
-		//noi->x - 0.5*arco.width, noi->y + noi->width,     noi->z  --BEGIN LOCATION BEFORE
-		//noi->x + 0.5*arco.width, noi->y + 0.5*noi->width, noi->z  --BEGIN LOCATION AFTER
-
-		//drawConnectionElement (at Beginnig)
-		drawFloor(noi->x + 0.5*arco.width, noi->y + 0.5*noi->width, noi->z, noi->x - 0.5*arco.width, noi->y + noi->width, noi->z, 2);
-		//drawConnectionElement (at End)
-		drawFloor(nof->x + 0.5*arco.width, nof->y - nof->width, nof->z, nof->x - 0.5*arco.width, nof->y - 0.5*nof->width, nof->z, 2);
-		//drawRamp
-		drawFloor(noi->x - 0.5*arco.width, noi->y + noi->width, noi->z, nof->x + 0.5*arco.width, nof->y - nof->width, nof->z, 0);
+	if (nodes[path.nodei].y < nodes[path.nodef].y){
+		noi = &nodes[path.nodei];
+		nof = &nodes[path.nodef];
 	}
 	else{
-		if (nodes[arco.nodei].y == nodes[arco.nodef].y){
-			//horizontal path
-			if (nodes[arco.nodei].x < nodes[arco.nodef].x){
-				noi = &nodes[arco.nodei];
-				nof = &nodes[arco.nodef];
-			}
-			else{
-				nof = &nodes[arco.nodei];
-				noi = &nodes[arco.nodef];
-			}
-
-
-			//nof->x - nof->width,      nof->y + 0.5*arco.width, nof->z  --END LOCATION BEFORE
-			//nof->x + 0.25*nof->width, nof->y - 0.5*arco.width, nof->z  --END LOCATION AFTER
-
-			//noi->x + noi->width,      noi->y - 0.5*arco.width, noi->z  --BEGIN LOCATION BEFORE
-			//noi->x - 0.25*noi->width, noi->y + 0.5*arco.width, noi->z  --BEGIN LOCATION AFTER
-
-			//drawConnectionElement (at Beginnig)
-			drawFloor(noi->x - 0.25*noi->width, noi->y + 0.5*arco.width, noi->z, noi->x + noi->width, noi->y - 0.5*arco.width, noi->z, 2);
-			//drawConnectionElement (at End)
-			drawFloor(nof->x - nof->width, nof->y + 0.5*arco.width, nof->z, nof->x + 0.25*nof->width, nof->y - arco.width*0.5, nof->z, 2);
-			//drawRamp
-			drawFloor(noi->x + noi->width, noi->y - 0.5*arco.width, noi->z, nof->x - nof->width, nof->y + 0.5*arco.width, nof->z, 1);
-		}
-		else{
-			//to do: diagonal path
-			cout << "Diagonal Path... Not Implemented\n";
-		}
+		nof = &nodes[path.nodei];
+		noi = &nodes[path.nodef];
 	}
+
+	//drawConnectionElement (at Beginnig)
+	//drawConnectionElement (at End)
+	//drawRamp
+	drawFloor(*noi, *nof, path);
+
 }
 
 void drawGraph(){
