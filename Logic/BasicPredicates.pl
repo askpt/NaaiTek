@@ -30,6 +30,16 @@ listAllFriends(PersonA,L):-findall(PersonB,(isFriend(PersonA,PersonB)),L).
 
 listAllFamily(PersonA,L):-findall(PersonB,(isFamily(PersonA,PersonB)),L).
 
+%Predicate to test if PersonA has common connections with personB
+
+hasCommonConnection(PersonA,PersonB):-isConnected(PersonA,PersonB),isConnected(PersonB,PersonC).
+
+%Predicate to test if PersonA has common colleagues with personB
+
+hasCommonColleagues(PersonA,PersonB):-isColleague(PersonA,PersonB),isColleague(PersonB,PersonC).
+
+
+
 
 
 
