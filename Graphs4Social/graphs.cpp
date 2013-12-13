@@ -10,6 +10,7 @@ Node nodes[_MAX_NODES_GRAPH];
 Path paths[_MAX_PATHS_GRAPH];
 int numNodes = 0, numPaths = 0;
 User users[_MAX_NODES_GRAPH];
+Connection connections[_MAX_PATHS_GRAPH];
 
 using namespace std;
 
@@ -43,7 +44,7 @@ void printNodes(){
 	for (int i = 0; i<numNodes; printNode(nodes[i++]));
 }
 
-Node createNode(float x, float y, float z, int user){
+Node createNode(float x, float y, float z, User user){
 	Node node;
 	node.x = x;
 	node.y = y;

@@ -1,4 +1,5 @@
-
+#include "User.h"
+#include "Connection.h"
 #ifndef _GRAPH_INCLUDE
 #define _GRAPH_INCLUDE
 
@@ -9,12 +10,13 @@
 
 typedef struct Node{
 	float x, y, z, width;
-	int user;
+	User user;
 }Node;
 
 typedef struct Path{
 	int nodei, nodef;
 	float weight, width;
+	Connection connection;                                                    
 }Path;
 
 extern Node nodes[];
@@ -25,7 +27,7 @@ void addNode(Node);
 void deleteNode(int);
 void printNode(Node);
 void listNodes();
-Node createNode(float, float, float, int);
+Node createNode(float, float, float, User);
 
 void addPath(Path);
 void deletePath(int);

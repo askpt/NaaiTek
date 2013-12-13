@@ -6,17 +6,9 @@ class User
 public:
 	User();
 	~User();
-
+	int iduser;
 private:
 
 };
-
-User::User()
-{
-}
-
-User::~User()
-{
-}
 
 #endif // !User_
