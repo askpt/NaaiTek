@@ -3,10 +3,10 @@
 %
 
 % loads knowledge base
-['KnowledgeBase.pl'].
+:- compile('KnowledgeBase.pl').
 
 % loads basic basic predicates
-['BasicPredicates.pl'].
+:- compile('BasicPredicates.pl').
 
 % loads graph search algorittms
-['GraphSearchAlgorithms.pl'].
+:- compile('GraphSearchAlgorithms.pl').
