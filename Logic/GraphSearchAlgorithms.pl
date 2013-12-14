@@ -47,6 +47,15 @@ next_node(X, T, Z) :- connects(X, Z, _),
 % it would be better, or not, to change which node to expand; this evaluation is based on the accumulated
 % strength from the root node until the evaluated node (this method will allow to evaluate the path, in the 
 % social graph, that guarantees that is going through the "strongest" relationships)
+%
+% in this search method the cost from PersonA to PersonB is an average cost
+% example: 
+% A - (1) - B - (1) - C - (1) - D
+% will be sorted ahead of
+% A - (2) - D
+%
+% note that this method is sorting in an ascending order, which means that in order to get the strongest
+% connection we need to get the LAST element of the list
 
 branch_and_bound(PersonA, PersonB, List) :- branch_and_bound_aux([(0, [PersonA])], PersonB, Path), reverse(Path, List).
 
@@ -56,9 +65,16 @@ branch_and_bound_aux([(_, [PersonB | _]) | Remaining], PersonB, Path) :- !, bran
 
 branch_and_bound_aux([(Cost, [Last | Tail]) | Others], PersonB, Path) :- 
 					findall((CostC, [PersonZ, Last | Tail]),
-					(next_node_b_b(Last, Tail, PersonZ, CostC1), CostC is CostC1 + Cost), List),
+					(next_node_b_b(Last, Tail, PersonZ, CostC1), 
+					countElementsInList([PersonZ, Last | Tail], TotalNodes), 
+					% line below was before taking average cost
+					%CostC is CostC1 + Cost), 
+					CostC is (CostC1 + Cost) / TotalNodes), 
+					List),
 					append(Others, List, PathN),
 					sort(PathN, PathN1),
+					% println for test only
+					%write(CostC), nl, write(TotalNodes), nl,
 					branch_and_bound_aux(PathN1, PersonB, Path).
 
 next_node_b_b(PersonX, List, PersonZ, Cost) :- connects(PersonX, PersonZ, Cost), not(member(PersonZ, List)).
