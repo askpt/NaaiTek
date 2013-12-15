@@ -18,11 +18,6 @@ server(Port) :-
 % creating a json object
 :- json_object path(path:list).
 
-test :-
-  prolog_to_json(circle(coord(3, 5)), JSON_Object),
-  format(user_output, '~w', JSON_Object).
-
-
 %handle(Request) :-
         %http_read_json(Request, JSONIn),
         %json_to_prolog(JSONIn, PrologIn),

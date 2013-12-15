@@ -20,3 +20,10 @@ $ swipl
 
 6) opened the following address in browser
 http://uvm061.dei.isep.ipp.pt:5000/hello_lapr5
+
+
+
+Currently available services:
+http://uvm061.dei.isep.ipp.pt:9000/depth_search
+http://uvm061.dei.isep.ipp.pt:9000/breadth_search
+http://uvm061.dei.isep.ipp.pt:9000/branch_and_bound
