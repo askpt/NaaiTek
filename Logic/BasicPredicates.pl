@@ -78,7 +78,7 @@ listCommonColleagues(PersonA,PersonB,L):-findall(PersonC,(isColleague(PersonA,Pe
 
 %Precicate to list every common friends between PersonA and PersonB
 
-listCommonFrieds(PersonA,PersonB,L):-findall(PersonC,(isFriend(PersonA,PersonC),isFriend(PersonB,PersonC)),L).
+listCommonFriends(PersonA,PersonB,L):-findall(PersonC,(isFriend(PersonA,PersonC),isFriend(PersonB,PersonC)),L).
 
 %Prediate to list every common family between PersonA and PersonB
 
