@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "User.h"
-
+#include "Json.h"
 
 #define __GRAFO__FILE__ "example.graph"
 
@@ -112,6 +112,10 @@ void saveGraph(){
 }
 
 void readGraph(){
+	
+	/*
+	utility::string_t uri = L"http://uvm061.dei.isep.ipp.pt:9000/branch_and_bound?personA=Joao&personB=JoseCid";
+	IterateJSONValue(uri);*/
 	ifstream myfile;
 
 	myfile.open(__GRAFO__FILE__, ios::in);
