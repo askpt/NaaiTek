@@ -37,7 +37,7 @@ breadth_search_aux([[Last | Tail] | Remaining], PersonB, List) :- findall([Perso
 
 breadth_search_aux([[PersonB | Tail] | Remaining], PersonB, List) :- !, breadth_search_aux(Remaining, PersonB, List).
 
-next_node(X, T, Z) :- connects(X, Z, _), 
+next_node(X, T, Z) :- isConnected(X, Z), 
 						not(member(Z, T)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
