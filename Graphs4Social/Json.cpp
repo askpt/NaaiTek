@@ -49,6 +49,7 @@ pplx::task<json::value> RequestJSONValueAsync(utility::string_t baseUrl)
 void IterateJSONValue(utility::string_t baseUri)
 {
 	// Create a JSON object.
+	// All data will be saved in json object
 	json::value obj = RequestJSONValueAsync(baseUri).get();
 	/*
 	obj[L"key1"] = json::value::boolean(false);
@@ -78,18 +79,18 @@ void IterateJSONValue(utility::string_t baseUri)
 
 	//wcout << obj << endl;
 
-
+	// Get a unique value
 	//wcout << obj[L"stat"] << endl;
 	
-	for (auto iter = obj.cbegin(); iter != obj.cend(); ++iter)
-	{
+	//for (auto iter = obj.cbegin(); iter != obj.cend(); ++iter)
+	//{
 	// Make sure to get the value as const reference otherwise you will end up copying
 	// the whole JSON value recursively which can be expensive if it is a nested object.
-	const json::value &str = iter->first;
-	const json::value &v = iter->second;
+	//const json::value &str = iter->first;
+	//const json::value &v = iter->second;
 
 	//Perform actions here to process each string and value in the JSON object...
-	std::wcout << L"String: " << str.as_string() << L", Value: " << v.to_string() << endl;
+	//std::wcout << L"String: " << str.as_string() << L", Value: " << v.to_string() << endl;
 	}
 	/*
 	for (auto iter = obj.begin(); iter != obj.end(); ++iter)
