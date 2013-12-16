@@ -14,18 +14,18 @@ $ sudo mkdir /var/www/PROLOG_WEBSERVER
 4) ran swi-prolog
 $ swipl
 
-5) loaded test.pl and started the server at port 5000
+5) loaded test.pl and started the server at port 8888
 ?- ['test.pl']
-?- server(5000).
+?- server(8888).
 
 6) opened the following address in browser
-http://uvm061.dei.isep.ipp.pt:5000/hello_lapr5
-
-
+http://uvm061.dei.isep.ipp.pt:8888/hello_lapr5
 
 Currently available services:
-http://uvm061.dei.isep.ipp.pt:9000/depth_search
-http://uvm061.dei.isep.ipp.pt:9000/breadth_search
-http://uvm061.dei.isep.ipp.pt:9000/branch_and_bound
+http://uvm061.dei.isep.ipp.pt:8888/depth_search
+http://uvm061.dei.isep.ipp.pt:8888/breadth_search
+http://uvm061.dei.isep.ipp.pt:8888/branch_and_bound
+http://uvm061.dei.isep.ipp.pt:8888/branch_and_bound?personA=Joao&personB=JoseCid
 
-http://uvm061.dei.isep.ipp.pt:9000/branch_and_bound?personA=Joao&personB=JoseCid
+To start the Prolog server just execute the following command:
+/etc/init.d/start-prolog-server.sh 
