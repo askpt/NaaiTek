@@ -85,7 +85,8 @@ listCommonFrieds(PersonA,PersonB,L):-findall(PersonC,(isFriend(PersonA,PersonC),
 listCommonFamily(PersonA,PersonB,L):-findall(PersonC,(isFamily(PersonA,PersonC),isFamily(PersonB,PersonC)),L).
 
 
-
+connectionCost(PersonA, PersonB, Cost) :- 
+	(connects(PersonA, PersonB, Cost1);connects(PersonB, PersonA, Cost1)), Cost is Cost1.
 
 
 

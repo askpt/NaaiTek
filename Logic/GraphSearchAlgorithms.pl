@@ -77,5 +77,8 @@ branch_and_bound_aux([(Cost, [Last | Tail]) | Others], PersonB, Path) :-
 					%write(CostC), nl, write(TotalNodes), nl,
 					branch_and_bound_aux(PathN1, PersonB, Path).
 
-next_node_b_b(PersonX, List, PersonZ, Cost) :- connects(PersonX, PersonZ, Cost), not(member(PersonZ, List)).
+next_node_b_b(PersonX, List, PersonZ, Cost) :- isConnected(PersonX, PersonZ),
+								connectionCost(PersonX, PersonZ, C),
+								Cost is C, 
+								not(member(PersonZ, List)).
 
