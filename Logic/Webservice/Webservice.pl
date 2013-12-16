@@ -5,6 +5,7 @@
 % prolog server
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
+:- use_module(library(http/http_parameters)).
 
 % supporting json
 :- use_module(library(http/json)).
@@ -21,7 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % test request
-:- http_handler(root(give_me_json), json_test, []).		
+:- http_handler(root(give_me_json), give_me_json, []).          
 
 % request for depth search on graph
 :- http_handler(root(depth_search), depth_search, []).
@@ -39,7 +40,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % initiates server at given port
-server(Port) :-						
+server(Port) :-                                         
         http_server(http_dispatch, [port(Port)]).
 
 
@@ -51,35 +52,36 @@ server(Port) :-
 %handle(Request) :-
         %http_read_json(Request, JSONIn),
         %json_to_prolog(JSONIn, PrologIn),
-        %<compute>(PrologIn, PrologOut),		% application body
+        %<compute>(PrologIn, PrologOut),                % application body
         %prolog_to_json(PrologOut, JSONOut),
         %prolog_to_json(circle(coord(3, 5)), JSON_Object),
         %reply_json(JSON_Object).
 
 
 % test request
-json_test(_Request) :-					
+give_me_json(_Request) :-
+                %http_parameters(_Request, [name(Module, [])]),                                 
         prolog_to_json(path(['Vicky', 'Ana', 'Joao', 'Andre', 'Diogo', 'Francisco', 'JoseCid']), JSON_Object),
         reply_json(JSON_Object).
 
 
 % depth search
 depth_search(_Request) :-
-	% test only, to be replaced by variables
-	depth_search('Joao', 'JoseCid', List),
-	prolog_to_json(path(List), JSON_Object),
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),        
+                depth_search(PersonA, PersonB, List),
+                prolog_to_json(path(List), JSON_Object),
         reply_json(JSON_Object).
 
 % breath search
 breadth_search(_Request) :-
-	% test only, to be replaced by variables
-	breadth_search('Joao', 'JoseCid', List),
-	prolog_to_json(path(List), JSON_Object),
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                breadth_search(PersonA, PersonB, List),
+                prolog_to_json(path(List), JSON_Object),
         reply_json(JSON_Object).
 
 % branch and bound
 branch_and_bound(_Request) :-
-	% test only, to be replaced by variables
-	branch_and_bound('Joao', 'JoseCid', List),
-	prolog_to_json(path(List), JSON_Object),
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                branch_and_bound(PersonA, PersonB, List),
+                prolog_to_json(path(List), JSON_Object),
         reply_json(JSON_Object).
