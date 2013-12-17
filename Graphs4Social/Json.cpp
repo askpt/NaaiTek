@@ -98,4 +98,3 @@ void IterateJSONValue(utility::string_t baseUri)
 	wcout << iter->first;
 	wcout << iter->second;
 	}*/
-}
