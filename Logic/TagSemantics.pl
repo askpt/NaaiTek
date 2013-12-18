@@ -16,4 +16,4 @@ tag('animal', ['dog','cat']).
 tag('cat',['animal']).
 tag('dog',['animal']).
 
-tag('family').
+tag('family',[]).
