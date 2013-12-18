@@ -7,7 +7,7 @@
 % load this file 
 % ['/Users/joaocarreira/Desktop/NaaiTek/Logic/KnowledgeBase.pl'].
 
-% connects(Person_A, Person_B, Connection_Strength)
+% connects(Person_A, Person_B, Connection_Strength, [tags])
 % this rule establises a connection between two people, with a strength ranging from 1 to 3
 %
 %
@@ -26,29 +26,29 @@
 
 
 % KnowledgeBase bootstrap
-connects('Ana', 'Vicky', 3).
-connects('Ana', 'Joao', 3).
-connects('Joao', 'Vicky', 3).
-connects('Joao', 'Simao', 1).
-connects('Joao', 'Artur', 2).
-connects('Joao', 'Tiago', 2).
-connects('Joao', 'Andre', 2).
-connects('Joao', 'Diogo', 1).
-connects('Andre', 'Simao', 1).
-connects('Andre', 'Catarina', 1).
-connects('Andre', 'Artur', 2).
-connects('Andre', 'Tiago', 2).
-connects('Andre', 'Diogo', 1).
-connects('Andre', 'Stephanie', 1).
-connects('Artur', 'Alcides', 1).
-connects('Alcides', 'Nando', 1).
-connects('Tiago', 'Marcia', 1).
-connects('Tiago', 'Diogo', 1).
-connects('Diogo', 'Francisco', 1).
-connects('Francisco', 'JoseCid', 1).
-connects('Diogo', 'Stephanie', 3).
-connects('Stephanie', 'Maria', 3).
-connects('Tiago', 'Stephanie', 1).
-connects('Simao', 'Artur', 1).
-connects('Artur', 'Tiago',2).
+connects('Ana', 'Vicky', 3, ['dog']).
+connects('Ana', 'Joao', 3, ['family']).
+connects('Joao', 'Vicky', 3, ['animal']).
+connects('Joao', 'Simao', 1, ['C#']).
+connects('Joao', 'Artur', 2, ['CSharp']).
+connects('Joao', 'Tiago', 2, ['CS']).
+connects('Joao', 'Andre', 2, ['phone']).
+connects('Joao', 'Diogo', 1, ['cat']).
+connects('Andre', 'Simao', 1, ['smartphone']).
+connects('Andre', 'Catarina', 1, ['WP']).
+connects('Andre', 'Artur', 2, ['animal']).
+connects('Andre', 'Tiago', 2, ['Android']).
+connects('Andre', 'Diogo', 1, ['CS']).
+connects('Andre', 'Stephanie', 1, ['family']).
+connects('Artur', 'Alcides', 1, ['cat']).
+connects('Alcides', 'Nando', 1, ['family']).
+connects('Tiago', 'Marcia', 1, ['family']).
+connects('Tiago', 'Diogo', 1, ['C#']).
+connects('Diogo', 'Francisco', 1, ['family']).
+connects('Francisco', 'JoseCid', 1, ['dummyphone']).
+connects('Diogo', 'Stephanie', 3, ['phone']).
+connects('Stephanie', 'Maria', 3, ['family']).
+connects('Tiago', 'Stephanie', 1, ['dog']).
+connects('Simao', 'Artur', 1, ['WP']).
+connects('Artur', 'Tiago',2, ['CS']).
 

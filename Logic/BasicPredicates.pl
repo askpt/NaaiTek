@@ -15,19 +15,19 @@ countElementsInList([_ | Tail], Count) :-
 
 %Predicate to test if personA is connected with personB
 
-isConnected(PersonA,PersonB):-connects(PersonA,PersonB,_);connects(PersonB,PersonA,_),PersonA\=PersonB.
+isConnected(PersonA,PersonB):-connects(PersonA,PersonB,_,_);connects(PersonB,PersonA,_,_),PersonA\=PersonB.
 
 %Predicate to test if PersonA is colleague of PersonB
 
-isColleague(PersonA,PersonB):-connects(PersonA,PersonB,1);connects(PersonB,PersonA,1).
+isColleague(PersonA,PersonB):-connects(PersonA,PersonB,1,_);connects(PersonB,PersonA,1,_).
 
 %Predicate to test if PersonA is friend of personB
 
-isFriend(PersonA,PersonB):-connects(PersonA,PersonB,2);connects(PersonB,PersonA,2).
+isFriend(PersonA,PersonB):-connects(PersonA,PersonB,2,_);connects(PersonB,PersonA,2,_).
 
 %Predicate to test if PersonA is family of PersonB
 
-isFamily(PersonA,PersonB):-connects(PersonA,PersonB,3);connects(PersonB,PersonA,3).
+isFamily(PersonA,PersonB):-connects(PersonA,PersonB,3,_);connects(PersonB,PersonA,3,_).
 
 %Predicate to list all connections of a certain person
 
@@ -86,7 +86,5 @@ listCommonFamily(PersonA,PersonB,L):-findall(PersonC,(isFamily(PersonA,PersonC),
 
 
 connectionCost(PersonA, PersonB, Cost) :- 
-	(connects(PersonA, PersonB, Cost1);connects(PersonB, PersonA, Cost1)), Cost is Cost1.
-
-
+	(connects(PersonA, PersonB, Cost1, _);connects(PersonB, PersonA, Cost1, _)), Cost is Cost1.
 

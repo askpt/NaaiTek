@@ -8,10 +8,12 @@ tag('C#', ['CSharp', 'CS']).
 tag('CSharp', ['C#', 'CS']).
 tag('CS', ['CSharp', 'C#']).
 
-tag('telemovel', ['smartphone', 'dummyphone']).
-tag('smartphone', ['WP', 'telemovel']).
-tag('dummyphone', ['Android', 'telemovel']).
+tag('phone', ['smartphone', 'dummyphone']).
+tag('smartphone', ['WP', 'phone']).
+tag('dummyphone', ['Android', 'phone']).
 
-tag('animal', ['cao','gato']).
-tag('cao',['animal']).
-tag('gato',['animal']).
+tag('animal', ['dog','cat']).
+tag('cat',['animal']).
+tag('dog',['animal']).
+
+tag('family').
