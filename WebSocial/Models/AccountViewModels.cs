@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebSocial.Models
 {
@@ -59,5 +61,36 @@ namespace WebSocial.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+
+        //birth date
+        [Required(ErrorMessage = "Birth Date is required")]
+        [Display(Name = "Birth Date in this form \"YYYY-MM-DD\"")]
+        public DateTime BirthDate { get; set; }
+
+        //Email
+        [Required(ErrorMessage = "Email is required")]
+        [RegularExpression(@"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}",
+            ErrorMessage = "Invalid e-mail inserted.")]
+        [Display(Name = "E-mail")]
+        public String Email { get; set; }
+
+        //Tags
+        [Display(Name = "Tags")]
+        public List<String> Tags { get; set; }
+
+        //Number
+        [Display(Name = "Contact Number")]
+        public int Number { get; set; }
+
+        //Country
+        [Required(ErrorMessage = "Country is required")]
+        [Display(Name = "Country")]
+        public String Country { get; set; }
+
+        //City  
+        [Required(ErrorMessage = "City is required")]
+        [Display(Name = "City")]
+        public String City { get; set; }
     }
 }

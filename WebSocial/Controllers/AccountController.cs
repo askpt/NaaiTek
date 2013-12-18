@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using WebSocial.Models;
+using WebSocial.DAL;
+using System.Web.Security;
 
 namespace WebSocial.Controllers
 {
@@ -16,7 +18,7 @@ namespace WebSocial.Controllers
     public class AccountController : Controller
     {
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new GameContext())))
         {
         }
 
@@ -78,10 +80,26 @@ namespace WebSocial.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName };
+                var user = new ApplicationUser() 
+                { 
+                    UserName = model.UserName, 
+                    //Birth Date
+                    BirthDate = model.BirthDate,
+                    //Email
+                    Email = model.Email,
+                    //Tags
+                    Tags = model.Tags,
+                    //Number
+                    Number = model.Number,
+                    //Country
+                    Country = model.Country,
+                    //City    
+                    City = model.City
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    UserManager.AddToRole(user.Id, "User");
                     await SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
