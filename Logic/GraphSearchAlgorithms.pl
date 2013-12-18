@@ -60,19 +60,26 @@ next_node(X, T, Z) :- isConnected(X, Z),
 branch_and_bound(PersonA, PersonB, List):- findall(L, ex_branch_and_bound(PersonA, PersonB, L), ListAux),
 	                                   sort(ListAux, ListAux2), reverse(ListAux2, [[(_,List)]|_]).
 
+branch_and_bound_test(PersonA, PersonB, List):- findall(L, ex_branch_and_bound(PersonA, PersonB, L), ListAux),
+	                                   sort(ListAux, ListAux2), reverse(ListAux2, List).
+
+
+
 ex_branch_and_bound(PersonA, PersonB, [(C,List)]) :- branch_and_bound_aux([(0, [PersonA])], PersonB, [(C,Path)]), reverse(Path, List).
 
 %branch_and_bound_aux([(_, First) | _], PersonB, First) :- First = [PersonB | _].
 
-branch_and_bound_aux([(C, [PersonB | Others]) | _], PersonB, [(C, [PersonB | Others])]).
+branch_and_bound_aux([(C1, [PersonB | Others]) | _], PersonB, [(C, [PersonB | Others])]):-
+					countElementsInList([PersonB | Others], TotalNodes), C is C1 / (TotalNodes - 1).
+
 
 branch_and_bound_aux([(Cost, [Last | Tail]) | Others], PersonB, Path) :-
 					findall((CostC, [PersonZ, Last | Tail]),
 					(next_node_b_b(Last, Tail, PersonZ, CostC1),
-					countElementsInList([PersonZ, Last | Tail], TotalNodes),
+					%countElementsInList([PersonZ, Last | Tail], TotalNodes),
 					% line below was before taking average cost
-					%CostC is CostC1 + Cost),
-					CostC is (CostC1 + Cost) / TotalNodes),
+					CostC is CostC1 + Cost),
+					%CostC is (CostC1 + Cost) / TotalNodes,),
 					List),
 					append(Others, List, PathN),
 					sort(PathN, PathN1),
