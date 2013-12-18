@@ -28,14 +28,14 @@ depth_search(PersonA, PersonB, TempList, [PersonA|List]) :- isConnected(PersonA,
 
 breadth_search(PersonA, PersonB, List) :- breadth_search_aux([[PersonA]], PersonB, InvertedList), reverse(InvertedList, List).
 
-breadth_search_aux([First | Remaining], PersonB, First) :- First = [PersonB | _].
+breadth_search_aux([First | _], PersonB, First) :- First = [PersonB | _].
 
 breadth_search_aux([[Last | Tail] | Remaining], PersonB, List) :- findall([PersonZ, Last | Tail],
 										next_node(Last, Tail, PersonZ), TempList),
 										append(Remaining, TempList, TempPath),
 										breadth_search_aux(TempPath, PersonB, List).
 
-breadth_search_aux([[PersonB | Tail] | Remaining], PersonB, List) :- !, breadth_search_aux(Remaining, PersonB, List).
+breadth_search_aux([[PersonB | _] | Remaining], PersonB, List) :- !, breadth_search_aux(Remaining, PersonB, List).
 
 next_node(X, T, Z) :- isConnected(X, Z),
 						not(member(Z, T)).
@@ -58,13 +58,13 @@ next_node(X, T, Z) :- isConnected(X, Z),
 % connection we need to get the LAST element of the list
 
 branch_and_bound(PersonA, PersonB, List):- findall(L, ex_branch_and_bound(PersonA, PersonB, L), ListAux),
-	                                   sort(ListAux, ListAux2), reverse(ListAux2, [List|_]).
+	                                   sort(ListAux, ListAux2), reverse(ListAux2, [[(_,List)]|_]).
 
-ex_branch_and_bound(PersonA, PersonB, List) :- branch_and_bound_aux([(0, [PersonA])], PersonB, Path), reverse(Path, List).
+ex_branch_and_bound(PersonA, PersonB, [(C,List)]) :- branch_and_bound_aux([(0, [PersonA])], PersonB, [(C,Path)]), reverse(Path, List).
 
-branch_and_bound_aux([(_, First) | _], PersonB, First) :- First = [PersonB | _].
+%branch_and_bound_aux([(_, First) | _], PersonB, First) :- First = [PersonB | _].
 
-branch_and_bound_aux([(_, [PersonB | _]) | Remaining], PersonB, Path) :- !, branch_and_bound_aux(Remaining, PersonB, Path).
+branch_and_bound_aux([(C, [PersonB | Others]) | _], PersonB, [(C, [PersonB | Others])]).
 
 branch_and_bound_aux([(Cost, [Last | Tail]) | Others], PersonB, Path) :-
 					findall((CostC, [PersonZ, Last | Tail]),
@@ -81,7 +81,6 @@ branch_and_bound_aux([(Cost, [Last | Tail]) | Others], PersonB, Path) :-
 					branch_and_bound_aux(PathN1, PersonB, Path).
 
 next_node_b_b(PersonX, List, PersonZ, Cost) :- isConnected(PersonX, PersonZ),
-								connectionCost(PersonX, PersonZ, C),
-								Cost is C,
+								connectionCost(PersonX, PersonZ, Cost),
 								not(member(PersonZ, List)).
 
