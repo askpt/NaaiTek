@@ -2,6 +2,9 @@
 % Loads all files necessary for Logic module
 %
 
+% loads tag Semantics definitions
+:- compile('TagSemantics.pl').
+
 % loads knowledge base
 :- compile('KnowledgeBase.pl').
 

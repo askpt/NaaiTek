@@ -4,7 +4,7 @@
 
 % counts the number of elements in a given list 
 countElementsInList([], 0).
-countElementsInList([Head | Tail], Count) :-
+countElementsInList([_ | Tail], Count) :-
 	countElementsInList(Tail, Sum),
 	Count is Sum + 1.
 	
