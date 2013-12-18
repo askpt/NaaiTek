@@ -34,7 +34,7 @@ connects('Joao', 'Artur', 2, ['CSharp']).
 connects('Joao', 'Tiago', 2, ['CS']).
 connects('Joao', 'Andre', 2, ['phone']).
 connects('Joao', 'Diogo', 1, ['cat']).
-connects('Andre', 'Simao', 1, ['smartphone']).
+connects('Andre', 'Simao', 1, ['smartphone','CS']).
 connects('Andre', 'Catarina', 1, ['WP']).
 connects('Andre', 'Artur', 2, ['animal']).
 connects('Andre', 'Tiago', 2, ['Android']).

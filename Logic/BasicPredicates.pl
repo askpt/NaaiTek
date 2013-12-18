@@ -88,3 +88,18 @@ listCommonFamily(PersonA,PersonB,L):-findall(PersonC,(isFamily(PersonA,PersonC),
 connectionCost(PersonA, PersonB, Cost) :- 
 	(connects(PersonA, PersonB, Cost1, _);connects(PersonB, PersonA, Cost1, _)), Cost is Cost1.
 
+
+% predicate to find all connections with same tag
+findAllConnectionsByTag(Tag, List):-tag(Tag, ListTag1), 
+	append([Tag], ListTag1, ListTag),
+	findAllConnectionsByTag_helper(ListTag, List).
+
+findAllConnectionsByTag_helper([],[]).
+
+findAllConnectionsByTag_helper([Head|Tail], [DefList|List]):-findall((UserA,UserB),(connects(UserA,UserB,_,ListTags),hasTag(ListTags, Head)), DefList),
+	findAllConnectionsByTag_helper(Tail, List).
+
+hasTag([Tag|_], Tag).
+
+hasTag([_|List], Tag):-hasTag(List, Tag).
+
