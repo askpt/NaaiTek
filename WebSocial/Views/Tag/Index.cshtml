@@ -6,27 +6,69 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (User.IsInRole("User") || User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            All Tags
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Add or Remove Tag", "AddOrRemoveTag", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @if (User.IsInRole("User"))
+                {
+                    if (Html.Action("UserHasTag", new { id = item.ID }).ToString() == "True")
+                    {
+                        @Html.ActionLink("Remove Tag", "AddOrRemoveTag", new { id = item.ID });
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Add Tag", "AddOrRemoveTag", new { id = item.ID });
+                    }
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                }
+            </td>
+        </tr>
+    }
 </table>
+
+@if (User.IsInRole("User"))
+{
+
+    <br />
+
+    <table class="table">
+        <tr>
+            <th>
+                Your Tags
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in ViewBag.UserTags)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+            </tr>
+        }
+
+    </table>
+
+}

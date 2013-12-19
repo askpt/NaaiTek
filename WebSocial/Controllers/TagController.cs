@@ -21,10 +21,17 @@ namespace WebSocial.Controllers
         // GET: /Tag/
         public async Task<ActionResult> Index()
         {
+            // gets current user id
+            string userID = User.Identity.GetUserId();
+
+            IList<int> tagIDs = (from userToTag in db.UsersTags where (userToTag.UserID == userID) select userToTag.TagID).ToList();
+            IQueryable<Tag> tags = (from tag in db.Tags where tagIDs.Contains(tag.ID) select tag);
+            ViewBag.UserTags = tags;
             return View(await db.Tags.ToListAsync());
         }
 
         // GET: /Tag/Create
+        [Authorize (Roles="Admin, User")]
         public ActionResult Create()
         {
             return View();
@@ -35,6 +42,7 @@ namespace WebSocial.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult> Create([Bind(Include = "ID,Name")] Tag tag)
         {
             if (ModelState.IsValid)
@@ -48,6 +56,7 @@ namespace WebSocial.Controllers
         }
 
         // GET: /Tag/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -65,6 +74,7 @@ namespace WebSocial.Controllers
         // POST: /Tag/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Tag tag = await db.Tags.FindAsync(id);
@@ -82,13 +92,12 @@ namespace WebSocial.Controllers
             base.Dispose(disposing);
         }
 
-        // GET: /Tag/AddOrRemoveTag/5
-        public async Task<ActionResult> AddOrRemoveTag(int id)
+        // returns treu if the user has  the selected tag
+        public bool UserHasTag(int id)
         {
             // gets current user id
             string userID = User.Identity.GetUserId();
 
-            
             //creates the tag to be added/removed
             UserTag ut = new UserTag();
             ut.TagID = id;
@@ -101,22 +110,37 @@ namespace WebSocial.Controllers
             if (!userTags.Count.Equals(0))
             {
                 // checks if the current user is one of those who has the tag
-                bool userHasThisTag;
-                userHasThisTag = (userTags.Contains(userID)) ? true : false;
-
-                // if he has the tag, removes it
-                if (userHasThisTag)
+                if (userTags.Contains(userID))
                 {
-                    IQueryable<UserTag> remTagQuery = (from remTag in db.UsersTags where remTag.TagID == id && remTag.UserID == userID select remTag);
-                    db.UsersTags.Remove(remTagQuery.First());
-                }
-                // if he doesnt, adds it
-                else
-                {
-                    db.UsersTags.Add(ut);
+                    return true;
                 }
             }
             // only option is to add it
+            return false;
+        }
+
+        // GET: /Tag/AddOrRemoveTag/5
+        [Authorize(Roles="User")]
+        public async Task<ActionResult> AddOrRemoveTag(int id)
+        {
+            // gets current user id
+            string userID = User.Identity.GetUserId();
+
+            //creates the tag to be added/removed
+            UserTag ut = new UserTag();
+            ut.TagID = id;
+            ut.UserID = userID;
+
+            // checks if the current user is one of those who has the tag
+            bool userHasThisTag = UserHasTag(id);
+
+            // if he has the tag, removes it
+            if (userHasThisTag)
+            {
+                IQueryable<UserTag> remTagQuery = (from remTag in db.UsersTags where remTag.TagID == id && remTag.UserID == userID select remTag);
+                db.UsersTags.Remove(remTagQuery.First());
+            }
+            // if he doesnt, adds it
             else
             {
                 db.UsersTags.Add(ut);
