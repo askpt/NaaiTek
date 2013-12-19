@@ -14,8 +14,6 @@ namespace WebSocial.Models
 
         public String Email { get; set; }
 
-        public List<String> Tags { get; set; }
-
         public int Number { get; set; }
 
         public String Country { get; set; }

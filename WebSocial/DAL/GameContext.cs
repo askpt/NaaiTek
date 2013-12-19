@@ -1,7 +1,6 @@
 ﻿using WebSocial.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
-using WebSocial.Models;
 
 namespace WebSocial.DAL
 {
@@ -12,6 +11,9 @@ namespace WebSocial.DAL
         {
 
         }
+
+        public System.Data.Entity.DbSet<Tag> Tags { get; set; }
+        public System.Data.Entity.DbSet<UserTag> UsersTags { get; set; }
 
     }
 }

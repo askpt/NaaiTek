@@ -88,7 +88,7 @@ namespace WebSocial.Controllers
                     //Email
                     Email = model.Email,
                     //Tags
-                    Tags = model.Tags,
+                    
                     //Number
                     Number = model.Number,
                     //Country

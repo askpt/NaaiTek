@@ -162,6 +162,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
     <Compile Include="DAL\GameContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -182,9 +183,23 @@
     <Compile Include="Migrations\201312181653093_otherUserAttributes.Designer.cs">
       <DependentUpon>201312181653093_otherUserAttributes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201312191508301_tags.cs" />
+    <Compile Include="Migrations\201312191508301_tags.Designer.cs">
+      <DependentUpon>201312191508301_tags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201312191523100_userIdString.cs" />
+    <Compile Include="Migrations\201312191523100_userIdString.Designer.cs">
+      <DependentUpon>201312191523100_userIdString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201312191539214_noListInUser.cs" />
+    <Compile Include="Migrations\201312191539214_noListInUser.Designer.cs">
+      <DependentUpon>201312191539214_noListInUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\UserTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -234,6 +249,9 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Tag\Create.cshtml" />
+    <Content Include="Views\Tag\Delete.cshtml" />
+    <Content Include="Views\Tag\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -257,6 +275,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201312181653093_otherUserAttributes.resx">
       <DependentUpon>201312181653093_otherUserAttributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312191508301_tags.resx">
+      <DependentUpon>201312191508301_tags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312191523100_userIdString.resx">
+      <DependentUpon>201312191523100_userIdString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312191539214_noListInUser.resx">
+      <DependentUpon>201312191539214_noListInUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
