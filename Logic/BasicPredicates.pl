@@ -7,12 +7,6 @@ countElementsInList([], 0).
 countElementsInList([_ | Tail], Count) :-
 	countElementsInList(Tail, Sum),
 	Count is Sum + 1.
-	
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Dynamic predicates
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-:-dynamic connects/4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specific predicates to handle graphs
@@ -109,4 +103,8 @@ hasTag([Tag|_], Tag).
 hasTag([_|List], Tag):-hasTag(List, Tag).
 
 %create connections
-createConnection(UserA, UserB, ConnectionStrenght):-assertz(connects(UserA, UserB, ConnectionStrenght, [])).
+createConnection(UserA, UserB, ConnectionStrenght):-assert(connects(UserA, UserB, ConnectionStrenght, [])).
+
+%remove connections
+removeConnection(UserA, UserB):-connects(UserA, UserB, Strenght, TagList),
+								retractall(connects(UserA, UserB, Strenght, TagList)).
