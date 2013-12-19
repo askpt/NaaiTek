@@ -108,3 +108,8 @@ createConnection(UserA, UserB, ConnectionStrenght):-assert(connects(UserA, UserB
 %remove connections
 removeConnection(UserA, UserB):-connects(UserA, UserB, Strenght, TagList),
 								retractall(connects(UserA, UserB, Strenght, TagList)).
+
+%edit connection by Strenght
+editConnectionByStrenght(UserA, UserB, ConnectionStr):-connects(UserA, UserB, StrTemp, List),
+	retractall(connects(UserA, UserB, StrTemp, List)),
+	assert(connects(UserA, UserB, ConnectionStr, List)).
