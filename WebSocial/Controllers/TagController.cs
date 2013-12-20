@@ -79,6 +79,10 @@ namespace WebSocial.Controllers
         {
             Tag tag = await db.Tags.FindAsync(id);
             db.Tags.Remove(tag);
+            // delete rows from UsersTags table
+            IEnumerable<UserTag> usersTagsToDelete = (from userTagToDelete in db.UsersTags where userTagToDelete.TagID == id select userTagToDelete);
+            db.UsersTags.RemoveRange(usersTagsToDelete);
+
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

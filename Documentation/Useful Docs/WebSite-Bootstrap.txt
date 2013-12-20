@@ -1,0 +1,19 @@
+Users:
+[Admin]
+id: ArturT 	pass: 123456
+
+[User]
+id: Artur	pass: 123456
+id: Stephanie	pass: 123456
+id: Tiago	pass: 123456
+id: Joao	pass: 123456
+id: Francisco	pass: 123456
+
+[Tag]	|	[User(s) that have it]
+Games	|	Artur,Francisco
+Soccer	|	Tiago,Joao
+Music	|	Stephanie,Tiago,Joao
+Rock	|	Artur,Francisco
+Fox	|	Artur,Francisco
+TV	|	Stephanie,Joao,Francisco
+Nerd	|	Artur,Tiago
