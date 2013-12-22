@@ -45,7 +45,7 @@ server(Port) :-
 
 
 % creating a json object
-:- json_object path(path:list).
+:- json_object path(path:list, status:atom).
 
 
 %test handler
@@ -61,7 +61,7 @@ server(Port) :-
 % test request
 give_me_json(_Request) :-
                 %http_parameters(_Request, [name(Module, [])]),                                 
-        prolog_to_json(path(['Vicky', 'Ana', 'Joao', 'Andre', 'Diogo', 'Francisco', 'JoseCid']), JSON_Object),
+        prolog_to_json(path(['Vicky', 'Ana', 'Joao', 'Andre', 'Diogo', 'Francisco', 'JoseCid'], 'ok'), JSON_Object),
         reply_json(JSON_Object).
 
 
@@ -69,19 +69,19 @@ give_me_json(_Request) :-
 depth_search(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),        
                 depth_search(PersonA, PersonB, List),
-                prolog_to_json(path(List), JSON_Object),
+                prolog_to_json(path(List, 'ok'), JSON_Object),
         reply_json(JSON_Object).
 
 % breath search
 breadth_search(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
                 breadth_search(PersonA, PersonB, List),
-                prolog_to_json(path(List), JSON_Object),
+                prolog_to_json(path(List, 'ok'), JSON_Object),
         reply_json(JSON_Object).
 
 % branch and bound
 branch_and_bound(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
                 branch_and_bound(PersonA, PersonB, List),
-                prolog_to_json(path(List), JSON_Object),
+                prolog_to_json(path(List, 'ok'), JSON_Object),
         reply_json(JSON_Object).
