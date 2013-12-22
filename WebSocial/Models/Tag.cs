@@ -11,6 +11,11 @@ namespace WebSocial.Models
         [Key]
         public int ID { get; set; }
 
+        [Display(Name = "Name", ResourceType = typeof(Resources.Resources))]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "NameRequired")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources.Resources),
+                          ErrorMessageResourceName = "NameLong")]
         public String Name { get; set; }
     }
 }

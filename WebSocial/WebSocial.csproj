@@ -161,12 +161,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="DAL\GameContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Migrations\201312181522213_initialCreate.cs" />
     <Compile Include="Migrations\201312181522213_initialCreate.Designer.cs">
       <DependentUpon>201312181522213_initialCreate.cs</DependentUpon>
@@ -194,6 +196,10 @@
     <Compile Include="Migrations\201312191539214_noListInUser.cs" />
     <Compile Include="Migrations\201312191539214_noListInUser.Designer.cs">
       <DependentUpon>201312191539214_noListInUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201312221702229_changeLanguage1stTry.cs" />
+    <Compile Include="Migrations\201312221702229_changeLanguage1stTry.Designer.cs">
+      <DependentUpon>201312221702229_changeLanguage1stTry.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -237,7 +243,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -252,9 +257,11 @@
     <Content Include="Views\Tag\Create.cshtml" />
     <Content Include="Views\Tag\Delete.cshtml" />
     <Content Include="Views\Tag\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -285,6 +292,15 @@
     <EmbeddedResource Include="Migrations\201312191539214_noListInUser.resx">
       <DependentUpon>201312191539214_noListInUser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312221702229_changeLanguage1stTry.resx">
+      <DependentUpon>201312221702229_changeLanguage1stTry.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{f793f56f-aa3f-40ea-9422-eedfbe9d07f7}</Project>
+      <Name>Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

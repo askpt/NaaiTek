@@ -1,16 +1,48 @@
 ﻿@model WebSocial.Models.Tag
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = Resources.CreateTag;
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
 
-<h2>Create</h2>
+@helper selected(string c, string culture)
+{
+    if (c == culture)
+    {
+        @:checked="checked"
+    }
+}
+
+<h2>Resources.CreateTag</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("SetCulture", "Tag"))
+{
+    <fieldset>
+        <legend>@Resources.ChooseYourLanguage</legend>
+        <div class="control-group">
+            <div class="controls">
+                <label for="en-us">
+                    <input name="culture" id="en-us" value="en-us" type="radio" @selected("en-us", culture) /> English
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label for="pt">
+                    <input name="culture" id="pt" value="pt" type="radio" @selected("pt", culture) /> Português
+                </label>
+            </div>
+        </div>
+
+    </fieldset>
+}
+
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Tag</h4>
         <hr />
@@ -32,10 +64,14 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        (function ($) {
+            $("input[type = 'radio']").click(function () {
+                $(this).parents("form").submit(); // post form
+            });
+
+        })(jQuery);
+    </script>
 }

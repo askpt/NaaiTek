@@ -11,10 +11,11 @@ using WebSocial.Models;
 using WebSocial.DAL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WebSocial.Helpers;
 
 namespace WebSocial.Controllers
 {
-    public class TagController : Controller
+    public class TagController : BaseController
     {
         private GameContext db = new GameContext();
 
@@ -152,6 +153,24 @@ namespace WebSocial.Controllers
 
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult SetCulture(string culture)
+        {
+            // Validate input
+            culture = CultureHelper.GetImplementedCulture(culture);
+            // Save culture in a cookie
+            HttpCookie cookie = Request.Cookies["_culture"];
+            if (cookie != null)
+                cookie.Value = culture;   // update cookie value
+            else
+            {
+                cookie = new HttpCookie("_culture");
+                cookie.Value = culture;
+                cookie.Expires = DateTime.Now.AddYears(1);
+            }
+            Response.Cookies.Add(cookie);
+            return RedirectToAction("Create");
         }
     }
 }
