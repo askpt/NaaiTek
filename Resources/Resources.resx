@@ -117,11 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AllTags" xml:space="preserve">
+    <value>AllTags</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Back To List</value>
+  </data>
   <data name="ChooseYourLanguage" xml:space="preserve">
     <value>Choose your language</value>
   </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete it?</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorWarning" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hello</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LogOff" xml:space="preserve">
+    <value>Log Off</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -132,7 +174,20 @@
   <data name="NameRequired" xml:space="preserve">
     <value>Name field can't be empty!</value>
   </data>
+  <data name="NewF" xml:space="preserve">
+    <value>New</value>
+    <comment>F -&gt; Feminin</comment>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
+  </data>
+  <data name="YourTags" xml:space="preserve">
+    <value>Your Tags</value>
   </data>
 </root>

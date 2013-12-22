@@ -117,11 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="AllTags" xml:space="preserve">
+    <value>Todas as Etiquetas</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Retroceder</value>
+  </data>
   <data name="ChooseYourLanguage" xml:space="preserve">
     <value>Escolha a sua língua</value>
   </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>Contactos</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Criar</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Apagar</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>De certeza que quer apagar?</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="ErrorWarning" xml:space="preserve">
+    <value>Ocorreu um erro enquanto processávamos o seu pedido.</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Olá</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Página Inicial</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>Índice</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Autenticar</value>
+  </data>
+  <data name="LogOff" xml:space="preserve">
+    <value>Sair</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
@@ -132,7 +174,20 @@
   <data name="NameRequired" xml:space="preserve">
     <value>O nome não pode estar vazio!</value>
   </data>
+  <data name="NewF" xml:space="preserve">
+    <value>Nova</value>
+    <comment>F -&gt; Feminino</comment>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registar</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
   <data name="Tag" xml:space="preserve">
     <value>Etiqueta</value>
+  </data>
+  <data name="YourTags" xml:space="preserve">
+    <value>As Minhas Etiquetas</value>
   </data>
 </root>

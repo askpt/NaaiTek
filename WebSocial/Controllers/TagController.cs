@@ -170,7 +170,7 @@ namespace WebSocial.Controllers
                 cookie.Expires = DateTime.Now.AddYears(1);
             }
             Response.Cookies.Add(cookie);
-            return RedirectToAction("Create");
+            return RedirectToAction("Index");
         }
     }
 }
