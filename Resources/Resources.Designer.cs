@@ -602,6 +602,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WebSocial is the official web site for Graphs4Social, an application that allows you to play while you connect with friends..
+        /// </summary>
+        public static string SiteDesc {
+            get {
+                return ResourceManager.GetString("SiteDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You&apos;ve successfully authenticated with.
         /// </summary>
         public static string SuccessAuth1 {
@@ -647,6 +656,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My Profile.
+        /// </summary>
+        public static string UserInfo {
+            get {
+                return ResourceManager.GetString("UserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Name.
         /// </summary>
         public static string UserName {
@@ -665,7 +683,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Tags.
+        ///   Looks up a localized string similar to My Tags.
         /// </summary>
         public static string YourTags {
             get {

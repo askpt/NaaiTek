@@ -321,6 +321,12 @@
     <value>The User Name field is required.</value>
   </data>
   <data name="YourTags" xml:space="preserve">
-    <value>Your Tags</value>
+    <value>My Tags</value>
+  </data>
+  <data name="SiteDesc" xml:space="preserve">
+    <value>WebSocial is the official web site for Graphs4Social, an application that allows you to play while you connect with friends.</value>
+  </data>
+  <data name="UserInfo" xml:space="preserve">
+    <value>My Profile</value>
   </data>
 </root>

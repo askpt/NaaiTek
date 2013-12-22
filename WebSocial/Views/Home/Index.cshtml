@@ -1,4 +1,6 @@
-﻿@{
+﻿@model WebSocial.Models.ApplicationUser
+
+@{
     ViewBag.Title = Resources.Home;
     var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
@@ -35,33 +37,54 @@
     </fieldset>
 }
 
-<div class="jumbotron">
-    <h1>Graphs4Social</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
+@if (!User.IsInRole("User") && !User.IsInRole("Admin"))
+{
+    <div class="jumbotron">
+        <h1>WebSocial</h1>
+        <p class="lead">@Resources.SiteDesc</p>
+        <p><a href="http://n-media.net/wp-content/uploads/2013/05/Web-under-construction.jpeg" class="btn btn-primary btn-large">Download Client &raquo;</a></p>
+    </div>
+}
+else
+{
+    <br />
+    if (User.IsInRole("User"))
+    {
+        <br />
+        <legend>@Resources.UserInfo</legend>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+        <table class="table">
+            <tr>
+                <th>@Resources.Country</th>
+                <td>@Model.Country</td>
+
+            </tr>
+            <tr>
+                <th>@Resources.City</th>
+                <td>@Model.City</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>
+                    @Resources.YourTags
+                </th>
+                <td>
+                    <text>|</text>
+                    @foreach (var item in ViewBag.UserTags)
+                    {
+                        @item.Name
+                        <text>|</text>
+                    }
+                </td>
+            </tr>
+        </table>
+
+    }
+    <p><a href="http://n-media.net/wp-content/uploads/2013/05/Web-under-construction.jpeg" class="btn btn-primary btn-large">Download Client &raquo;</a></p>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

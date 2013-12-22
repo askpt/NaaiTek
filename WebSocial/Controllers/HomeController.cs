@@ -4,14 +4,28 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebSocial.Helpers;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using WebSocial.DAL;
+using WebSocial.Models;
 
 namespace WebSocial.Controllers
 {
     public class HomeController : BaseController
     {
+
+        private GameContext db = new GameContext();
+
         public ActionResult Index()
         {
-            return View();
+            string userID = User.Identity.GetUserId();
+            ApplicationUser user = db.Users.Find(userID);
+
+            IList<int> tagIDs = (from userToTag in db.UsersTags where (userToTag.UserID == userID) select userToTag.TagID).ToList();
+            IQueryable<Tag> tags = (from tag in db.Tags where tagIDs.Contains(tag.ID) select tag);
+            ViewBag.UserTags = tags;
+
+            return View(user);
         }
 
         public ActionResult About()

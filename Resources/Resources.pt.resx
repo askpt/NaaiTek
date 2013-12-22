@@ -323,4 +323,10 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="YourTags" xml:space="preserve">
     <value>As Minhas Etiquetas</value>
   </data>
+  <data name="SiteDesc" xml:space="preserve">
+    <value>WebSocial é o site oficial da Graphs4Social, uma aplicação que te permite jogar enquanto te ligas a amigos.</value>
+  </data>
+  <data name="UserInfo" xml:space="preserve">
+    <value>Meu Perfil</value>
+  </data>
 </root>
