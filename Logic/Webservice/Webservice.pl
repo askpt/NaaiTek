@@ -33,7 +33,20 @@
 % request for branch and bound search on graph
 :- http_handler(root(branch_and_bound), branch_and_bound, []).
 
+% request for create connection
+:- http_handler(root(create_connection), create_connection, []).
 
+% request for remove connection
+:- http_handler(root(remove_connection), remove_connection, []).
+
+% request for update connection strenght
+:- http_handler(root(update_connection_strenght), update_connection_strenght, []).
+
+% request for add connection tag
+:- http_handler(root(add_connection_tag), add_connection_tag, []).
+
+% request for remove connection tag
+:- http_handler(root(remove_connection_tag), remove_connection_tag, []).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
@@ -46,7 +59,7 @@ server(Port) :-
 
 % creating a json object
 :- json_object path(path:list, status:atom).
-:- json_object error(details:atom, status:atom).
+:- json_object message(details:atom, status:atom).
 
 
 %test handler
@@ -71,7 +84,7 @@ depth_search(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),        
                 (depth_search(PersonA, PersonB, List),
                 prolog_to_json(path(List, 'ok'), JSON_Object);
-                prolog_to_json(error('path not found', 'error'), JSON_Object)),
+                prolog_to_json(message('path not found', 'error'), JSON_Object)),
         reply_json(JSON_Object).
 
 % breath search
@@ -79,7 +92,7 @@ breadth_search(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
                 (breadth_search(PersonA, PersonB, List),
                 prolog_to_json(path(List, 'ok'), JSON_Object);
-                prolog_to_json(error('path not found', 'error'), JSON_Object)), 
+                prolog_to_json(message('path not found', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
 
 % branch and bound
@@ -87,5 +100,45 @@ branch_and_bound(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
                (branch_and_bound(PersonA, PersonB, List),
                 prolog_to_json(path(List, 'ok'), JSON_Object);
-                prolog_to_json(error('path not found', 'error'), JSON_Object)), 
+                prolog_to_json(message('path not found', 'error'), JSON_Object)), 
+        reply_json(JSON_Object).
+
+%create connection
+create_connection(_Request) :-
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, []), strenght(Strenght, [])]),
+               (createConnection(PersonA, PersonB, Strenght),
+                prolog_to_json(message('connection created', 'ok'), JSON_Object);
+                prolog_to_json(message('connection not created', 'error'), JSON_Object)), 
+        reply_json(JSON_Object).
+
+%remove connection
+remove_connection(_Request) :-
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+               (removeConnection(PersonA, PersonB),
+                prolog_to_json(message('connection removed', 'ok'), JSON_Object);
+                prolog_to_json(message('connection not removed or not exists', 'error'), JSON_Object)), 
+        reply_json(JSON_Object).
+
+%update connection strenght
+update_connection_strenght(_Request) :-
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, []), strenght(Strenght, [])]),
+               (editConnectionByStrenght(PersonA, PersonB, Strenght),
+                prolog_to_json(message('connection edited', 'ok'), JSON_Object);
+                prolog_to_json(message('connection not edited or not exists', 'error'), JSON_Object)), 
+        reply_json(JSON_Object).
+
+%add connection tag
+add_connection_tag(_Request) :-
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, []), tag(Tag, [])]),
+               (editConnectionByAddTag(PersonA, PersonB, Tag),
+                prolog_to_json(message('connection edited', 'ok'), JSON_Object);
+                prolog_to_json(message('connection not edited or not exists', 'error'), JSON_Object)), 
+        reply_json(JSON_Object).
+
+%remove connection tag
+remove_connection_tag(_Request) :-
+                http_parameters(_Request, [personA(PersonA, []), personB(PersonB, []), tag(Tag, [])]),
+               (editConnectionByRemoveTag(PersonA, PersonB, Tag),
+                prolog_to_json(message('connection edited', 'ok'), JSON_Object);
+                prolog_to_json(message('connection not edited or not exists', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
