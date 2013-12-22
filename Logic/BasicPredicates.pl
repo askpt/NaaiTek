@@ -119,3 +119,9 @@ editConnectionByAddTag(UserA, UserB, Tag):-connects(UserA, UserB, Value, TempLis
 	ListTag = [Tag|TempList],
 	retractall(connects(UserA, UserB, Value, TempList)),
 	assert(connects(UserA, UserB, Value, ListTag)).
+
+%edit connection by tag (remove)
+editConnectionByRemoveTag(UserA, UserB, Tag):-connects(UserA, UserB, Value, TempList),
+	delete(TempList, Tag, ListTag),
+	retractall(connects(UserA, UserB, Value, TempList)),
+	assert(connects(UserA, UserB, Value, ListTag)).
