@@ -120,23 +120,84 @@
   <data name="About" xml:space="preserve">
     <value>Sobre</value>
   </data>
+  <data name="Account" xml:space="preserve">
+    <value>Conta</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Adicionar</value>
+  </data>
+  <data name="AddLocalAccount" xml:space="preserve">
+    <value>Você não tem uma identificação/password para este web site. Adicione
+uma conta local para que possa autenticar-se sem um login externo.</value>
   </data>
   <data name="AllTags" xml:space="preserve">
     <value>Todas as Etiquetas</value>
   </data>
+  <data name="AssociateYour" xml:space="preserve">
+    <value>Associe a sua </value>
+  </data>
+  <data name="AssociationForm" xml:space="preserve">
+    <value>Formulário de Associação</value>
+  </data>
+  <data name="Autentication" xml:space="preserve">
+    <value>Está autenticado como </value>
+  </data>
   <data name="BackToList" xml:space="preserve">
     <value>Retroceder</value>
+  </data>
+  <data name="BD" xml:space="preserve">
+    <value>Data de aniversário tem de ser apresentada na forma  "AAAA-MM-DD"</value>
+  </data>
+  <data name="BDRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Data de Aniversário"</value>
+  </data>
+  <data name="ChangePw" xml:space="preserve">
+    <value>Mudar Palavra-Chave</value>
   </data>
   <data name="ChooseYourLanguage" xml:space="preserve">
     <value>Escolha o seu idioma</value>
   </data>
+  <data name="City" xml:space="preserve">
+    <value>Cidade</value>
+  </data>
+  <data name="CityRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Cidade"</value>
+  </data>
+  <data name="ConfirmNewPw" xml:space="preserve">
+    <value>Confirmar Nova Palavra-Chave</value>
+  </data>
+  <data name="ConfirmPw" xml:space="preserve">
+    <value>Confirmar Palavra-Chave</value>
+  </data>
+  <data name="ContactNumber" xml:space="preserve">
+    <value>Número de Contacto</value>
+  </data>
   <data name="Contacts" xml:space="preserve">
     <value>Contactos</value>
   </data>
+  <data name="ContNumberRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Número de Contacto"</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="CountryRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "País"</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Criar</value>
+  </data>
+  <data name="CreateLocalLogin" xml:space="preserve">
+    <value>Criar Autenticação Local</value>
+  </data>
+  <data name="CreateNewAcc" xml:space="preserve">
+    <value>Criar uma nova conta.</value>
+  </data>
+  <data name="CurrentPw" xml:space="preserve">
+    <value>Palavra-Chave Atual</value>
+  </data>
+  <data name="CurrentPwRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Palavra-Chave Atual"</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Apagar</value>
@@ -144,11 +205,20 @@
   <data name="DeleteConfirmation" xml:space="preserve">
     <value>De certeza que quer apagar?</value>
   </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "E-mail"</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Erro</value>
   </data>
   <data name="ErrorWarning" xml:space="preserve">
     <value>Ocorreu um erro enquanto processávamos o seu pedido.</value>
+  </data>
+  <data name="ExtLoginFail" xml:space="preserve">
+    <value>Falha de Login Externo</value>
+  </data>
+  <data name="FailAuth" xml:space="preserve">
+    <value>Falha ao autenticar-se com o serviço!</value>
   </data>
   <data name="Hello" xml:space="preserve">
     <value>Olá</value>
@@ -156,14 +226,26 @@
   <data name="Home" xml:space="preserve">
     <value>Página Inicial</value>
   </data>
+  <data name="IfNoLocalAcc" xml:space="preserve">
+    <value>se não tiver uma conta local.</value>
+  </data>
   <data name="Index" xml:space="preserve">
     <value>Índice</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Autenticar</value>
   </data>
+  <data name="LoginExt" xml:space="preserve">
+    <value>Use outro serviço para se autenticar</value>
+  </data>
   <data name="LogOff" xml:space="preserve">
     <value>Sair</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Gerir Conta</value>
+  </data>
+  <data name="MatchPw" xml:space="preserve">
+    <value>As Palavras-Chave Não Condizem</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
@@ -178,14 +260,65 @@
     <value>Nova</value>
     <comment>F -&gt; Feminino</comment>
   </data>
+  <data name="NewPw" xml:space="preserve">
+    <value>Nova Palavra-Chave</value>
+  </data>
+  <data name="NewPwRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Nova Palavra-Chave"</value>
+  </data>
+  <data name="NoExtLoginConf" xml:space="preserve">
+    <value>Nenhum serviço de login externo configurado.</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Palavra-Chave</value>
+  </data>
+  <data name="Pw" xml:space="preserve">
+    <value>Palavra-Chave</value>
+  </data>
+  <data name="PwLong" xml:space="preserve">
+    <value>Tamanho da Palavra-Chave Inválido</value>
+  </data>
+  <data name="PwRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Palavra-Chave"</value>
+  </data>
+  <data name="RegExEmail" xml:space="preserve">
+    <value>E-mail inserido inválido</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Registar</value>
+  </data>
+  <data name="RegisterYourself" xml:space="preserve">
+    <value>Registe-se </value>
+  </data>
+  <data name="RegLogins" xml:space="preserve">
+    <value>Serviços de autenticação configurados</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Lembrar?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remover</value>
   </data>
+  <data name="SuccessAuth1" xml:space="preserve">
+    <value>Autenticou-se com sucesso usando </value>
+  </data>
+  <data name="SuccessAuth2" xml:space="preserve">
+    <value>Por favor insira um nome de utilizador para este site em baixo e clique no botão de registo para acabar o processo de autenticação.</value>
+  </data>
   <data name="Tag" xml:space="preserve">
     <value>Etiqueta</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Etiquetas</value>
+  </data>
+  <data name="UseLocalAcc" xml:space="preserve">
+    <value>Use uma conta local para se autenticar.</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Nome do Utilizador</value>
+  </data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>É necessário preencher o campo "Nome do Utilizador"</value>
   </data>
   <data name="YourTags" xml:space="preserve">
     <value>As Minhas Etiquetas</value>

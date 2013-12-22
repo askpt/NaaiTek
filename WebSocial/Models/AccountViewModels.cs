@@ -6,91 +6,107 @@ namespace WebSocial.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "UserNameRequired")]
+        [Display(Name = "UserName", ResourceType = typeof(Resources.Resources))]
         public string UserName { get; set; }
     }
 
     public class ManageUserViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "CurrentPwRequired")]
         [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
+        [Display(Name = "CurrentPw", ResourceType = typeof(Resources.Resources))]
         public string OldPassword { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "NewPwRequired")]
+        [StringLength(100, MinimumLength = 6, ErrorMessageResourceType = typeof(Resources.Resources),
+                          ErrorMessageResourceName = "PwLong")]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "NewPw", ResourceType = typeof(Resources.Resources))]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "ConfirmNewPw", ResourceType = typeof(Resources.Resources))]
+        [Compare("NewPassword", ErrorMessageResourceType = typeof(Resources.Resources),
+                          ErrorMessageResourceName = "MatchPw")]
         public string ConfirmPassword { get; set; }
     }
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "UserNameRequired")]
+        [Display(Name = "UserName", ResourceType = typeof(Resources.Resources))]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "PwRequired")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", ResourceType = typeof(Resources.Resources))]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "RememberMe", ResourceType = typeof(Resources.Resources))]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "UserNameRequired")]
+        [Display(Name = "UserName", ResourceType = typeof(Resources.Resources))]
         public string UserName { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "NewPwRequired")]
+        [StringLength(100, MinimumLength = 6, ErrorMessageResourceType = typeof(Resources.Resources),
+                          ErrorMessageResourceName = "PwLong")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Pw", ResourceType = typeof(Resources.Resources))]
         public string Password { get; set; }
 
+
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "ConfirmPw", ResourceType = typeof(Resources.Resources))]
+        [Compare("Password", ErrorMessageResourceType = typeof(Resources.Resources),
+                          ErrorMessageResourceName = "MatchPw")]
         public string ConfirmPassword { get; set; }
 
 
         //birth date
-        [Required(ErrorMessage = "Birth Date is required")]
-        [Display(Name = "Birth Date in this form \"YYYY-MM-DD\"")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "BDRequired")]
+        [Display(Name = "BD", ResourceType = typeof(Resources.Resources))]
         public DateTime BirthDate { get; set; }
 
         //Email
-        [Required(ErrorMessage = "Email is required")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "EmailRequired")]
         [RegularExpression(@"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}",
-            ErrorMessage = "Invalid e-mail inserted.")]
+            ErrorMessageResourceType = typeof(Resources.Resources),
+                          ErrorMessageResourceName = "RegExEmail")]
         [Display(Name = "E-mail")]
         public String Email { get; set; }
 
-        //Tags
-        [Display(Name = "Tags")]
-        public List<String> Tags { get; set; }
-
         //Number
-        [Display(Name = "Contact Number")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "ContNumberRequired")]
+        [Display(Name = "ContactNumber", ResourceType = typeof(Resources.Resources))]
         public int Number { get; set; }
 
         //Country
-        [Required(ErrorMessage = "Country is required")]
-        [Display(Name = "Country")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "CountryRequired")]
+        [Display(Name = "Country", ResourceType = typeof(Resources.Resources))]
         public String Country { get; set; }
 
         //City  
-        [Required(ErrorMessage = "City is required")]
-        [Display(Name = "City")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+                  ErrorMessageResourceName = "CityRequired")]
+        [Display(Name = "City", ResourceType = typeof(Resources.Resources))]
         public String City { get; set; }
     }
 }
