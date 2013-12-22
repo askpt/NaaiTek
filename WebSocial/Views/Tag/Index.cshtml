@@ -2,39 +2,6 @@
 
 @{
     ViewBag.Title = Resources.Index;
-    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
-}
-
-@helper selected(string c, string culture)
-{
-    if (c == culture)
-    {
-        @:checked="checked"
-    }
-}
-
-<br />
-
-@using (Html.BeginForm("SetCulture", "Tag"))
-{
-    <fieldset>
-        <legend>@Resources.ChooseYourLanguage</legend>
-        <div class="control-group">
-            <div class="controls">
-                <label for="en-us">
-                    <input name="culture" id="en-us" value="en-us" type="radio" @selected("en-us", culture) /> English
-                </label>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="controls">
-                <label for="pt">
-                    <input name="culture" id="pt" value="pt" type="radio" @selected("pt", culture) /> Português
-                </label>
-            </div>
-        </div>
-
-    </fieldset>
 }
 
 <h2>@Resources.Index</h2>
@@ -104,16 +71,4 @@
 
     </table>
 
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-        (function ($) {
-            $("input[type = 'radio']").click(function () {
-                $(this).parents("form").submit(); // post form
-            });
-
-        })(jQuery);
-    </script>
 }
