@@ -46,6 +46,7 @@ server(Port) :-
 
 % creating a json object
 :- json_object path(path:list, status:atom).
+:- json_object error(details:atom, status:atom).
 
 
 %test handler
@@ -68,20 +69,23 @@ give_me_json(_Request) :-
 % depth search
 depth_search(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),        
-                depth_search(PersonA, PersonB, List),
-                prolog_to_json(path(List, 'ok'), JSON_Object),
+                (depth_search(PersonA, PersonB, List),
+                prolog_to_json(path(List, 'ok'), JSON_Object);
+                prolog_to_json(error('path not found', 'error'), JSON_Object)),
         reply_json(JSON_Object).
 
 % breath search
 breadth_search(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
-                breadth_search(PersonA, PersonB, List),
-                prolog_to_json(path(List, 'ok'), JSON_Object),
+                (breadth_search(PersonA, PersonB, List),
+                prolog_to_json(path(List, 'ok'), JSON_Object);
+                prolog_to_json(error('path not found', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
 
 % branch and bound
 branch_and_bound(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
-                branch_and_bound(PersonA, PersonB, List),
-                prolog_to_json(path(List, 'ok'), JSON_Object),
+               (branch_and_bound(PersonA, PersonB, List),
+                prolog_to_json(path(List, 'ok'), JSON_Object);
+                prolog_to_json(error('path not found', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
