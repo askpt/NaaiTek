@@ -120,8 +120,8 @@
   <data name="ChooseYourLanguage" xml:space="preserve">
     <value>Escolha a sua língua</value>
   </data>
-  <data name="CreateTag" xml:space="preserve">
-    <value>Criar Etiqueta</value>
+  <data name="Create" xml:space="preserve">
+    <value>Criar</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
@@ -131,5 +131,8 @@
   </data>
   <data name="NameRequired" xml:space="preserve">
     <value>O nome não pode estar vazio!</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Etiqueta</value>
   </data>
 </root>

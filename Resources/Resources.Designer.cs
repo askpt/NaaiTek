@@ -70,11 +70,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Tag.
+        ///   Looks up a localized string similar to Create.
         /// </summary>
-        public static string CreateTag {
+        public static string Create {
             get {
-                return ResourceManager.GetString("CreateTag", resourceCulture);
+                return ResourceManager.GetString("Create", resourceCulture);
             }
         }
         
@@ -102,6 +102,15 @@ namespace Resources {
         public static string NameRequired {
             get {
                 return ResourceManager.GetString("NameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag.
+        /// </summary>
+        public static string Tag {
+            get {
+                return ResourceManager.GetString("Tag", resourceCulture);
             }
         }
     }

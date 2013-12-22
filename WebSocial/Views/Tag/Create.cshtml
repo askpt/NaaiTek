@@ -1,7 +1,7 @@
 ﻿@model WebSocial.Models.Tag
 
 @{
-    ViewBag.Title = Resources.CreateTag;
+    ViewBag.Title = Resources.Create + Resources.Tag;
     var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
 
@@ -13,7 +13,7 @@
     }
 }
 
-<h2>Resources.CreateTag</h2>
+<h2>@Resources.Create @Resources.Tag</h2>
 
 
 @using (Html.BeginForm("SetCulture", "Tag"))
@@ -44,7 +44,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Tag</h4>
+        <h4>@Resources.Tag</h4>
         <hr />
         @Html.ValidationSummary(true)
 
@@ -58,7 +58,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="@Resources.Create" class="btn btn-default" />
             </div>
         </div>
     </div>
