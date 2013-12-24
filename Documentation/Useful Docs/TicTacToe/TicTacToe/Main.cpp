@@ -1,89 +1,194 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <stdlib.h>
 #include <stdlib.h>     
 #include <GL\glut.h>
 #include <iostream>
 
-
 using namespace std;
 
-struct float2
+struct player1
 {
-	float2(float _x = 0.0f, float _y = 0.0f) : x(_x), y(_y) {}
-
-	float x;
-	float y;
+	bool matrix[3][3];
 };
 
-struct float3
+struct player2
 {
-	float3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f) : x(_x), y(_y), z(_z) {}
-
-	float x;
-	float y;
-	float z;
+	bool matrix[3][3];
 };
 
-int g_iWindowWidth = 512;
-int g_iWindowHeight = 512;
-int g_iGLUTWindowHandle = 0;
 
-int g_iErrorCode = 0;
-
-/* callbacks declaration*/
+int WindowWidth = 600;
+int WindowHeight =600;
 
 
-void InitGL(int argc, char* argv[]);
+int GLUTWindowHandle = 0;
 
-/*this function will be registered as the render function that is invoked by GLUT when the current windows needs to be redisplayed*/
-void DisplayGL();
+/*function to initialize OpenGL*/
 
-/*this function is registered with Glut and it is invoked when windows system events are not being received*/
-void IdleGL();
-
-/*callback keyboard*/
-void KeyboardGL(unsigned char c, int x, int y);
-
-/*callback mouse*/
-void MouseGL(int button, int state, int x, int y);
-
-/*this method is invoked when the mouse moves within the window while one or more mouse buttons are pressed*/
-void MotionGL(int x, int y);
-
-/*this callback is invoked when the render window is resized*/
-void ReshapeGL(int w, int h);
-
-/*draw callbacks*/
-
-/*callback to draw the square*/
-void DrawSquare(float width);
-
-/*callback to draw the scene*/
-
-void RenderScene();
-
-
-/*callback to clear the scene*/
-
-void CleanScene(int exitCode, bool bExit = true);
-
-/*main method*/
-
-int main(int argc, char * argv[])
+void myInit()
 {
-	InitGL(argc, argv);
-	glutMainLoop();
+	glClearColor(1.0, 0.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
+	glShadeModel(GL_FLAT);
+
+	glViewport(0, 0, WindowWidth, WindowHeight);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	gluOrtho2D(0.0, (GLdouble)WindowWidth, (GLdouble)WindowHeight, 0.0);
+	glMatrixMode(GL_MODELVIEW);
+
+
 }
 
-/*callback to draw the X*/
+void drawTable()
+{
+	float squareWidth = WindowWidth / 5.0;
 
-void DrawX();
+	glColor3b(1.0, 0.0, 0.0);
 
-/*callback to draw the O*/
+	glLineWidth(4.0);
+	glBegin(GL_LINES);
+	glVertex2f(100, 100);
+	glVertex2f(100+squareWidth, 100);
 
-void DrawO();
+	glVertex2f(100+squareWidth, squareWidth+100);
+	glVertex2f(100, 100+squareWidth);
 
-/*callback to draw the 9 squares forming one square*/
+	glVertex2f(100, 100);
+	glVertex2f(100, 100 + squareWidth);
+
+	glVertex2f(100 + squareWidth, 100 + squareWidth);
+	glVertex2f(100 + squareWidth, 100);
+	glEnd();
+
+	glColor3b(1.0, 0.0, 0.0);
+	glLineWidth(4.0);
+	glBegin(GL_LINES);
+
+	glVertex2f(100 + squareWidth, 100);
+	glVertex2f(100 + 2 * squareWidth, 100);
+
+	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2f(100 + squareWidth, 100 + squareWidth);
+
+	glVertex2f(100 + 2 * squareWidth, 100);
+	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+
+	glEnd();
+
+	glColor3b(1.0, 0.0, 0.0);
+	glLineWidth(4.0);
+	glBegin(GL_LINES);
+
+	glVertex2f(100 + 2 * squareWidth, 100);
+	glVertex2f(100 + 3 * squareWidth, 100);
+
+	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+
+	glVertex2f(100 + 3 * squareWidth, 100);
+	glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+
+	glEnd();
+
+	glColor3b(1.0, 0.0, 0.0);
+	glLineWidth(4.0);
+
+	glBegin(GL_LINES);
+	glVertex2f(100, 100 + squareWidth);
+	glVertex2f(100, 100 + 2 * squareWidth);
+
+	glVertex2f(100 + squareWidth, 100 + squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2f(100, 100 + 2 * squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2f(100+squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+
+	glEnd();
+
+	glColor3b(1.0, 0.0, 0.0);
+	glLineWidth(4.0);
+
+	glBegin(GL_LINES);
+	glVertex2f(100, 100 + 2 * squareWidth);
+	glVertex2f(100, 100 + 3 * squareWidth);
+
+	glVertex2f(100, 100 + 3 * squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
+
+	glVertex2f(100+squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + 2*squareWidth, 100 + 3 * squareWidth);
+
+	glVertex2f(100 + 2*squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
 
+	glVertex2f(100+squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100+squareWidth, 100 + 3 * squareWidth);
 
+	glVertex2f(100 +2* squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + 2*squareWidth, 100 + 3 * squareWidth);
+
+	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
+
+
+	
+	glEnd();
+
+}
+void display(void)
+{
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawTable();
+	glFlush();
+
+
+}
+void myReshape(int w, int h){
+
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_MODELVIEW);
+	display();
+
+}
+
+
+void mouse(int btn, int mouseState, int x, int y)
+{
+}
+
+int main(int argc, char ** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowSize(WindowWidth, WindowHeight);
+	glutCreateWindow("TIC-TAC-TOE");
+	glutReshapeFunc(myReshape);
+	glutDisplayFunc(display);
+	//glutKeyboardFunc(keyboard);
+	//glutSpecialFunc(Special);
+	glutMouseFunc(mouse);
+
+	myInit();
+	glutMainLoop();
+	return 0;
+}
