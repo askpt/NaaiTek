@@ -1,4 +1,6 @@
-﻿#include "cpprest\http_client.h"
+﻿#define _CRT_SECURE_NO_WARNINGS 1
+
+#include "cpprest\http_client.h"
 #include <iostream>
 #include "cpprest\json.h"
 
@@ -14,7 +16,7 @@ pplx::task<json::value> RequestJSONValueAsync()
 	// against a server that provides JSON data.  
 	// This example fails because the returned Content-Type is text/html and not application/json.
 	//http_client client(L"http://uvm061.dei.isep.ipp.pt:9000/branch_and_bound?personA=Joao&personB=JoseCid");
-	http_client client(L"http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5937ac05f94264e881035cfcfb8a51b0&text=cat&format=json&nojsoncallback=1");
+	http_client client(L"http://uvm061.dei.isep.ipp.pt:9000/get_graph?user=Andre");
 	return client.request(methods::GET).then([](http_response response) -> pplx::task<json::value>
 	{
 		if (response.status_code() == status_codes::OK)
@@ -79,8 +81,14 @@ void IterateJSONValue()
 
 	//wcout << obj << endl;
 
+	//JSON.paths[8].tags[0] = smartphone
+	wstring w_str = obj[L"paths"][8][L"tags"][0].as_string();
 
-	wcout << obj[L"stat"] << endl;
+	//wstring to string converter
+	char c_mb_str[80];
+	wcstombs(c_mb_str, &w_str[0], 80);
+	string s(c_mb_str);
+	cout << "Resultado: (" << s << ")" << endl;
 	/*
 	for (auto iter = obj.cbegin(); iter != obj.cend(); ++iter)
 	{
