@@ -91,7 +91,8 @@ connectionCost(PersonA, PersonB, Cost) :-
 % predicate to find all connections with same tag
 findAllConnectionsByTag(Tag, List):-tag(Tag, ListTag1), 
 	append([Tag], ListTag1, ListTag),
-	findAllConnectionsByTag_helper(ListTag, List).
+	findAllConnectionsByTag_helper(ListTag, ListTemp),
+	append(ListTemp, List).
 
 findAllConnectionsByTag_helper([],[]).
 
