@@ -54,6 +54,9 @@
 % request for get paths
 :- http_handler(root(get_paths), get_paths, []).
 
+% request for get graph
+:- http_handler(root(get_graph), get_graph, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,6 +73,8 @@ server(Port) :-
 
 :- json_object allpaths(paths:list, status:atom).
 :- json_object paths(user1:atom, user2:atom, connection:number, tags:list).
+
+:- json_object graph(nodes:list, paths:list, status:atom).
 
 %test handler
 %handle(Request) :-
@@ -169,3 +174,11 @@ create_json_paths([],[]).
 
 create_json_paths([(U1, U2, S, L)|T], [Json_ret|Lj]):-prolog_to_json(paths(U1,U2,S,L), Json_ret),
     create_json_paths(T, Lj).
+
+%get user graph
+get_graph(_Request) :-  http_parameters(_Request, [user(User, [])]),
+                listAllPaths(User, List),
+                create_json_paths(List, ListJsonP),
+                listAllNodes(User, ListN),
+                prolog_to_json(graph(ListN, ListJsonP, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
