@@ -128,12 +128,16 @@ editConnectionByRemoveTag(UserA, UserB, Tag):-connects(UserA, UserB, Value, Temp
 	assert(connects(UserA, UserB, Value, ListTag)).
 
 %list of all friends (3rd)
-listAllConnections3rd(User, L):-listAllConnections(User, L1), 
-	listAll2ndfriends(L1, L2),
+listAllNodes(User, L):-listAllConnections(User, L1), 
+	listAll2ndFriends(L1, L2),
 	union(L1, L2, L).
 
-listAll2ndfriends([],[]).
+listAll2ndFriends([],[]).
 
-listAll2ndfriends([User|T], List):-listAllConnections(User, L1),
-	listAll2ndfriends(T, L2),
+listAll2ndFriends([User|T], List):-listAllConnections(User, L1),
+	listAll2ndFriends(T, L2),
 	union(L1,L2,List).
+
+%list of all connections(3rd)
+listAllPaths(User, L):-listAllNodes(User, Nodes),
+	findall((User1, User2, S, Tag), (connects(User1, User2, S, Tag), member(User1, Nodes), member(User2, Nodes)), L).
