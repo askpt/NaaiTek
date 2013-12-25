@@ -48,6 +48,9 @@
 % request for remove connection tag
 :- http_handler(root(remove_connection_tag), remove_connection_tag, []).
 
+% request for get nodes
+:- http_handler(root(get_nodes), get_nodes, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,6 +63,7 @@ server(Port) :-
 % creating a json object
 :- json_object path(path:list, status:atom).
 :- json_object message(details:atom, status:atom).
+:- json_object nodes(nodes:list, status:atom).
 
 
 %test handler
@@ -142,3 +146,9 @@ remove_connection_tag(_Request) :-
                 prolog_to_json(message('connection edited', 'ok'), JSON_Object);
                 prolog_to_json(message('connection not edited or not exists', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
+
+%get user nodes
+get_nodes(_Request) :-  http_parameters(_Request, [user(User, [])]),
+                listAllNodes(User, List),
+                prolog_to_json(nodes(List, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
