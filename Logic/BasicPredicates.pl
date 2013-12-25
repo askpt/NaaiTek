@@ -125,3 +125,14 @@ editConnectionByRemoveTag(UserA, UserB, Tag):-connects(UserA, UserB, Value, Temp
 	delete(TempList, Tag, ListTag),
 	retractall(connects(UserA, UserB, Value, TempList)),
 	assert(connects(UserA, UserB, Value, ListTag)).
+
+%list of all friends (3rd)
+listAllConnections3rd(User, L):-listAllConnections(User, L1), 
+	listAll2ndfriends(L1, L2),
+	union(L1, L2, L).
+
+listAll2ndfriends([],[]).
+
+listAll2ndfriends([User|T], List):-listAllConnections(User, L1),
+	listAll2ndfriends(T, L2),
+	union(L1,L2,List).
