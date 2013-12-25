@@ -51,6 +51,9 @@
 % request for get nodes
 :- http_handler(root(get_nodes), get_nodes, []).
 
+% request for get paths
+:- http_handler(root(get_paths), get_paths, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,6 +68,8 @@ server(Port) :-
 :- json_object message(details:atom, status:atom).
 :- json_object nodes(nodes:list, status:atom).
 
+:- json_object allpaths(paths:list, status:atom).
+:- json_object paths(user1:atom, user2:atom, connection:number, tags:list).
 
 %test handler
 %handle(Request) :-
@@ -152,3 +157,15 @@ get_nodes(_Request) :-  http_parameters(_Request, [user(User, [])]),
                 listAllNodes(User, List),
                 prolog_to_json(nodes(List, 'ok'), JSON_Object),
                 reply_json(JSON_Object).
+
+%get user paths
+get_paths(_Request) :-  http_parameters(_Request, [user(User, [])]),
+                listAllPaths(User, List),
+                create_json_paths(List, ListJson),
+                prolog_to_json(allpaths(ListJson, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+create_json_paths([],[]).
+
+create_json_paths([(U1, U2, S, L)|T], [Json_ret|Lj]):-prolog_to_json(paths(U1,U2,S,L), Json_ret),
+    create_json_paths(T, Lj).
