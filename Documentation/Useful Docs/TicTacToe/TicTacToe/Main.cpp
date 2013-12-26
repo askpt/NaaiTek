@@ -24,6 +24,9 @@ int WindowHeight =600;
 
 int GLUTWindowHandle = 0;
 
+float squareWidth = WindowWidth / 5.0;
+
+
 /*function to initialize OpenGL*/
 
 void myInit()
@@ -42,10 +45,74 @@ void myInit()
 
 }
 
+/*this function draw 9 squares forming one big square
+Square1:
+
+A(100,100)
+B(100+squareWidth,100)
+C(100+squareWidth,100+squareWidth)
+D(100,100+squareWidth)
+
+Square2:
+
+B(100+squareWidth,100)
+C(100+squareWidth,100+squareWidth)
+E(100+2*squareWidth,100)
+F(100+2*squareWidth,100+squareWidth)
+
+Square3:
+
+E(100+2*squareWidth,100)
+F(100+2*squareWidth,100+squareWidth)
+G(100+3*squareWidth,100)
+H(100+3*squareWidth,100+squareWidth)
+
+Square4:
+
+C(100+squareWidth,100+squareWidth)
+D(100,100+squareWidth)
+I(100,100+2*squareWidth)
+J(100+squareWidth,100+2*squareWidth)
+
+Square5:
+
+C(100+squareWidth,100+squareWidth)
+J(100+squareWidth,100+2*squareWidth)
+F(100+2*squareWidth,100+squareWidth)
+K(100+2*squareWidth,100+2*squareWidth)
+
+Square6:
+
+F(100+2*squareWidth,100+squareWidth)
+H(100+3*squareWidth,100+squareWidth)
+K(100+2*squareWidth,100+2*squareWidth)
+L(100+3*squareWidth,100+2*squareWidth)
+
+Square7:
+
+I(100,100+2*squareWidth)
+J(100+squareWidth,100+2*squareWidth)
+M(100,100+3*squareWidth)
+N(100+squareWidth,100+3*squareWidth)
+
+Square8:
+
+J(100+squareWidth,100+2*squareWidth)
+K(100+2*squareWidth,100+2*squareWidth)
+N(100+squareWidth,100+3*squareWidth)
+O(100+2*squareWidth,100+3*squareWidth)
+
+Square9:
+
+K(100+2*squareWidth,100+2*squareWidth)
+L(100+3*squareWidth,100+2*squareWidth)
+O(100+2*squareWidth,100+3*squareWidth)
+P(100+3*squareWidth,100+3*squareWidth)
+*/
+
 void drawTable()
 {
-	float squareWidth = WindowWidth / 5.0;
-
+	
 	glColor3b(1.0, 0.0, 0.0);
 
 	glLineWidth(4.0);
@@ -151,6 +218,18 @@ void drawTable()
 	glEnd();
 
 }
+
+/*function called by the mouse callback to draw X's on the specific squad*/
+void drawX(int x, int y)
+{
+
+}
+
+/*function called by the mouse callback to draw X's on the specific squad*/
+void drawO(int x, int y)
+{
+
+}
 void display(void)
 {
 	
@@ -171,9 +250,11 @@ void myReshape(int w, int h){
 
 }
 
-
+/*callback mouse*/
 void mouse(int btn, int mouseState, int x, int y)
 {
+
+
 }
 
 int main(int argc, char ** argv)
