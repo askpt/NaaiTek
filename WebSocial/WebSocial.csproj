@@ -214,6 +214,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\UserOverallStatistics.cs" />
     <Compile Include="Models\UserGraph.cs" />
     <Compile Include="Models\UserTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
