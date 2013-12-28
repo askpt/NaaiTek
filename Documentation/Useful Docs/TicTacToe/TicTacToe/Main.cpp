@@ -222,7 +222,48 @@ void drawTable()
 /*function called by the mouse callback to draw X's on the specific squad*/
 void drawX(int x, int y)
 {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	
+	glColor3b(1.0, 0.0, 0.0);
 
+	glLineWidth(4.0);
+
+	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
+	{
+		
+		glBegin(GL_LINES);
+		glVertex2f(100, 100);
+		glVertex2f(100 + squareWidth, 100 + squareWidth);
+
+		glVertex2f(100 + squareWidth, 100);
+		glVertex2f(100, 100 + squareWidth);
+
+
+		glEnd();
+		glFlush();
+	
+	}
+	/*
+	else
+	if (x>100 + squareWidth && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
+		//drawX(x, y);
+	else
+	if (x>100 + 2 + squareWidth && x<100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
+		drawX(x, y);
+	else
+	if (x > 100 && x<(100 + squareWidth) && y > 100 + squareWidth && y < 100 + 2 * squareWidth)
+		drawX(x, y);
+	glBegin(GL_LINES);
+	glVertex2f(100, 100);
+	glVertex2f(100 + squareWidth, 100+squareWidth);
+
+	glVertex2f(100 + squareWidth, 100);
+	glVertex2f(100, 100 + squareWidth);
+
+	
+	glEnd();
+	glFlush();*/
 }
 
 /*function called by the mouse callback to draw X's on the specific squad*/
@@ -253,8 +294,14 @@ void myReshape(int w, int h){
 /*callback mouse*/
 void mouse(int btn, int mouseState, int x, int y)
 {
-
-
+	switch (btn){
+	case GLUT_LEFT_BUTTON:
+	
+	if (mouseState == GLUT_DOWN)
+	{
+		drawX(x, y);
+	}
+}
 }
 
 int main(int argc, char ** argv)
