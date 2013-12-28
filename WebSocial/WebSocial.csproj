@@ -201,6 +201,10 @@
     <Compile Include="Migrations\201312221702229_changeLanguage1stTry.Designer.cs">
       <DependentUpon>201312221702229_changeLanguage1stTry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201312281555007_ErrorResolve.cs" />
+    <Compile Include="Migrations\201312281555007_ErrorResolve.Designer.cs">
+      <DependentUpon>201312281555007_ErrorResolve.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -294,6 +298,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201312221702229_changeLanguage1stTry.resx">
       <DependentUpon>201312221702229_changeLanguage1stTry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312281555007_ErrorResolve.resx">
+      <DependentUpon>201312281555007_ErrorResolve.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
