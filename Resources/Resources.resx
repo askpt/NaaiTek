@@ -332,4 +332,7 @@
   <data name="Dimension" xml:space="preserve">
     <value>Dimension</value>
   </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
 </root>

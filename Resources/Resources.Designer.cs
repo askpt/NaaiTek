@@ -620,6 +620,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Statistics.
+        /// </summary>
+        public static string Statistics {
+            get {
+                return ResourceManager.GetString("Statistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You&apos;ve successfully authenticated with.
         /// </summary>
         public static string SuccessAuth1 {

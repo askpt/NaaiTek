@@ -332,4 +332,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="Dimension" xml:space="preserve">
     <value>Dimensão</value>
   </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Estatísticas</value>
+  </data>
 </root>
