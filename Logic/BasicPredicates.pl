@@ -146,3 +146,14 @@ listAllPaths(User, L):-listAllNodes(User, Nodes),
 listAllUsers(List):-findall(([U1, U2]), (connects(U1, U2, _, _)), L1),
 	append(L1, L2),
 	list_to_set(L2, List).
+
+%list of all users (with network dimension)
+listAllUsersWithDimension(List):-listAllUsers(L1),
+	calculateDimension(L1, List).
+
+calculateDimension([],[]).
+
+calculateDimension([H|T], [(H, S)|L]):- listAllNodes(H, Nodes),
+	length(Nodes, S1),
+	S is S1 - 1,
+	calculateDimension(T, L).

@@ -60,6 +60,9 @@
 % request for get all users
 :- http_handler(root(get_users), get_users, []).
 
+% request for get all users with dimension
+:- http_handler(root(get_users_dimension), get_users_dimension, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -80,6 +83,8 @@ server(Port) :-
 :- json_object graph(nodes:list, paths:list, status:atom).
 
 :- json_object users(users:list, status:atom).
+
+:- json_object user(user:atom, dimension:number).
 %test handler
 %handle(Request) :-
         %http_read_json(Request, JSONIn),
@@ -191,3 +196,14 @@ get_graph(_Request) :-  http_parameters(_Request, [user(User, [])]),
 get_users(_Request) :- listAllUsers(List),
                 prolog_to_json(users(List, 'ok'), JSON_Object),
                 reply_json(JSON_Object).
+
+%get all users with dimension
+get_users_dimension(_Request) :- listAllUsersWithDimension(List),
+                create_json_users(List, List_Json),
+                prolog_to_json(users(List_Json, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+create_json_users([],[]).
+
+create_json_users([(U, S)|T], [Json_ret|Lj]):-prolog_to_json(user(U,S), Json_ret),
+    create_json_users(T, Lj).
