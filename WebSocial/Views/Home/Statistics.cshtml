@@ -1,0 +1,16 @@
+﻿@model WebSocial.Models.ApplicationUser
+
+@{
+    ViewBag.Title = Resources.Statistics;
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+}
+
+@helper selected(string c, string culture)
+{
+    if (c == culture)
+    {
+        @:checked="checked"
+    }
+}
+
+

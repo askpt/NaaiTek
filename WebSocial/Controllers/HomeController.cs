@@ -51,6 +51,12 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        public ActionResult Statistics()
+        {
+
+            return View();
+        }
+
         public ActionResult SetCulture(string culture)
         {
             // Validate input
