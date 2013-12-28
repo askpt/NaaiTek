@@ -174,7 +174,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CultureHelper.cs" />
-    <Compile Include="Helpers\UserGraphServices.cs" />
     <Compile Include="Migrations\201312181522213_initialCreate.cs" />
     <Compile Include="Migrations\201312181522213_initialCreate.Designer.cs">
       <DependentUpon>201312181522213_initialCreate.cs</DependentUpon>
