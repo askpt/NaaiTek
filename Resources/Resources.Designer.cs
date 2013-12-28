@@ -485,6 +485,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Network Dimension.
+        /// </summary>
+        public static string NetworkDimension {
+            get {
+                return ResourceManager.GetString("NetworkDimension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         public static string NewF {

@@ -335,4 +335,7 @@
   <data name="Statistics" xml:space="preserve">
     <value>Statistics</value>
   </data>
+  <data name="NetworkDimension" xml:space="preserve">
+    <value>Network Dimension</value>
+  </data>
 </root>

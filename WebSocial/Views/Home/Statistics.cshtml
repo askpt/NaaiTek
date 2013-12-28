@@ -1,6 +1,4 @@
-﻿@model WebSocial.Models.ApplicationUser
-
-@{
+﻿@{
     ViewBag.Title = Resources.Statistics;
     var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
@@ -12,5 +10,12 @@
         @:checked="checked"
     }
 }
+
+<table class="table">
+    <tr>
+        <th>@Resources.NetworkDimension</th>
+        <td>@ViewBag.Dimension</td>
+    </tr>
+</table>
 
 

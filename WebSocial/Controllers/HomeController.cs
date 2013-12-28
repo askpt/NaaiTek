@@ -51,8 +51,10 @@ namespace WebSocial.Controllers
             return View();
         }
 
-        public ActionResult Statistics()
+        public async Task<ActionResult> Statistics()
         {
+            UserDimension users = await UserDimensionServices.GetNetworkDimension();
+            ViewBag.Dimension = users.users.Count;
 
             return View();
         }
