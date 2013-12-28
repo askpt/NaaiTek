@@ -329,4 +329,7 @@
   <data name="UserInfo" xml:space="preserve">
     <value>My Profile</value>
   </data>
+  <data name="Dimension" xml:space="preserve">
+    <value>Dimension</value>
+  </data>
 </root>

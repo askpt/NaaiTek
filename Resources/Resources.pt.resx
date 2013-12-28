@@ -329,4 +329,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="UserInfo" xml:space="preserve">
     <value>Meu Perfil</value>
   </data>
+  <data name="Dimension" xml:space="preserve">
+    <value>Dimensão</value>
+  </data>
 </root>

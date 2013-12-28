@@ -323,6 +323,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dimension.
+        /// </summary>
+        public static string Dimension {
+            get {
+                return ResourceManager.GetString("Dimension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The E-mail field is required..
         /// </summary>
         public static string EmailRequired {
