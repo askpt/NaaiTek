@@ -205,5 +205,5 @@ get_users_dimension(_Request) :- listAllUsersWithDimension(List),
 
 create_json_users([],[]).
 
-create_json_users([(U, S)|T], [Json_ret|Lj]):-prolog_to_json(user(U,S), Json_ret),
+create_json_users([(S, U)|T], [Json_ret|Lj]):-prolog_to_json(user(U,S), Json_ret),
     create_json_users(T, Lj).

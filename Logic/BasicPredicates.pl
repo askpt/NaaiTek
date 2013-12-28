@@ -149,11 +149,13 @@ listAllUsers(List):-findall(([U1, U2]), (connects(U1, U2, _, _)), L1),
 
 %list of all users (with network dimension)
 listAllUsersWithDimension(List):-listAllUsers(L1),
-	calculateDimension(L1, List).
+	calculateDimension(L1, L2),
+	sort(L2, L3),
+	reverse(L3, List).
 
 calculateDimension([],[]).
 
-calculateDimension([H|T], [(H, S)|L]):- listAllNodes(H, Nodes),
+calculateDimension([H|T], [(S, H)|L]):- listAllNodes(H, Nodes),
 	length(Nodes, S1),
 	S is S1 - 1,
 	calculateDimension(T, L).
