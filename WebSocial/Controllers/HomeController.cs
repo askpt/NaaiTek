@@ -56,6 +56,8 @@ namespace WebSocial.Controllers
             UserDimension users = await UserDimensionServices.GetNetworkDimension();
             ViewBag.Dimension = users.users.Count;
 
+            ViewBag.Users = users.users;
+
             return View();
         }
 

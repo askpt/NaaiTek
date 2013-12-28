@@ -338,4 +338,10 @@
   <data name="NetworkDimension" xml:space="preserve">
     <value>Network Dimension</value>
   </data>
+  <data name="Leaderboard" xml:space="preserve">
+    <value>Leaderboard</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
 </root>

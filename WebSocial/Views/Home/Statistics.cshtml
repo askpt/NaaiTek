@@ -18,4 +18,21 @@
     </tr>
 </table>
 
+<h2>@Resources.Leaderboard</h2>
+<table class="table">
+    <tr>
+        <td>@Resources.Position</td>
+        <td>@Resources.UserName</td>
+        <td>@Resources.NetworkDimension</td>
+    </tr>
+    @for (int i = 0; i < 10; i++)
+    {
+        <tr>
+            <td>@(i+1)</td>
+            <td>@ViewBag.Users[i].user</td>
+            <td>@ViewBag.Users[i].dimension</td>
+        </tr>
+    }
+</table>
+
 
