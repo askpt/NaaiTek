@@ -57,6 +57,9 @@
 % request for get graph
 :- http_handler(root(get_graph), get_graph, []).
 
+% request for get all users
+:- http_handler(root(get_users), get_users, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -76,6 +79,7 @@ server(Port) :-
 
 :- json_object graph(nodes:list, paths:list, status:atom).
 
+:- json_object users(users:list, status:atom).
 %test handler
 %handle(Request) :-
         %http_read_json(Request, JSONIn),
@@ -181,4 +185,9 @@ get_graph(_Request) :-  http_parameters(_Request, [user(User, [])]),
                 create_json_paths(List, ListJsonP),
                 listAllNodes(User, ListN),
                 prolog_to_json(graph(ListN, ListJsonP, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+%get all users
+get_users(_Request) :- listAllUsers(List),
+                prolog_to_json(users(List, 'ok'), JSON_Object),
                 reply_json(JSON_Object).

@@ -141,3 +141,8 @@ listAll2ndFriends([User|T], List):-listAllConnections(User, L1),
 %list of all connections(3rd)
 listAllPaths(User, L):-listAllNodes(User, Nodes),
 	findall((User1, User2, S, Tag), (connects(User1, User2, S, Tag), member(User1, Nodes), member(User2, Nodes)), L).
+
+%list of all users
+listAllUsers(List):-findall(([U1, U2]), (connects(U1, U2, _, _)), L1),
+	append(L1, L2),
+	list_to_set(L2, List).
