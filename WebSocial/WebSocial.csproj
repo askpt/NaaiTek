@@ -173,6 +173,10 @@
     <Compile Include="Migrations\201312291432273_CorrectError.Designer.cs">
       <DependentUpon>201312291432273_CorrectError.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201312291444268_removedTagInheritance.cs" />
+    <Compile Include="Migrations\201312291444268_removedTagInheritance.Designer.cs">
+      <DependentUpon>201312291444268_removedTagInheritance.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\TagCount.cs" />
     <Compile Include="DAL\GameContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -317,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201312291432273_CorrectError.resx">
       <DependentUpon>201312291432273_CorrectError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312291444268_removedTagInheritance.resx">
+      <DependentUpon>201312291444268_removedTagInheritance.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

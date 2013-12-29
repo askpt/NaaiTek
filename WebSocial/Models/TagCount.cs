@@ -5,8 +5,9 @@ using System.Text;
 
 namespace WebSocial.Models
 {
-    class TagCount : Tag
+    public class TagCount
     {
+        public Tag Tag { get; set; }
         public int TotalUsers { get; set; }
     }
 }
