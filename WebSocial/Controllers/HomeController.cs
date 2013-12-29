@@ -26,13 +26,16 @@ namespace WebSocial.Controllers
             IQueryable<Tag> tags = (from tag in db.Tags where tagIDs.Contains(tag.ID) select tag);
             ViewBag.UserTags = tags;
 
-            string username = user.UserName;
-            UserGraph graph = await UserGraphServices.GetUserGraph(username);
+            if (userID != null)
+            {
+                string username = user.UserName;
+                UserGraph graph = await UserGraphServices.GetUserGraph(username);
 
-            // need to remove one because this dimension contains self user
-            int dimension = (graph.nodes.Count - 1);
+                // need to remove one because this dimension contains self user
+                int dimension = (graph.nodes.Count - 1);
 
-            ViewBag.Dimension = dimension;
+                ViewBag.Dimension = dimension;
+            }
 
             return View(user);
         }
