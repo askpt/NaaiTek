@@ -28,7 +28,7 @@ namespace WebSocial.Controllers
 
             string username = user.UserName;
             UserGraph graph = await UserGraphServices.GetUserGraph(username);
-            
+
             // need to remove one because this dimension contains self user
             int dimension = (graph.nodes.Count - 1);
 
@@ -58,6 +58,8 @@ namespace WebSocial.Controllers
 
             ViewBag.Users = users.users;
 
+            ViewBag.AnomUserTag = GetOverallUserTagCount(users.users.Count);
+
             return View();
         }
 
@@ -78,5 +80,47 @@ namespace WebSocial.Controllers
             Response.Cookies.Add(cookie);
             return RedirectToAction("Index");
         }
+
+        private List<TagCount> GetOverallUserTagCount(int userCount)
+        {
+            List<Tag> allTags = db.Tags.ToList();
+            List<TagCount> tagsStatistics = new List<TagCount>();
+            List<UserTag> allUsers = db.UsersTags.ToList();
+
+            foreach (Tag tag in allTags)
+            {
+                TagCount tagTemp = new TagCount { Tag = tag, TotalUsers = 0 };
+                foreach (UserTag user in allUsers)
+                {
+                    if (tag.ID == user.TagID)
+                    {
+                        tagTemp.TotalUsers++;
+                    }
+                }
+                tagTemp.TagClass = GetTagClass(tagTemp.TotalUsers, userCount);
+                tagsStatistics.Add(tagTemp);
+            }
+
+            return tagsStatistics;
+        }
+
+        public static string GetTagClass(int tagCount, int usersCount)
+        {
+            var result = (tagCount * 100) / usersCount;
+            if (result <= 1)
+                return "tag1";
+            if (result <= 4)
+                return "tag2";
+            if (result <= 8)
+                return "tag3";
+            if (result <= 12)
+                return "tag4";
+            if (result <= 18)
+                return "tag5";
+            if (result <= 30)
+                return "tag6";
+            return result <= 50 ? "tag7" : "";
+        }
+
     }
 }

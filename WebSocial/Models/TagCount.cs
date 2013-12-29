@@ -9,5 +9,6 @@ namespace WebSocial.Models
     {
         public Tag Tag { get; set; }
         public int TotalUsers { get; set; }
+        public string TagClass { get; set; }
     }
 }
