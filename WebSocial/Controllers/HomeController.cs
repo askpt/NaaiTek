@@ -63,8 +63,11 @@ namespace WebSocial.Controllers
 
             ViewBag.AnomUserTag = GetOverallUserTagCount(users.users.Count);
 
+            ViewBag.AnomConnTag = await GetOverallConnectionTagCount();
+
             return View();
         }
+
 
         public ActionResult SetCulture(string culture)
         {
@@ -107,7 +110,27 @@ namespace WebSocial.Controllers
             return tagsStatistics;
         }
 
-        public static string GetTagClass(int tagCount, int usersCount)
+
+        private static async Task<List<TagCount>> GetOverallConnectionTagCount()
+        {
+            TagCountConnection tag = await TagCountServices.GetTagCountConnection();
+
+            List<TagCount> listTags = new List<TagCount>();
+
+            // Convert the Tag Count Connection to the Tag Count object
+            foreach (TagConnection item in tag.tags)
+            {
+                string classTag = GetTagClass(item.count, tag.nr_connections);
+                Tag tagTmp = new Tag(){Name = item.tag};
+                TagCount tagCountTmp = new TagCount() { Tag = tagTmp, TotalUsers = item.count, TagClass = classTag };
+
+                listTags.Add(tagCountTmp);
+            }
+
+            return listTags;
+        }
+
+        private static string GetTagClass(int tagCount, int usersCount)
         {
             var result = (tagCount * 100) / usersCount;
             if (result <= 1)
