@@ -44,3 +44,11 @@
         <b class="@tag.TagClass">@tag.Tag.Name</b>
     }
 </div>
+
+<h2>Overall Tags By Connection</h2>
+<div id="tags">
+    @foreach (TagCount tag in ViewBag.AnomConnTag)
+    {
+        <b class="@tag.TagClass">@tag.Tag.Name</b>
+    }
+</div>
