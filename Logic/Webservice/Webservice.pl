@@ -63,6 +63,9 @@
 % request for get all users with dimension
 :- http_handler(root(get_users_dimension), get_users_dimension, []).
 
+% request for get tag count
+:- http_handler(root(get_tag_count), get_tag_count, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,6 +88,9 @@ server(Port) :-
 :- json_object users(users:list, status:atom).
 
 :- json_object user(user:atom, dimension:number).
+
+:- json_object tags(tags:list, nr_connections:number, status:atom).
+:- json_object tag(tag:atom, count:number).
 %test handler
 %handle(Request) :-
         %http_read_json(Request, JSONIn),
@@ -206,4 +212,19 @@ get_users_dimension(_Request) :- listAllUsersWithDimension(List),
 create_json_users([],[]).
 
 create_json_users([(S, U)|T], [Json_ret|Lj]):-prolog_to_json(user(U,S), Json_ret),
-    create_json_users(T, Lj).
+                create_json_users(T, Lj).
+
+%get tag count
+get_tag_count(_Request):-getCountTags(L),
+                create_json_tags(L, List_Json),
+                count_connections(Result),
+                prolog_to_json(tags(List_Json, Result, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+create_json_tags([],[]).
+
+create_json_tags([(Tag, S)|T], [Json_ret|Lj]):-prolog_to_json(tag(Tag, S), Json_ret),
+    create_json_tags(T, Lj).
+
+count_connections(R):-findall((A, B), connects(A, B, _, _), L),
+                length(L, R).
