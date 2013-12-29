@@ -5,8 +5,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using WebSocial.Models;
 
-namespace WebSocial.Models
+namespace WebSocial.Helpers.Models
 {
     public class TagCount
     {
@@ -26,25 +27,5 @@ namespace WebSocial.Models
         public List<TagConnection> tags { get; set; }
         public int nr_connections { get; set; }
         public string status { get; set; }
-    }
-
-    public class TagCountServices
-    {
-        private const string _baseUrl = "http://localhost:5000";
-
-        public static async Task<TagCountConnection> GetTagCountConnection()
-        {
-            TagCountConnection tagCount;
-
-            HttpClient client = new HttpClient();
-
-            var url = string.Format(_baseUrl + "/get_tag_count");
-
-            string responseJson = await client.GetStringAsync(url);
-
-            tagCount = JsonConvert.DeserializeObject<TagCountConnection>(responseJson);
-
-            return tagCount;
-        }
     }
 }

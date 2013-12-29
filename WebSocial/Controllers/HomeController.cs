@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using WebSocial.DAL;
 using WebSocial.Models;
 using System.Threading.Tasks;
+using WebSocial.Helpers.Models;
 
 namespace WebSocial.Controllers
 {
@@ -29,7 +30,7 @@ namespace WebSocial.Controllers
             if (userID != null)
             {
                 string username = user.UserName;
-                UserGraph graph = await UserGraphServices.GetUserGraph(username);
+                UserGraph graph = await Services.GetUserGraph(username);
 
                 // need to remove one because this dimension contains self user
                 int dimension = (graph.nodes.Count - 1);
@@ -56,7 +57,7 @@ namespace WebSocial.Controllers
 
         public async Task<ActionResult> Statistics()
         {
-            UserDimension users = await UserDimensionServices.GetNetworkDimension();
+            UserDimension users = await Services.GetAllUsers();
             ViewBag.Dimension = users.users.Count;
 
             ViewBag.Users = users.users;
@@ -113,7 +114,7 @@ namespace WebSocial.Controllers
 
         private static async Task<List<TagCount>> GetOverallConnectionTagCount()
         {
-            TagCountConnection tag = await TagCountServices.GetTagCountConnection();
+            TagCountConnection tag = await Services.GetTagCountConnection();
 
             List<TagCount> listTags = new List<TagCount>();
 
