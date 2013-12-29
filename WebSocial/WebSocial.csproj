@@ -169,6 +169,11 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Migrations\201312291432273_CorrectError.cs" />
+    <Compile Include="Migrations\201312291432273_CorrectError.Designer.cs">
+      <DependentUpon>201312291432273_CorrectError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TagCount.cs" />
     <Compile Include="DAL\GameContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -309,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201312281555007_ErrorResolve.resx">
       <DependentUpon>201312281555007_ErrorResolve.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312291432273_CorrectError.resx">
+      <DependentUpon>201312291432273_CorrectError.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
