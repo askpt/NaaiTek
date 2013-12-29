@@ -159,3 +159,27 @@ calculateDimension([H|T], [(S, H)|L]):- listAllNodes(H, Nodes),
 	length(Nodes, S1),
 	S is S1 - 1,
 	calculateDimension(T, L).
+
+%list of tag counts
+getCountTags(List):-getAllTags(TagList),
+	getConnectionsByTagNoSemantics(AllConnectionTagList),
+	countTags(TagList, AllConnectionTagList, List).
+
+getAllTags(List):-findall(Tag, tag(Tag, _), List).
+
+getConnectionsByTagNoSemantics(List):-findall(L, connects(_, _, _, L), L1), append(L1, List).
+
+countTags([], _, []).
+
+countTags([H|T], ListToCount, [R|L]):-countInList(H, ListToCount, R),
+	countTags(T, ListToCount, L).
+
+countInList(H, List, R):-countInList_Helper(H, List, 0, S),
+	R = (H, S).
+
+countInList_Helper(_, [], N, N).
+
+countInList_Helper(H, [H|T], N,R):- N1 is N + 1,
+	countInList_Helper(H, T, N1,R).
+
+countInList_Helper(H, [_|T], N,R):-countInList_Helper(H, T, N,R).
