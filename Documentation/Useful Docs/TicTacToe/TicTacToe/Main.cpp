@@ -19,7 +19,7 @@ struct player2
 
 
 int WindowWidth = 600;
-int WindowHeight =600;
+int WindowHeight = 600;
 
 
 int GLUTWindowHandle = 0;
@@ -112,16 +112,16 @@ P(100+3*squareWidth,100+3*squareWidth)
 
 void drawTable()
 {
-	
+
 	glColor3b(1.0, 0.0, 0.0);
 
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
 	glVertex2f(100, 100);
-	glVertex2f(100+squareWidth, 100);
+	glVertex2f(100 + squareWidth, 100);
 
-	glVertex2f(100+squareWidth, squareWidth+100);
-	glVertex2f(100, 100+squareWidth);
+	glVertex2f(100 + squareWidth, squareWidth + 100);
+	glVertex2f(100, 100 + squareWidth);
 
 	glVertex2f(100, 100);
 	glVertex2f(100, 100 + squareWidth);
@@ -173,7 +173,7 @@ void drawTable()
 	glVertex2f(100, 100 + 2 * squareWidth);
 	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
 
-	glVertex2f(100+squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
 	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
 
 	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
@@ -197,24 +197,24 @@ void drawTable()
 	glVertex2f(100, 100 + 3 * squareWidth);
 	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100+squareWidth, 100 + 3 * squareWidth);
-	glVertex2f(100 + 2*squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100 + 2*squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 	glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
 
-	glVertex2f(100+squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100+squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100 +2* squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100 + 2*squareWidth, 100 + 3 * squareWidth);
+	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 
 	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
 	glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
 
-	
+
 	glEnd();
 
 }
@@ -224,14 +224,14 @@ void drawX(int x, int y)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
+
 	glColor3b(1.0, 0.0, 0.0);
 
 	glLineWidth(4.0);
 
 	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
 	{
-		
+
 		glBegin(GL_LINES);
 		glVertex2f(100, 100);
 		glVertex2f(100 + squareWidth, 100 + squareWidth);
@@ -242,28 +242,139 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
-	
+
 	}
-	/*
-	else
-	if (x>100 + squareWidth && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
-		//drawX(x, y);
-	else
-	if (x>100 + 2 + squareWidth && x<100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
-		drawX(x, y);
-	else
-	if (x > 100 && x<(100 + squareWidth) && y > 100 + squareWidth && y < 100 + 2 * squareWidth)
-		drawX(x, y);
-	glBegin(GL_LINES);
-	glVertex2f(100, 100);
-	glVertex2f(100 + squareWidth, 100+squareWidth);
 
-	glVertex2f(100 + squareWidth, 100);
-	glVertex2f(100, 100 + squareWidth);
+	else
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
 
-	
-	glEnd();
-	glFlush();*/
+	{
+
+		glBegin(GL_LINES);
+		glVertex2f(100 + squareWidth, 100);
+		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+
+		glVertex2f(100 + 2 * squareWidth, 100);
+		glVertex2f(100 + squareWidth, 100 + squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+
+	else
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
+	{
+		glBegin(GL_LINES);
+		glVertex2f(100 + 2 * squareWidth, 100);
+		glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+
+		glVertex2f(100 + 3 * squareWidth, 100);
+		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+	else
+	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth))
+	{
+		glBegin(GL_LINES);
+		glVertex2f(100, 100 + squareWidth);
+		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+
+		glVertex2f(100 + squareWidth, 100 + squareWidth);
+		glVertex2f(100, 100 + 2 * squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+
+	else
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+
+	{
+
+		glBegin(GL_LINES);
+		glVertex2f(100 + squareWidth, 100 + squareWidth);
+		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+
+		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	{
+		glBegin(GL_LINES);
+		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+		glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+
+		glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+	else
+	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth))
+	{
+
+		glBegin(GL_LINES);
+		glVertex2f(100, 100 + 2 * squareWidth);
+		glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
+
+		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+		glVertex2f(100, 100 + 3 * squareWidth);
+
+
+		glEnd();
+		glFlush();
+
+	}
+
+	else
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+
+	{
+
+		glBegin(GL_LINES);
+		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+		glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
+
+		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+
+	else
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	{
+		glBegin(GL_LINES);
+		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
+
+		glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
+
+
+		glEnd();
+		glFlush();
+	}
+
+
+
+
+
+
 }
 
 /*function called by the mouse callback to draw X's on the specific squad*/
@@ -273,7 +384,7 @@ void drawO(int x, int y)
 }
 void display(void)
 {
-	
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -296,12 +407,12 @@ void mouse(int btn, int mouseState, int x, int y)
 {
 	switch (btn){
 	case GLUT_LEFT_BUTTON:
-	
-	if (mouseState == GLUT_DOWN)
-	{
-		drawX(x, y);
+
+		if (mouseState == GLUT_DOWN)
+		{
+			drawX(x, y);
+		}
 	}
-}
 }
 
 int main(int argc, char ** argv)
