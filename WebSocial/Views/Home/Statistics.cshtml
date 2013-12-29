@@ -1,4 +1,6 @@
-﻿@{
+﻿@using WebSocial.Models
+
+@{
     ViewBag.Title = Resources.Statistics;
     var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
@@ -28,11 +30,17 @@
     @for (int i = 0; i < 10; i++)
     {
         <tr>
-            <td>@(i+1)</td>
+            <td>@(i + 1)</td>
             <td>@ViewBag.Users[i].user</td>
             <td>@ViewBag.Users[i].dimension</td>
         </tr>
     }
 </table>
 
-
+<h2>Overall Tags By User</h2>
+<div id="tags">
+    @foreach (TagCount tag in ViewBag.AnomUserTag)
+    {
+        <b class="@tag.TagClass">@tag.Tag.Name</b>
+    }
+</div>
