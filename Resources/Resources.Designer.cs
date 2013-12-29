@@ -539,6 +539,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overall Tags By Connection.
+        /// </summary>
+        public static string OverallConTags {
+            get {
+                return ResourceManager.GetString("OverallConTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overall Tags By User.
+        /// </summary>
+        public static string OverallUserTags {
+            get {
+                return ResourceManager.GetString("OverallUserTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {

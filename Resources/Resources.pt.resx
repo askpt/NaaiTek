@@ -344,4 +344,10 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="Position" xml:space="preserve">
     <value>Posição</value>
   </data>
+  <data name="OverallConTags" xml:space="preserve">
+    <value>Tags das Conexões: Vista Geral</value>
+  </data>
+  <data name="OverallUserTags" xml:space="preserve">
+    <value>Tags dos Utilizadores: Vista Geral</value>
+  </data>
 </root>

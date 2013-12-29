@@ -344,4 +344,10 @@
   <data name="Position" xml:space="preserve">
     <value>Position</value>
   </data>
+  <data name="OverallConTags" xml:space="preserve">
+    <value>Overall Tags By Connection</value>
+  </data>
+  <data name="OverallUserTags" xml:space="preserve">
+    <value>Overall Tags By User</value>
+  </data>
 </root>
