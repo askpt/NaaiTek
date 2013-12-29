@@ -47,30 +47,15 @@ input[type="checkbox"].input-validation-error {
             ------------------------------
             */
 
-.tag1 {
-    font-size: 0.8em;
-}
+.tag1{font-size: 0.8em}
+.tag2{font-size: 0.9em}
+.tag3{font-size: 1em}
+.tag4{font-size: 1.2em}
+.tag5{font-size: 1.4em}
+.tag6{font-size: 1.7em}
+.tag7{font-size: 2.0em}
 
-.tag2 {
-    font-size: 1.4em;
-}
-
-.tag3 {
-    font-size: 1.9em;
-}
-
-.tag4 {
-    font-size: 2.4em;
-}
-
-.tag5 {
-    font-size: 3em;
-}
-
-.tag6 {
-    font-size: 3.5em;
-}
-
-.tag7 {
-    font-size: 4em;
+#tags {
+    width: 240px;
+    text-align: center;
 }
