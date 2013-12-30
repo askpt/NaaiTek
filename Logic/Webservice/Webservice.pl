@@ -66,6 +66,9 @@
 % request for get tag count
 :- http_handler(root(get_tag_count), get_tag_count, []).
 
+% request for get user tag count
+:-http_handler(root(get_user_tag_count), get_user_tag_count, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,4 +230,15 @@ create_json_tags([(Tag, S)|T], [Json_ret|Lj]):-prolog_to_json(tag(Tag, S), Json_
     create_json_tags(T, Lj).
 
 count_connections(R):-findall((A, B), connects(A, B, _, _), L),
+                length(L, R).
+
+%get user tag count
+get_user_tag_count(_Request):- http_parameters(_Request, [user(User, [])]),
+                getCountTagsUser(User, L),
+                create_json_tags(L, List_Json),
+                count_user_connections(User, Result),
+                prolog_to_json(tags(List_Json, Result, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+count_user_connections(U, R):-listAllPaths(U, L),
                 length(L, R).
