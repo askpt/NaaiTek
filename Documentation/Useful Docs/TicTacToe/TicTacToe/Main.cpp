@@ -229,6 +229,7 @@ void drawX(int x, int y)
 
 	glLineWidth(4.0);
 
+	//square1
 	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
 	{
 
@@ -243,6 +244,8 @@ void drawX(int x, int y)
 		glFlush();
 	}
 	else
+
+	//square2
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -256,6 +259,7 @@ void drawX(int x, int y)
 		glFlush();
 	}
 	else
+		//square3
 	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -269,6 +273,7 @@ void drawX(int x, int y)
 		glFlush();
 	}
 	else
+		//square4
 	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth))
 	{
 		glBegin(GL_LINES);
@@ -283,6 +288,7 @@ void drawX(int x, int y)
 	}
 
 	else
+		//square5
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -296,7 +302,8 @@ void drawX(int x, int y)
 		glEnd();
 		glFlush();
 	}
-
+	else
+		//square6
 	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -310,6 +317,7 @@ void drawX(int x, int y)
 		glFlush();
 	}
 	else
+		//square7
 	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth))
 	{
 
@@ -324,6 +332,7 @@ void drawX(int x, int y)
 		glFlush();
 	}
 	else
+		//square8
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -337,6 +346,7 @@ void drawX(int x, int y)
 		glFlush();
 	}
 	else
+		//square9
 	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -360,20 +370,16 @@ void drawO(int x, int y)
 
 	glColor3b(1.0, 0.0, 0.0);
 
-	glLineWidth(4.0);
+
+	//square1
 	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
 	{
 		GLint i;
-		GLfloat t,xTemp,yTemp;
-
-		GLfloat x0 = (2*100 + squareWidth) / 2.0;
-		GLfloat y0 = (2*100 + squareWidth) / 2.0;
-
-		t = 0.0,xTemp=0.0,yTemp=0.0;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (2 * 100 + squareWidth) / 2.0;
+		GLfloat y0 = (2 * 100 + squareWidth) / 2.0;
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
-
-
-		
 		glBegin(GL_POLYGON);
 		for (i = 0; i < 50; i++)
 		{
@@ -385,6 +391,178 @@ void drawO(int x, int y)
 		glEnd();
 		glFlush();
 	}
+	else
+		//square2
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + squareWidth + (squareWidth / 2.0));
+		GLfloat y0 = (100 + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+
+	else
+		//square3
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + 2*squareWidth + (squareWidth / 2.0));
+		GLfloat y0 = (100 + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+
+	else
+		//square4
+	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth))
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100+(squareWidth/2.0));
+		GLfloat y0 = (100 + squareWidth+(squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+	else
+		//square5
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + squareWidth+(squareWidth / 2.0));
+		GLfloat y0 = (100 + squareWidth + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+	else
+		//square6
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + 2*squareWidth + (squareWidth / 2.0));
+		GLfloat y0 = (100 + squareWidth + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+
+	else
+		//square7
+	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth))
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + (squareWidth / 2.0));
+		GLfloat y0 = (100 + 2*squareWidth + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+	else
+		//square8
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + squareWidth+ (squareWidth / 2.0));
+		GLfloat y0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+	else
+		//square9
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	{
+		GLint i;
+		GLfloat t, xTemp, yTemp;
+		GLfloat x0 = (100 + 2*squareWidth+(squareWidth / 2.0));
+		GLfloat y0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
+		t = 0.0, xTemp = 0.0, yTemp = 0.0;
+		GLfloat r = squareWidth / 2.5;
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
+
 }
 void display(void)
 {
