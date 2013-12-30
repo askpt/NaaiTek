@@ -107,25 +107,38 @@ hasTag([_|List], Tag):-hasTag(List, Tag).
 createConnection(UserA, UserB, ConnectionStrenght):-assert(connects(UserA, UserB, ConnectionStrenght, [])).
 
 %remove connections
-removeConnection(UserA, UserB):-connects(UserA, UserB, Strenght, TagList),
-								retractall(connects(UserA, UserB, Strenght, TagList)).
+removeConnection(UserA, UserB):-(connects(UserA, UserB, Strenght, TagList),
+								retractall(connects(UserA, UserB, Strenght, TagList)));
+								(connects(UserB, UserA, Strenght, TagList),
+								retractall(connects(UserB, UserA, Strenght, TagList))).
 
 %edit connection by Strenght
-editConnectionByStrenght(UserA, UserB, ConnectionStr):-connects(UserA, UserB, StrTemp, List),
+editConnectionByStrenght(UserA, UserB, ConnectionStr):-(connects(UserA, UserB, StrTemp, List),
 	retractall(connects(UserA, UserB, StrTemp, List)),
-	assert(connects(UserA, UserB, ConnectionStr, List)).
+	assert(connects(UserA, UserB, ConnectionStr, List)));
+	(connects(UserB, UserA, StrTemp, List),
+	retractall(connects(UserB, UserA, StrTemp, List)),
+	assert(connects(UserB, UserA, ConnectionStr, List))).
 
 %edit connection by tag (add)
-editConnectionByAddTag(UserA, UserB, Tag):-connects(UserA, UserB, Value, TempList),
+editConnectionByAddTag(UserA, UserB, Tag):-(connects(UserA, UserB, Value, TempList),
 	ListTag = [Tag|TempList],
 	retractall(connects(UserA, UserB, Value, TempList)),
-	assert(connects(UserA, UserB, Value, ListTag)).
+	assert(connects(UserA, UserB, Value, ListTag)));
+	(connects(UserB, UserA, Value, TempList),
+	ListTag = [Tag|TempList],
+	retractall(connects(UserB, UserA, Value, TempList)),
+	assert(connects(UserB, UserA, Value, ListTag))).
 
 %edit connection by tag (remove)
-editConnectionByRemoveTag(UserA, UserB, Tag):-connects(UserA, UserB, Value, TempList),
+editConnectionByRemoveTag(UserA, UserB, Tag):-(connects(UserA, UserB, Value, TempList),
 	delete(TempList, Tag, ListTag),
 	retractall(connects(UserA, UserB, Value, TempList)),
-	assert(connects(UserA, UserB, Value, ListTag)).
+	assert(connects(UserA, UserB, Value, ListTag)));
+	(connects(UserB, UserA, Value, TempList),
+	delete(TempList, Tag, ListTag),
+	retractall(connects(UserB, UserA, Value, TempList)),
+	assert(connects(UserB, UserA, Value, ListTag))).
 
 %list of all friends (3rd)
 listAllNodes(User, L):-listAllConnections(User, L1), 
