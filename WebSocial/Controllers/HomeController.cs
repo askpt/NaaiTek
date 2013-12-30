@@ -77,7 +77,7 @@ namespace WebSocial.Controllers
                 UserGraph graph = await Services.GetUserGraph(user.UserName);
                 List<string> friendIds = FindFriendIds(graph);
 
-                ViewBag.AnomUserTag = GetAuthenticatedUserTagCount(graph.nodes.Count, friendIds);
+                ViewBag.AuthUserTag = GetAuthenticatedUserTagCount(graph.nodes.Count, friendIds);
             }
 
             return View();
