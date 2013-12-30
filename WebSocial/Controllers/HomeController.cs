@@ -76,6 +76,8 @@ namespace WebSocial.Controllers
 
                 UserGraph graph = await Services.GetUserGraph(user.UserName);
                 List<string> friendIds = FindFriendIds(graph);
+
+                ViewBag.AnomUserTag = GetAuthenticatedUserTagCount(graph.nodes.Count, friendIds);
             }
 
             return View();
@@ -108,9 +110,32 @@ namespace WebSocial.Controllers
             foreach (Tag tag in allTags)
             {
                 TagCount tagTemp = new TagCount { Tag = tag, TotalUsers = 0 };
-                foreach (UserTag user in allUsers)
+                foreach (UserTag userTag in allUsers)
                 {
-                    if (tag.ID == user.TagID)
+                    if (tag.ID == userTag.TagID)
+                    {
+                        tagTemp.TotalUsers++;
+                    }
+                }
+                tagTemp.TagClass = GetTagClass(tagTemp.TotalUsers, userCount);
+                tagsStatistics.Add(tagTemp);
+            }
+
+            return tagsStatistics;
+        }
+
+        private List<TagCount> GetAuthenticatedUserTagCount(int userCount, List<string> friendIds)
+        {
+            List<Tag> allTags = db.Tags.ToList();
+            List<TagCount> tagsStatistics = new List<TagCount>();
+            List<UserTag> allUsers = db.UsersTags.ToList();
+
+            foreach (Tag tag in allTags)
+            {
+                TagCount tagTemp = new TagCount { Tag = tag, TotalUsers = 0 };
+                foreach (UserTag userTag in allUsers)
+                {
+                    if (tag.ID == userTag.TagID && friendIds.Contains(userTag.UserID))
                     {
                         tagTemp.TotalUsers++;
                     }
