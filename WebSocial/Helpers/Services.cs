@@ -58,6 +58,21 @@ namespace WebSocial.Helpers
 
             return userGraph;
         }
+
+        public static async Task<TagCountConnection> GetTagCountConnectionByUser(string username)
+        {
+            TagCountConnection tagCount;
+
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/get_user_tag_count?user={0}", username);
+
+            string responseJson = await client.GetStringAsync(url);
+
+            tagCount = JsonConvert.DeserializeObject<TagCountConnection>(responseJson);
+
+            return tagCount;
+        }
     }
 
 
