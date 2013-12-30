@@ -183,3 +183,19 @@ countInList_Helper(H, [H|T], N,R):- N1 is N + 1,
 	countInList_Helper(H, T, N1,R).
 
 countInList_Helper(H, [_|T], N,R):-countInList_Helper(H, T, N,R).
+
+%list of tag counts (auth user)
+getCountTagsUser(User, List):-getAllTags(TagList),
+	getConnectionsByTagNoSemanticsUser(User, AllConnectionTagList),
+	countTags(TagList, AllConnectionTagList, L1),
+	removeZeroTag(L1, List).
+
+getConnectionsByTagNoSemanticsUser(User, List):-listAllNodes(User, Friends),
+	findall(L, (connects(U1, U2, _, L), member(U1, Friends), member(U2, Friends)), L1), 
+	append(L1, List).	
+
+removeZeroTag([],[]).
+
+removeZeroTag([(_, 0)|T], R):-removeZeroTag(T, R).
+
+removeZeroTag([H|T], [H|R]):-removeZeroTag(T, R).
