@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include <stdlib.h>     
 #include <GL\glut.h>
+#include <SWI-cpp.h>
 #include <iostream>
+
+
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795
 #endif
@@ -598,13 +601,31 @@ void mouse(int btn, int mouseState, int x, int y)
 	}
 }
 
-int main(int argc, char ** argv)
+void prologConnection()
 {
+	char *plargv[] = { "swipl.dll", "-s", "teste.pl", NULL };
+	PlEngine e(3, plargv);
+	PlTermv av(2);
+	av[1] = PlCompound("jose");
+	PlQuery q("ancestral", av);
+	while (q.next_solution())
+	{
+		cout << (char*)av[0] << endl;
+	}
+	//cin.get();
+}
+
+int main(int argc, char **argv)
+{
+	
+	prologConnection();
+	
 	glutInit(&argc, argv);
+
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("TIC-TAC-TOE");
-	glutReshapeFunc(myReshape);
+	//glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
 	//glutKeyboardFunc(keyboard);
 	//glutSpecialFunc(Special);
@@ -612,5 +633,8 @@ int main(int argc, char ** argv)
 
 	myInit();
 	glutMainLoop();
+	
+	
+	
 	return 0;
 }
