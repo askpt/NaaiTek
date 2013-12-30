@@ -68,7 +68,7 @@ namespace WebSocial.Controllers
 
             // authenticated users
             string userID = User.Identity.GetUserId();
-            if (userID != null)
+            if (userID != null && User.IsInRole("User"))
             {
                 ApplicationUser user = db.Users.Find(userID);
 
@@ -77,9 +77,6 @@ namespace WebSocial.Controllers
 
             return View();
         }
-
-        
-
 
         public ActionResult SetCulture(string culture)
         {
