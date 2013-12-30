@@ -73,6 +73,9 @@ namespace WebSocial.Controllers
                 ApplicationUser user = db.Users.Find(userID);
 
                 ViewBag.AuthConnTag = await GetAuthenticatedConnectionTagCount(user.UserName);
+
+                UserGraph graph = await Services.GetUserGraph(user.UserName);
+                List<string> friendIds = FindFriendIds(graph);
             }
 
             return View();
@@ -118,7 +121,6 @@ namespace WebSocial.Controllers
 
             return tagsStatistics;
         }
-
 
         private static async Task<List<TagCount>> GetOverallConnectionTagCount()
         {
@@ -166,6 +168,22 @@ namespace WebSocial.Controllers
             if (result <= 30)
                 return "tag6";
             return result <= 50 ? "tag7" : "";
+        }
+
+        private List<string> FindFriendIds(UserGraph graph)
+        {
+            List<string> usernames = graph.nodes;
+            List<string> userIds = new List<string>();
+
+            foreach (ApplicationUser item in db.Users)
+            {
+                if (usernames.Contains(item.UserName))
+                {
+                    userIds.Add(item.Id);
+                }
+            }
+
+            return userIds;
         }
 
     }
