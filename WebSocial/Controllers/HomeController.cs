@@ -66,8 +66,19 @@ namespace WebSocial.Controllers
 
             ViewBag.AnomConnTag = await GetOverallConnectionTagCount();
 
+            // authenticated users
+            string userID = User.Identity.GetUserId();
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                ViewBag.AuthConnTag = await GetAuthenticatedConnectionTagCount(user.UserName);
+            }
+
             return View();
         }
+
+        
 
 
         public ActionResult SetCulture(string culture)
@@ -116,13 +127,24 @@ namespace WebSocial.Controllers
         {
             TagCountConnection tag = await Services.GetTagCountConnection();
 
+            return ConvertToTagCount(tag);
+        }
+
+        private static async Task<List<TagCount>> GetAuthenticatedConnectionTagCount(string username)
+        {
+            TagCountConnection tag = await Services.GetTagCountConnectionByUser(username);
+
+            return ConvertToTagCount(tag);
+        }
+        private static List<TagCount> ConvertToTagCount(TagCountConnection tag)
+        {
             List<TagCount> listTags = new List<TagCount>();
 
             // Convert the Tag Count Connection to the Tag Count object
             foreach (TagConnection item in tag.tags)
             {
                 string classTag = GetTagClass(item.count, tag.nr_connections);
-                Tag tagTmp = new Tag(){Name = item.tag};
+                Tag tagTmp = new Tag() { Name = item.tag };
                 TagCount tagCountTmp = new TagCount() { Tag = tagTmp, TotalUsers = item.count, TagClass = classTag };
 
                 listTags.Add(tagCountTmp);
