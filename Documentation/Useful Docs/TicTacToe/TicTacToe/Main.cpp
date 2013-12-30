@@ -4,6 +4,9 @@
 #include <stdlib.h>     
 #include <GL\glut.h>
 #include <iostream>
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626433832795
+#endif
 
 using namespace std;
 
@@ -17,7 +20,7 @@ struct player2
 	bool matrix[3][3];
 };
 
-
+const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
 int WindowHeight = 600;
 
@@ -31,8 +34,8 @@ float squareWidth = WindowWidth / 5.0;
 
 void myInit()
 {
-	glClearColor(1.0, 0.0, 0.0, 0.0);
-	glColor3f(1.0, 1.0, 1.0);
+	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	glShadeModel(GL_FLAT);
 
 	glViewport(0, 0, WindowWidth, WindowHeight);
@@ -117,31 +120,31 @@ void drawTable()
 
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
-	glVertex2f(100, 100);
-	glVertex2f(100 + squareWidth, 100);
+	glVertex2d(100, 100);
+	glVertex2d(100 + squareWidth, 100);
 
-	glVertex2f(100 + squareWidth, squareWidth + 100);
-	glVertex2f(100, 100 + squareWidth);
+	glVertex2d(100 + squareWidth, squareWidth + 100);
+	glVertex2d(100, 100 + squareWidth);
 
-	glVertex2f(100, 100);
-	glVertex2f(100, 100 + squareWidth);
+	glVertex2d(100, 100);
+	glVertex2d(100, 100 + squareWidth);
 
-	glVertex2f(100 + squareWidth, 100 + squareWidth);
-	glVertex2f(100 + squareWidth, 100);
+	glVertex2d(100 + squareWidth, 100 + squareWidth);
+	glVertex2d(100 + squareWidth, 100);
 	glEnd();
 
 	glColor3b(1.0, 0.0, 0.0);
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
 
-	glVertex2f(100 + squareWidth, 100);
-	glVertex2f(100 + 2 * squareWidth, 100);
+	glVertex2d(100 + squareWidth, 100);
+	glVertex2d(100 + 2 * squareWidth, 100);
 
-	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
-	glVertex2f(100 + squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + squareWidth, 100 + squareWidth);
 
-	glVertex2f(100 + 2 * squareWidth, 100);
-	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100);
+	glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
 
 	glEnd();
 
@@ -149,14 +152,41 @@ void drawTable()
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
 
-	glVertex2f(100 + 2 * squareWidth, 100);
-	glVertex2f(100 + 3 * squareWidth, 100);
+	glVertex2d(100 + 2 * squareWidth, 100);
+	glVertex2d(100 + 3 * squareWidth, 100);
 
-	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
-	glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 3 * squareWidth, 100 + squareWidth);
 
-	glVertex2f(100 + 3 * squareWidth, 100);
-	glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 3 * squareWidth, 100);
+	glVertex2d(100 + 3 * squareWidth, 100 + squareWidth);
+
+	glEnd();
+
+	glColor3b(1.0, 0.0f, 0.0f);
+	glLineWidth(4.0);
+
+	glBegin(GL_LINES);
+	glVertex2d(100, 100 + squareWidth);
+	glVertex2d(100, 100 + 2 * squareWidth);
+
+	glVertex2d(100 + squareWidth, 100 + squareWidth);
+	glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2d(100, 100 + 2 * squareWidth);
+	glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+
+	glVertex2d(100 + 3 * squareWidth, 100 + squareWidth);
+	glVertex2d(100 + 3 * squareWidth, 100 + 2 * squareWidth);
 
 	glEnd();
 
@@ -164,56 +194,26 @@ void drawTable()
 	glLineWidth(4.0);
 
 	glBegin(GL_LINES);
-	glVertex2f(100, 100 + squareWidth);
-	glVertex2f(100, 100 + 2 * squareWidth);
+	glVertex2d(100, 100 + 2 * squareWidth);
+	glVertex2d(100, 100 + 3 * squareWidth);
 
-	glVertex2f(100 + squareWidth, 100 + squareWidth);
-	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100, 100 + 3 * squareWidth);
+	glVertex2d(100 + squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100, 100 + 2 * squareWidth);
-	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + squareWidth, 100 + 3 * squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + 3 * squareWidth);
+	glVertex2d(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
-	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 
-	glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
-	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
-
-	glEnd();
-
-	glColor3b(1.0, 0.0, 0.0);
-	glLineWidth(4.0);
-
-	glBegin(GL_LINES);
-	glVertex2f(100, 100 + 2 * squareWidth);
-	glVertex2f(100, 100 + 3 * squareWidth);
-
-	glVertex2f(100, 100 + 3 * squareWidth);
-	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
-
-	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
-	glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
-
-	glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
-	glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
-
-
-	glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
-
-	glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
-
-	glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
-	glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
-
-
+	glVertex2d(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+	glVertex2d(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
 	glEnd();
 
@@ -233,45 +233,37 @@ void drawX(int x, int y)
 	{
 
 		glBegin(GL_LINES);
-		glVertex2f(100, 100);
-		glVertex2f(100 + squareWidth, 100 + squareWidth);
+		glVertex2d(100, 100);
+		glVertex2d(100 + squareWidth, 100 + squareWidth);
 
-		glVertex2f(100 + squareWidth, 100);
-		glVertex2f(100, 100 + squareWidth);
-
+		glVertex2d(100 + squareWidth, 100);
+		glVertex2d(100, 100 + squareWidth);
 
 		glEnd();
 		glFlush();
-
 	}
-
 	else
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
-
 	{
-
 		glBegin(GL_LINES);
-		glVertex2f(100 + squareWidth, 100);
-		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
+		glVertex2d(100 + squareWidth, 100);
+		glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
 
-		glVertex2f(100 + 2 * squareWidth, 100);
-		glVertex2f(100 + squareWidth, 100 + squareWidth);
-
+		glVertex2d(100 + 2 * squareWidth, 100);
+		glVertex2d(100 + squareWidth, 100 + squareWidth);
 
 		glEnd();
 		glFlush();
 	}
-
 	else
 	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
 	{
 		glBegin(GL_LINES);
-		glVertex2f(100 + 2 * squareWidth, 100);
-		glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100);
+		glVertex2d(100 + 3 * squareWidth, 100 + squareWidth);
 
-		glVertex2f(100 + 3 * squareWidth, 100);
-		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
-
+		glVertex2d(100 + 3 * squareWidth, 100);
+		glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
 
 		glEnd();
 		glFlush();
@@ -280,12 +272,11 @@ void drawX(int x, int y)
 	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth))
 	{
 		glBegin(GL_LINES);
-		glVertex2f(100, 100 + squareWidth);
-		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100, 100 + squareWidth);
+		glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
 
-		glVertex2f(100 + squareWidth, 100 + squareWidth);
-		glVertex2f(100, 100 + 2 * squareWidth);
-
+		glVertex2d(100 + squareWidth, 100 + squareWidth);
+		glVertex2d(100, 100 + 2 * squareWidth);
 
 		glEnd();
 		glFlush();
@@ -293,15 +284,13 @@ void drawX(int x, int y)
 
 	else
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
-
 	{
-
 		glBegin(GL_LINES);
-		glVertex2f(100 + squareWidth, 100 + squareWidth);
-		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + squareWidth, 100 + squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
 
-		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
-		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
+		glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
 
 
 		glEnd();
@@ -311,12 +300,11 @@ void drawX(int x, int y)
 	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
 	{
 		glBegin(GL_LINES);
-		glVertex2f(100 + 2 * squareWidth, 100 + squareWidth);
-		glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
+		glVertex2d(100 + 3 * squareWidth, 100 + 2 * squareWidth);
 
-		glVertex2f(100 + 3 * squareWidth, 100 + squareWidth);
-		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
-
+		glVertex2d(100 + 3 * squareWidth, 100 + squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
 
 		glEnd();
 		glFlush();
@@ -326,61 +314,77 @@ void drawX(int x, int y)
 	{
 
 		glBegin(GL_LINES);
-		glVertex2f(100, 100 + 2 * squareWidth);
-		glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
+		glVertex2d(100, 100 + 2 * squareWidth);
+		glVertex2d(100 + squareWidth, 100 + 3 * squareWidth);
 
-		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
-		glVertex2f(100, 100 + 3 * squareWidth);
-
+		glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100, 100 + 3 * squareWidth);
 
 		glEnd();
 		glFlush();
-
 	}
-
 	else
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
-
 	{
-
 		glBegin(GL_LINES);
-		glVertex2f(100 + squareWidth, 100 + 2 * squareWidth);
-		glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
+		glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 
-		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
-		glVertex2f(100 + squareWidth, 100 + 3 * squareWidth);
-
+		glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + squareWidth, 100 + 3 * squareWidth);
 
 		glEnd();
 		glFlush();
 	}
-
 	else
 	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
 	{
 		glBegin(GL_LINES);
-		glVertex2f(100 + 2 * squareWidth, 100 + 2 * squareWidth);
-		glVertex2f(100 + 3 * squareWidth, 100 + 3 * squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
-		glVertex2f(100 + 3 * squareWidth, 100 + 2 * squareWidth);
-		glVertex2f(100 + 2 * squareWidth, 100 + 3 * squareWidth);
-
+		glVertex2d(100 + 3 * squareWidth, 100 + 2 * squareWidth);
+		glVertex2d(100 + 2 * squareWidth, 100 + 3 * squareWidth);
 
 		glEnd();
 		glFlush();
 	}
-
-
-
-
-
 
 }
 
 /*function called by the mouse callback to draw X's on the specific squad*/
 void drawO(int x, int y)
 {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
+	glColor3b(1.0, 0.0, 0.0);
+
+	glLineWidth(4.0);
+	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
+	{
+		GLint i;
+		GLfloat t,xTemp,yTemp;
+
+		GLfloat x0 = (2*100 + squareWidth) / 2.0;
+		GLfloat y0 = (2*100 + squareWidth) / 2.0;
+
+		t = 0.0,xTemp=0.0,yTemp=0.0;
+		GLfloat r = squareWidth / 2.5;
+
+
+		
+		glBegin(GL_POLYGON);
+		for (i = 0; i < 50; i++)
+		{
+			xTemp = r * cos(t) + x0;
+			yTemp = r * sin(t) + y0;
+			glVertex2f(xTemp, yTemp);
+			t += 2.0*M_PI / 50;
+		}
+		glEnd();
+		glFlush();
+	}
 }
 void display(void)
 {
@@ -410,7 +414,8 @@ void mouse(int btn, int mouseState, int x, int y)
 
 		if (mouseState == GLUT_DOWN)
 		{
-			drawX(x, y);
+			//drawX(x, y);
+			drawO(x, y);
 		}
 	}
 }
