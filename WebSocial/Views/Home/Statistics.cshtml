@@ -52,3 +52,14 @@
         <b class="@tag.TagClass">@tag.Tag.Name</b>
     }
 </div>
+
+@if (User.IsInRole("User"))
+{
+    <h2>Single User Tags By Connection</h2>
+    <div id="tags">
+        @foreach (TagCount tag in ViewBag.AuthConnTag)
+        {
+            <b class="@tag.TagClass">@tag.Tag.Name</b>
+        }
+    </div>
+}
