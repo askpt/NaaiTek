@@ -350,4 +350,10 @@
   <data name="OverallUserTags" xml:space="preserve">
     <value>Overall Tags By User</value>
   </data>
+  <data name="AuthConTags" xml:space="preserve">
+    <value>Single User Tags By Connection</value>
+  </data>
+  <data name="AuthUserTags" xml:space="preserve">
+    <value>Single User Tags By Users</value>
+  </data>
 </root>

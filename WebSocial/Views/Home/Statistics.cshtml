@@ -55,7 +55,7 @@
 
 @if (User.IsInRole("User"))
 {
-     <h2>Single User Tags By Users</h2>
+     <h2>@Resources.AuthUserTags</h2>
     <div id="tags">
         @foreach (TagCount tag in ViewBag.AuthUserTag)
         {
@@ -63,7 +63,7 @@
         }
     </div>
     
-    <h2>Single User Tags By Connection</h2>
+    <h2>@Resources.AuthConTags</h2>
     <div id="tags">
         @foreach (TagCount tag in ViewBag.AuthConnTag)
         {

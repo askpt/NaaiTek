@@ -134,6 +134,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single User Tags By Connection.
+        /// </summary>
+        public static string AuthConTags {
+            get {
+                return ResourceManager.GetString("AuthConTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single User Tags By Users.
+        /// </summary>
+        public static string AuthUserTags {
+            get {
+                return ResourceManager.GetString("AuthUserTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back To List.
         /// </summary>
         public static string BackToList {
