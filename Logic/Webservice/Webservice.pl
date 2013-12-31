@@ -69,6 +69,27 @@
 % request for get user tag count
 :-http_handler(root(get_user_tag_count), get_user_tag_count, []).
 
+% request for make a request friend
+:-http_handler(root(request_friend), request_friend, []).
+
+% request for response with game 
+:-http_handler(root(game_response), game_response, []).
+
+% request for accept friend request
+:-http_handler(root(accept_response), accept_response, []).
+
+% request to check the user friend requests
+:-http_handler(root(check_requests), check_requests, []).
+
+% request to check the game requests
+:-http_handler(root(check_game_requests), check_game_requests, []).
+
+% request to check the friend notifications
+:-http_handler(root(check_friend_notifications), check_friend_notifications, []).
+
+% request to remove friend requests
+:-http_handler(root(remove_request), remove_request, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -242,3 +263,47 @@ get_user_tag_count(_Request):- http_parameters(_Request, [user(User, [])]),
 
 count_user_connections(U, R):-listAllPaths(U, L),
                 length(L, R).
+
+%make a friend request
+request_friend(_Request):-http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                requestFriend(PersonA, PersonB),
+                prolog_to_json(message('Friend requested successfully', 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+%make a friend request game response
+game_response(_Request):-http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                gameResponseRequest(PersonA, PersonB),
+                prolog_to_json(message('Friend game requested successfully', 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+
+%make a friend request accept response
+accept_response(_Request):-http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                acceptResponseRequest(PersonA, PersonB),
+                prolog_to_json(message('Friend accepted successfully', 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+
+%check the received friend requests
+check_requests(_Request):-http_parameters(_Request, [user(User, [])]),
+                checkUserRequests(User, L),
+                prolog_to_json(users(L, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+%check the game response friend requests
+check_game_requests(_Request):-http_parameters(_Request, [user(User, [])]),
+                checkGameResponseRequest(User, L),
+                prolog_to_json(users(L, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+%check friend request notifications
+check_friend_notifications(_Request):-http_parameters(_Request, [user(User, [])]),
+                checkFriendRequestNot(User, L),
+                prolog_to_json(users(L, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+%remove friend request
+remove_request(_Request):-http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                removeRequest(PersonA, PersonB),
+                prolog_to_json(message('Friend request removed successfully','ok'), JSON_Object),
+                reply_json(JSON_Object).

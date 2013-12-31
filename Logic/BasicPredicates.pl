@@ -217,9 +217,9 @@ removeZeroTag([H|T], [H|R]):-removeZeroTag(T, R).
 requestFriend(User1, User2):-assert(pending(User1, User2, 'request')).
 
 %friend request game response
-gameResponseRequest(User1, User2):-pending(User1, User2, 'request'),
-	retractall(pending(User1, User2, 'request')),
-	assert(pending(User1, User2, 'game')).
+gameResponseRequest(User1, User2):-pending(User2, User1, 'request'),
+	retractall(pending(User2, User1, 'request')),
+	assert(pending(User2, User1, 'game')).
 
 %friend request accept response
 acceptResponseRequest(User1, User2):-(pending(User1, User2, 'request'),!,
