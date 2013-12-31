@@ -38,10 +38,10 @@ GLuint g_textureId;
 float g_scale;
 
 // text to be written on rotating cube
-const char * stringVectorForRotatingCube[4] = { "NaaiTek", "presents", "NaaiTek", "presents" };
+const char *stringVectorForRotatingCube[4] = { "NaaiTek", "presents", "NaaiTek", "presents" };
 
 // text to be displayed in a "label"
-const char* stringForLabel = "GRAPHS4SOCIAL";
+const char *stringForLabel = "GRAPHS4SOCIAL";
 
 // windows
 int mainWindow;
@@ -65,6 +65,7 @@ void drawLabelWithTextAtScreenPosition(float x, float y, float z);
 void setupAmbientLight();
 void setupPositionedLight();
 void drawBackgroundAtScreenPosition(float x, float y, float z);
+void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float z);
 
 
 /**
@@ -184,6 +185,12 @@ void drawScene()
     
     // drawing "Graphs4Social" label
     drawLabelWithTextAtScreenPosition(0.0, 2.0, -10.0);
+    
+    // drawing offline mode option
+    drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, 1.0, -40.0);
+    
+    // drawing online mode option
+    drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, -4.5, -40.0);
     
     // drawing background
     drawBackgroundAtScreenPosition(0.0f, 1.0f, -5.0f);
@@ -325,6 +332,42 @@ void drawBackgroundAtScreenPosition(float x, float y, float z)
 	glEnd();
 }
 
+
+void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float z)
+{
+    glLoadIdentity();
+	glTranslatef(x, y, z);
+    
+    glRotatef(25.0f, 0.0f, 1.0f, 0.0f);
+    
+    // putting the box in the correct position
+	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+    
+    
+    
+    // drawing the faces
+    glBegin(GL_QUADS);
+    
+        // Text face (normal color)
+        glColor3f(0.7f, 0.0f, 0.0f);
+        glNormal3f(0.0, 0.7f, 0.0f);
+        glVertex3f(-w / 2, w / 2, -h / 2);
+        glVertex3f(-w / 2, w / 2, h / 2);
+        glVertex3f(w / 2, w / 2, h / 2);
+        glVertex3f(w / 2, w / 2, -h / 2);
+    
+        // Left face (establishing a gradient)
+        glNormal3f(-1.0, 0.0f, 0.0f);
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glVertex3f(-w / 2, -w / 2, -h / 2);
+        glVertex3f(-w / 2, -w / 2, h / 2);
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(-w / 2, w / 2, h / 2);
+        glVertex3f(-w / 2, w / 2, -h / 2);
+         
+    glEnd();
+    
+}
 
 void update(int value)
 {
