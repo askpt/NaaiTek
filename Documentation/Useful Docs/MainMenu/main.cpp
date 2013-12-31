@@ -39,6 +39,7 @@ float g_scale;
 
 // text to be written on rotating cube
 const char * stringVectorForRotatingCube[4] = { "NaaiTek", "presents", "NaaiTek", "presents" };
+
 // text to be displayed in a "label"
 const char* stringForLabel = "GRAPHS4SOCIAL";
 
@@ -63,6 +64,8 @@ void drawRotatingCubeAtScreenPosition(float x, float y, float z);
 void drawLabelWithTextAtScreenPosition(float x, float y, float z);
 void setupAmbientLight();
 void setupPositionedLight();
+void drawBackgroundAtScreenPosition(float x, float y, float z);
+
 
 /**
  * main
@@ -182,6 +185,9 @@ void drawScene()
     // drawing "Graphs4Social" label
     drawLabelWithTextAtScreenPosition(0.0, 2.0, -10.0);
     
+    // drawing background
+    drawBackgroundAtScreenPosition(0.0f, 1.0f, -5.0f);
+    
     glutSwapBuffers();
 }
 
@@ -261,13 +267,63 @@ void drawLabelWithTextAtScreenPosition(float x, float y, float z)
 }
 
 
+void drawBackgroundAtScreenPosition(float x, float y, float z)
+{
+    glLoadIdentity();
+	glTranslatef(x, y, z);
+    
+    // applying a color to the texture in the redish
+    glColor3f(0.2f, 0.2f, 0.2f);
+    
+    // "floor"
+    glBegin(GL_QUADS);
+        glNormal3f(0.0, 1.0f, 0.0f);
+    
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(-2.5f, -2.5f, 2.5f);
+    
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(2.5f, -2.5f, 2.5f);
+    
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(2.5f, -2.5f, -2.5f);
+    
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(-2.5f, -2.5f, -2.5f);
+    glEnd();
+    
+    
+    // "left wall"
+    glColor3f(0.4f, 0.4f, 0.4f);
+    glBegin(GL_QUADS);
+        glNormal3f(1.0f, 0.0f, 0.0f);
+	
+        glVertex3f(-2.5f, -2.5f, 2.5f);
+        glVertex3f(-2.5f, -2.5f, -2.5f);
+        glVertex3f(-2.5f, 2.5f, -2.5f);
+        glVertex3f(-2.5f, 2.5f, 2.5f);
+	glEnd();
+    
+    // "right wall"
+    glColor3f(0.4f, 0.4f, 0.4f);
+    glBegin(GL_QUADS);
+        glNormal3f(1.0f, 0.0f, 0.0f);
+	
+        glVertex3f(2.5f, -2.5f, 2.5f);
+        glVertex3f(2.5f, -2.5f, -2.5f);
+        glVertex3f(2.5f, 2.5f, -2.5f);
+        glVertex3f(2.5f, 2.5f, 2.5f);
+	glEnd();
+}
+
+
 void update(int value)
 {
 	// rotates the shapes 1.5 degrees in every 25 miliseconds
 	g_angle += 1.5f;
 	if (g_angle > 360)
 	{
-		g_angle -= 360;
+		g_angle = 0;
 	}
     
 	// informing GLUT that the scene has changed
