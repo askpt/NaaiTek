@@ -224,7 +224,22 @@ gameResponseRequest(User1, User2):-pending(User1, User2, 'request'),
 %friend request accept response
 acceptResponseRequest(User1, User2):-(pending(User1, User2, 'request'),!,
 	retractall(pending(User1, User2, 'request')),
-	assert(pending(User1, User2, 'accept')));
+	assert(pending(User1, User2, 'accept')),
+	assert(connects(User1, User2, 0, [])));
 	(pending(User1, User2, 'game'),!,
 	retractall(pending(User1, User2, 'game')),
-	assert(pending(User2, User1, 'accept'))).
+	assert(pending(User2, User1, 'accept')),
+	assert(connects(User1, User2, 0, []))).
+
+%check the received friend requests
+checkUserRequests(User, L):-findall(U, pending(U, User, 'request'), L).
+
+%check the game response friend requests
+checkGameResponseRequest(User, L):-findall(U, pending(User, U, 'game'), L).
+
+%check friend request notifications
+checkFriendRequestNot(User, L):-findall(U, pending(User, U, 'accept'), L).
+
+%remove friend request
+removeRequest(User1, User2):-retractall(pending(User1, User2, _));
+	retractall(pending(User2, User1, _)).
