@@ -44,7 +44,7 @@ const char * stringVectorForRotatingCube[4] = { "NaaiTek", "presents", "NaaiTek"
 const char* stringForLabel = "GRAPHS4SOCIAL";
 
 // windows
-int mainWindow, loginWindow;
+int mainWindow;
 
 
 //************************************************************************
@@ -139,9 +139,9 @@ void initRendering()
 	glShadeModel(GL_SMOOTH);
     
     // loading the image as texture
-    //Image* image = loadBMP("/Users/joaocarreira/Desktop/OpenGL/Text/Text/vtr.bmp");
-	//g_textureId = loadTexture(image);
-	//delete image;
+    Image* image = loadBMP("/Users/joaocarreira/Desktop/OpenGL/GameMenu/GameMenu/graph.bmp");
+	g_textureId = loadTexture(image);
+	delete image;
 
     t3dInit();
 }
@@ -222,7 +222,7 @@ void drawRotatingCubeAtScreenPosition(float x, float y, float z)
 	glTranslatef(x, y, z);
 	
     // "inclining" the camera to see from above
-	glRotatef(40.0f, 1.0f, 0.0f, 0.0f);
+	glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
     
     // rotation animation
 	glRotatef(-g_angle, 0.0f, 1.0f, 0.0f);
@@ -272,10 +272,17 @@ void drawBackgroundAtScreenPosition(float x, float y, float z)
     glLoadIdentity();
 	glTranslatef(x, y, z);
     
-    // applying a color to the texture in the redish
-    glColor3f(0.2f, 0.2f, 0.2f);
-    
     // "floor"
+    
+    // enabling texture in the floor
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, g_textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    // applying a color to the texture in the redish
+    glColor3f(0.4f, 0.4f, 0.4f);
+    
     glBegin(GL_QUADS);
         glNormal3f(0.0, 1.0f, 0.0f);
     
@@ -292,20 +299,22 @@ void drawBackgroundAtScreenPosition(float x, float y, float z)
         glVertex3f(-2.5f, -2.5f, -2.5f);
     glEnd();
     
+    glDisable(GL_TEXTURE_2D);
     
     // "left wall"
-    glColor3f(0.4f, 0.4f, 0.4f);
+    glColor3f(0.2f, 0.2f, 0.2f);
     glBegin(GL_QUADS);
         glNormal3f(1.0f, 0.0f, 0.0f);
-	
+
         glVertex3f(-2.5f, -2.5f, 2.5f);
         glVertex3f(-2.5f, -2.5f, -2.5f);
         glVertex3f(-2.5f, 2.5f, -2.5f);
         glVertex3f(-2.5f, 2.5f, 2.5f);
+    
 	glEnd();
     
     // "right wall"
-    glColor3f(0.4f, 0.4f, 0.4f);
+    glColor3f(0.2f, 0.2f, 0.2f);
     glBegin(GL_QUADS);
         glNormal3f(1.0f, 0.0f, 0.0f);
 	
