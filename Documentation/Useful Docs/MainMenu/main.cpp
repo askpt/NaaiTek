@@ -61,6 +61,8 @@ void cleanUp();
 // drawing subrotines
 void drawRotatingCubeAtScreenPosition(float x, float y, float z);
 void drawLabelWithTextAtScreenPosition(float x, float y, float z);
+void setupAmbientLight();
+void setupPositionedLight();
 
 /**
  * main
@@ -170,6 +172,10 @@ void drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
     
+    // enabling lighting
+    setupAmbientLight();
+    setupPositionedLight();
+    
     // drawing rotating cube with "NaaiTek Presents"
     drawRotatingCubeAtScreenPosition(0.0, 5.0, -15.0);
     
@@ -180,20 +186,34 @@ void drawScene()
 }
 
 
-void drawRotatingCubeAtScreenPosition(float x, float y, float z)
+void setupAmbientLight()
 {
-	glLoadIdentity();
-	glTranslatef(x, y, z);
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -8.0f);
 	
     // ambient light
 	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-	
+}
+
+
+void setupPositionedLight()
+{
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -8.0f);
+    
     // positioned light
-	GLfloat lightColor0[] = {0.6f, 0.6f, 0.6f, 1.0f};
-	GLfloat lightPos0[] = {-0.5f, 0.5f, 1.0f, 0.0f};
+	GLfloat lightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat lightPos0[] = {0.5f, 0.5f, 1.0f, 0.0f};
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+}
+
+
+void drawRotatingCubeAtScreenPosition(float x, float y, float z)
+{
+	glLoadIdentity();
+	glTranslatef(x, y, z);
 	
     // "inclining" the camera to see from above
 	glRotatef(40.0f, 1.0f, 0.0f, 0.0f);
@@ -224,16 +244,6 @@ void drawLabelWithTextAtScreenPosition(float x, float y, float z)
     glLoadIdentity();
 	glTranslatef(x, y, z);
     
-    // ambient light
-	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-	
-    // positioned light
-	GLfloat lightColor0[] = {0.6f, 0.6f, 0.6f, 1.0f};
-	GLfloat lightPos0[] = {-0.5f, 0.5f, 1.0f, 0.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-	
     // "inclining" the camera to see from above
 	glRotatef(20.0f, 0.0f, 0.0f, 0.0f);
     
