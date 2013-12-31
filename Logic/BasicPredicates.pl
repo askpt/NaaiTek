@@ -212,3 +212,6 @@ removeZeroTag([],[]).
 removeZeroTag([(_, 0)|T], R):-removeZeroTag(T, R).
 
 removeZeroTag([H|T], [H|R]):-removeZeroTag(T, R).
+
+%friend request
+request_friend(User1, User2):-assert(pending(User1, User2, 'request')).

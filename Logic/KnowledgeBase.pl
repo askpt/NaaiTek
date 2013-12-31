@@ -29,6 +29,7 @@
 % Dynamic predicates
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 :-dynamic connects/4.
+:-dynamic pending/3.
 
 % KnowledgeBase bootstrap
 connects('Ana', 'Vicky', 3, ['dog']).
@@ -57,3 +58,10 @@ connects('Tiago', 'Stephanie', 1, ['dog']).
 connects('Simao', 'Artur', 1, ['WP']).
 connects('Artur', 'Tiago',2, ['CS']).
 
+%friend request bootstrap
+pending('Tiago', 'Catarina', 'request').
+pending('Alcides', 'Catarina', 'request').
+pending('Catarina', 'Stephanie', 'game').
+pending('Tiago', 'Vicky', 'game').
+pending('Diogo', 'JoseCid', 'accept').
+pending('Alcides', 'Simao', 'accept').
