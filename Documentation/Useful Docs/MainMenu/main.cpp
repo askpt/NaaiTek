@@ -66,6 +66,7 @@ void setupAmbientLight();
 void setupPositionedLight();
 void drawBackgroundAtScreenPosition(float x, float y, float z);
 void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float z);
+void drawTextAtScreenPosition(char *str, float x, float y, float z);
 
 
 /**
@@ -187,10 +188,15 @@ void drawScene()
     drawLabelWithTextAtScreenPosition(0.0, 2.0, -10.0);
     
     // drawing offline mode option
-    drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, 1.0, -40.0);
+    //drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, 1.0, -40.0);
     
     // drawing online mode option
-    drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, -4.5, -40.0);
+    //drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, -4.5, -40.0);
+    
+    // text with game modes
+    drawTextAtScreenPosition("Online Mode", 0.0, 0.0, -15.0);
+    drawTextAtScreenPosition("Offline Mode", 0.0, -1.0, -15.0);
+    drawTextAtScreenPosition("Exit", 0.0, -2.0, -15.0);
     
     // drawing background
     drawBackgroundAtScreenPosition(0.0f, 1.0f, -5.0f);
@@ -270,7 +276,6 @@ void drawLabelWithTextAtScreenPosition(float x, float y, float z)
         glTranslatef(0, 0, 1.5f / g_scale);
         t3dDraw3D(stringForLabel, 0, 0, 0.2f);
     glPopMatrix();
-
 }
 
 
@@ -368,6 +373,28 @@ void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float
     glEnd();
     
 }
+
+
+void drawTextAtScreenPosition(char *str, float x, float y, float z)
+{
+    glLoadIdentity();
+	glTranslatef(x, y, z);
+    
+    // "inclining" the camera to see from above
+	glRotatef(20.0f, 1.5f, 1.0f, 0.0f);
+    
+    //setting up the correct scale for the text
+	glScalef(g_scale * 0.7, g_scale * 0.7, g_scale * 0.7);
+	
+    // text color
+    glColor3f(0.7f, 0.3f, 1.0f);
+    
+    glPushMatrix();
+        glTranslatef(0, 0, 1.5f / g_scale);
+        t3dDraw3D(str, 0, 0, 0.2f);
+    glPopMatrix();
+}
+
 
 void update(int value)
 {
