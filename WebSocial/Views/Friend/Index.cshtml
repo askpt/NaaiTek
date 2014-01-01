@@ -1,0 +1,51 @@
+﻿@using WebSocial.Helpers.Models;
+
+@{
+    ViewBag.Title = "Friends";
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+}
+
+@helper selected(string c, string culture)
+{
+    if (c == culture)
+    {
+        @:checked="checked"
+    }
+}
+
+<h2>Friend's List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Friend</th>
+            <th>Connection Strenght</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    @foreach (WebSocial.Helpers.Models.Path item in ViewBag.friends)
+    {
+        <tr>
+            @if (item.user1 != ViewBag.username)
+            {
+                <td>@item.user1</td>
+            }
+            else
+            {
+            <td>@item.user2</td>
+            }
+            <td>@item.connection</td>
+            <td>
+                @foreach (string tag in item.tags)
+                {
+                    @tag
+                    <text>|</text>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+

@@ -30,6 +30,7 @@ namespace WebSocial.Controllers
                 List<Path> friends = await Services.GetOnlyFriends(user.UserName);
 
                 ViewBag.friends = friends;
+                ViewBag.username = user.UserName;
             }
 
             return View();
