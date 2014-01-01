@@ -233,6 +233,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection Strenght.
+        /// </summary>
+        public static string ConStr {
+            get {
+                return ResourceManager.GetString("ConStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact Number.
         /// </summary>
         public static string ContactNumber {
@@ -391,6 +400,24 @@ namespace Resources {
         public static string FailAuth {
             get {
                 return ResourceManager.GetString("FailAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Friends.
+        /// </summary>
+        public static string Friends {
+            get {
+                return ResourceManager.GetString("Friends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Friends List.
+        /// </summary>
+        public static string FriendsList {
+            get {
+                return ResourceManager.GetString("FriendsList", resourceCulture);
             }
         }
         

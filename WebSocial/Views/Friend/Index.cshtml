@@ -1,7 +1,7 @@
 ﻿@using WebSocial.Helpers.Models;
 
 @{
-    ViewBag.Title = "Friends";
+    ViewBag.Title = @Resources.Friends;
     var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
 
@@ -13,14 +13,14 @@
     }
 }
 
-<h2>Friend's List</h2>
+<h2>@Resources.FriendsList</h2>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Friend</th>
-            <th>Connection Strenght</th>
-            <th>Tags</th>
+            <th>@Resources.Friends</th>
+            <th>@Resources.ConStr</th>
+            <th>@Resources.Tags</th>
         </tr>
     </thead>
     @foreach (WebSocial.Helpers.Models.Path item in ViewBag.friends)

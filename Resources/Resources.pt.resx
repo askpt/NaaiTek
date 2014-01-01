@@ -356,4 +356,13 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="AuthUserTags" xml:space="preserve">
     <value>Tags dos Utilizadores: Vista do Utilizador</value>
   </data>
+  <data name="ConStr" xml:space="preserve">
+    <value>Força da Conexão</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="FriendsList" xml:space="preserve">
+    <value>Lista de Amigos</value>
+  </data>
 </root>
