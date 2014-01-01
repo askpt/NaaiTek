@@ -51,6 +51,8 @@ int mainWindow;
 // forward declarations of OpenGL callback functions
 //************************************************************************
 void handleKeypress(unsigned char key, int x, int y);
+void handleMouseButtonClicks(int button, int state, int x, int y);
+void handleMouseMovement(int x, int y);
 void initRendering();
 void handleResize(int w, int h);
 void drawScene();
@@ -89,7 +91,9 @@ int main(int argc, char *argv[])
 	// setting handler functions
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
-	glutReshapeFunc(handleResize);
+    glutMouseFunc(handleMouseButtonClicks);
+    glutMotionFunc(handleMouseMovement);
+    glutReshapeFunc(handleResize);
     
 	// adding a timer
 	glutTimerFunc(25, update, 0);
@@ -113,6 +117,28 @@ void handleKeypress(unsigned char key, int x, int y)
 		case 27:
 			exit(0);
 	}
+}
+
+
+/**
+ * This funcion is invoked when the user presses a mouse button on the current window.
+ * Each press and release action will generate an event.
+ * int button will be one of GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, or GLUT_RIGHT_BUTTON.
+ * int state will be either GLUT_DOWN, or GLUT_UP indicating whether the event was a pressed, or released event.
+ * int x, int y store the position of the mouse relative to the current window.
+ */
+ void handleMouseButtonClicks(int button, int state, int x, int y)
+{
+    
+}
+
+
+/** This method is invoked when the mouse moves within the window while one or more mouse buttons are pressed.
+ * int x, int y store the position of the mouse relative to the current window.
+ */
+void handleMouseMovement(int x, int y)
+{
+    
 }
 
 
@@ -192,6 +218,7 @@ void drawScene()
     
     // drawing online mode option
     //drawSolidWithTextAtScreenPosition(10.0, 3.0, 0.0, -4.5, -40.0);
+    
     
     // text with game modes
     drawTextAtScreenPosition("Online Mode", 0.0, 0.0, -15.0);
