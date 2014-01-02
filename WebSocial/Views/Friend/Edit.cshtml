@@ -78,11 +78,11 @@ else
             <td>
                 @if (Html.Action("ConnectionHasTag", new { allTag = item, tags = Model.tags }).ToString() == "True")
                 {
-                    @Html.ActionLink(Resources.Remove, "RemoveTag", new { tag = item, user1 = Model.user1, user2 = Model.user2 });
+                    @Html.ActionLink(Resources.Remove, "RemoveTag", new { tag = item, user1 = Model.user1, user2 = Model.user2, last = ViewBag.last });
                 }
                 else
                 {
-                    @Html.ActionLink(Resources.Add, "AddTag", new { tag = item, user1 = Model.user1, user2 = Model.user2 });
+                    @Html.ActionLink(Resources.Add, "AddTag", new { tag = item, user1 = Model.user1, user2 = Model.user2, last = ViewBag.last });
                 }
 
             </td>

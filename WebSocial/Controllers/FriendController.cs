@@ -84,6 +84,7 @@ namespace WebSocial.Controllers
 
                 ViewBag.username = user.UserName;
                 ViewBag.allTags = await Services.GetAllTags();
+                ViewBag.last = friends.Count - 1;
 
                 return View(friends[id]);
             }
@@ -146,6 +147,18 @@ namespace WebSocial.Controllers
         public bool ConnectionHasTag(string allTag, List<string> tags)
         {
             return (tags.Contains(allTag));
+        }
+
+        public async Task<ActionResult> AddTag(string tag, string user1, string user2, int last)
+        {
+            await Services.AddTag(user1, user2, tag);
+            return RedirectToAction("Edit/" + last);
+        }
+
+        public async Task<ActionResult> RemoveTag(string tag, string user1, string user2, int last)
+        {
+            await Services.RemoveTag(user1, user2, tag);
+            return RedirectToAction("Edit/" + last);
         }
     }
 }
