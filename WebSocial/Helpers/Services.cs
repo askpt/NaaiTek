@@ -134,6 +134,16 @@ namespace WebSocial.Helpers
 
             return true;
         }
+
+        public static async Task<bool> RemoveFriend(string user1, string user2)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/remove_connection?personA={0}&personB={1}&tag={2}", user1, user2);
+            await client.GetAsync(url);
+
+            return true;
+        }
     }
 
 
