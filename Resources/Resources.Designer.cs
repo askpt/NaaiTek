@@ -737,6 +737,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WebSocial is the official web site for Graphs4Social, an application that allows you to play while you connect with friends..
         /// </summary>
         public static string SiteDesc {

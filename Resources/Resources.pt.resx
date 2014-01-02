@@ -380,4 +380,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="Undefined" xml:space="preserve">
     <value>Indefinido</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
 </root>
