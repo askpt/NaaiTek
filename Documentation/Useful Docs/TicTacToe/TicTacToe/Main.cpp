@@ -13,15 +13,14 @@
 
 using namespace std;
 
-struct player1
+typedef struct
 {
-	bool matrix[3][3];
-};
+	int matrix[3][3];
+	int win = 0;
+	int loose = 0;
+}Game;
 
-struct player2
-{
-	bool matrix[3][3];
-};
+
 
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
@@ -32,11 +31,33 @@ int GLUTWindowHandle = 0;
 
 float squareWidth = WindowWidth / 5.0;
 
+Game game;
 
+
+/**function to init the game parametrers**/
+void initGameData()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3;j++)
+		{
+			game.matrix[i][j] = 0;
+			
+		}
+	}
+}
+
+/*function to call prolog and send border game*/
+
+void requestAnswer()
+{
+
+}
 /*function to initialize OpenGL*/
 
 void myInit()
 {
+	initGameData();
 	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glShadeModel(GL_FLAT);
@@ -47,6 +68,7 @@ void myInit()
 
 	gluOrtho2D(0.0, (GLdouble)WindowWidth, (GLdouble)WindowHeight, 0.0);
 	glMatrixMode(GL_MODELVIEW);
+	
 
 
 }
@@ -623,7 +645,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glutInitWindowSize(WindowWidth, WindowHeight);
+	glutInitWindowSize(WindowWidth, WindowHeight); 
 	glutCreateWindow("TIC-TAC-TOE");
 	//glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
