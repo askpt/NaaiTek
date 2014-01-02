@@ -114,6 +114,26 @@ namespace WebSocial.Helpers
 
             return tags.tags;
         }
+
+        public static async Task<bool> AddTag(string user1, string user2, string tag)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/add_connection_tag?personA={0}&personB={1}&tag={2}", user1, user2, tag);
+            await client.GetAsync(url);
+
+            return true;
+        }
+
+        public static async Task<bool> RemoveTag(string user1, string user2, string tag)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/remove_connection_tag?personA={0}&personB={1}&tag={2}", user1, user2, tag);
+            await client.GetAsync(url);
+
+            return true;
+        }
     }
 
 
