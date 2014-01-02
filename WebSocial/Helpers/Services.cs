@@ -90,6 +90,18 @@ namespace WebSocial.Helpers
 
             return friends;
         }
+
+        public static async Task<bool> EditConnection(string user1, string user2, int strenght)
+        {
+            HttpClient client = new HttpClient();
+            if (strenght > -1)
+            {
+                var url = string.Format(_baseUrl + "/update_connection_strenght?personA={0}&personB={1}&strenght={2}", user1, user2, strenght);
+                await client.GetAsync(url);
+            }
+            
+            return true;
+        }
     }
 
 
