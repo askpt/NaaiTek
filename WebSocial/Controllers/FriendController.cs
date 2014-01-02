@@ -10,6 +10,7 @@ using WebSocial.DAL;
 using WebSocial.Models;
 using System.Threading.Tasks;
 using WebSocial.Helpers.Models;
+using System.Net;
 
 namespace WebSocial.Controllers
 {
@@ -71,8 +72,20 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                List<Path> friends = await Services.GetOnlyFriends(user.UserName);
+
+                ViewBag.friend = friends[id];
+                ViewBag.username = user.UserName;
+            }
+
             return View();
         }
 

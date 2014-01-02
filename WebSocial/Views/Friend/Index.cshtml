@@ -23,24 +23,27 @@
             <th>@Resources.Tags</th>
         </tr>
     </thead>
-    @foreach (WebSocial.Helpers.Models.Path item in ViewBag.friends)
+    @for (int i = 0; i < ViewBag.friends.Count; i++)
     {
         <tr>
-            @if (item.user1 != ViewBag.username)
+            @if (ViewBag.friends[i].user1 != ViewBag.username)
             {
-                <td>@item.user1</td>
+                <td>@ViewBag.friends[i].user1</td>
             }
             else
             {
-            <td>@item.user2</td>
+                <td>@ViewBag.friends[i].user2</td>
             }
-            <td>@item.connection</td>
+            <td>@ViewBag.friends[i].connection</td>
             <td>
-                @foreach (string tag in item.tags)
+                @foreach (string tag in ViewBag.friends[i].tags)
                 {
                     @tag
                     <text>|</text>
                 }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = i })
             </td>
         </tr>
     }
