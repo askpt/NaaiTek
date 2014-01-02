@@ -82,8 +82,8 @@ namespace WebSocial.Controllers
 
                 List<Path> friends = await Services.GetOnlyFriends(user.UserName);
 
-                ViewBag.friend = friends[id];
                 ViewBag.username = user.UserName;
+                return View(friends[id]);
             }
 
             return View();
@@ -92,11 +92,22 @@ namespace WebSocial.Controllers
         //
         // POST: /Friend/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(int id, FormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
+                string userID = User.Identity.GetUserId();
+
+                if (userID != null)
+                {
+                    int strenght = int.Parse(collection["strenghtList"]);
+
+                    string user1 = collection["user1"];
+
+                    string user2 = collection["user2"];
+
+                    await Services.EditConnection(user1, user2, strenght);
+                }
 
                 return RedirectToAction("Index");
             }

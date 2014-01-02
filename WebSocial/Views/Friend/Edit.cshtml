@@ -1,11 +1,42 @@
 ﻿@using WebSocial.Helpers.Models;
+@model WebSocial.Helpers.Models.Path
 
 @{
     ViewBag.Title = "Edit";
+
+    var loadListItems = new List<SelectListItem>();
+    loadListItems.Add(new SelectListItem { Text = "0 - Undefined", Value = "0" });
+    loadListItems.Add(new SelectListItem { Text = "1 - Colleagues", Value = "1" });
+    loadListItems.Add(new SelectListItem { Text = "2 - Friends", Value = "2" });
+    loadListItems.Add(new SelectListItem { Text = "3 - Family", Value = "3" });
+
+    loadListItems[Model.connection].Selected = true;
 }
 
 <h2>Edit</h2>
 
-@ViewBag.Friend.user1
-@ViewBag.Friend.user2
-@ViewBag.Friend.connection
+<h2>Friend</h2>
+@if (Model.user1 != ViewBag.username)
+{
+    <td>@Model.user1</td>
+}
+else
+{
+    <td>@Model.user2</td>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.Hidden("user1", Model.user1);
+    @Html.Hidden("user2", Model.user2);
+
+    <h2>Connection</h2>
+    @Html.DropDownList("strenghtList", loadListItems);
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+}
+
