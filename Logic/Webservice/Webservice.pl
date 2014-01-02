@@ -90,6 +90,9 @@
 % request to remove friend requests
 :-http_handler(root(remove_request), remove_request, []).
 
+% request to get all tags
+:-http_handler(root(get_all_tags), get_all_tags, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,6 +118,8 @@ server(Port) :-
 
 :- json_object tags(tags:list, nr_connections:number, status:atom).
 :- json_object tag(tag:atom, count:number).
+
+:- json_object tags(tags:list, status:atom).
 %test handler
 %handle(Request) :-
         %http_read_json(Request, JSONIn),
@@ -308,3 +313,9 @@ remove_request(_Request):-http_parameters(_Request, [personA(PersonA, []), perso
                 removeRequest(PersonA, PersonB),
                 prolog_to_json(message('Friend request removed successfully','ok'), JSON_Object),
                 reply_json(JSON_Object).
+
+%get all tags
+get_all_tags(_Request):-getAllTags(List),
+                prolog_to_json(tags(List, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+                
