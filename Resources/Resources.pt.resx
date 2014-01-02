@@ -365,4 +365,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="FriendsList" xml:space="preserve">
     <value>Lista de Amigos</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
 </root>

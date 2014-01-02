@@ -365,4 +365,7 @@
   <data name="FriendsList" xml:space="preserve">
     <value>Friends List</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>
