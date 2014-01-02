@@ -368,4 +368,16 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
+  <data name="Colleagues" xml:space="preserve">
+    <value>Colegas</value>
+  </data>
+  <data name="Family" xml:space="preserve">
+    <value>Família</value>
+  </data>
+  <data name="Friend" xml:space="preserve">
+    <value>Amigo</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Indefinido</value>
+  </data>
 </root>

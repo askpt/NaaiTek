@@ -215,6 +215,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colleagues.
+        /// </summary>
+        public static string Colleagues {
+            get {
+                return ResourceManager.GetString("Colleagues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm New Password.
         /// </summary>
         public static string ConfirmNewPw {
@@ -409,6 +418,24 @@ namespace Resources {
         public static string FailAuth {
             get {
                 return ResourceManager.GetString("FailAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Family.
+        /// </summary>
+        public static string Family {
+            get {
+                return ResourceManager.GetString("Family", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Friend.
+        /// </summary>
+        public static string Friend {
+            get {
+                return ResourceManager.GetString("Friend", resourceCulture);
             }
         }
         
@@ -760,6 +787,15 @@ namespace Resources {
         public static string Tags {
             get {
                 return ResourceManager.GetString("Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undefined.
+        /// </summary>
+        public static string Undefined {
+            get {
+                return ResourceManager.GetString("Undefined", resourceCulture);
             }
         }
         

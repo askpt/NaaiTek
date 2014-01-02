@@ -2,20 +2,20 @@
 @model WebSocial.Helpers.Models.Path
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = Resources.Edit;
 
     var loadListItems = new List<SelectListItem>();
-    loadListItems.Add(new SelectListItem { Text = "0 - Undefined", Value = "0" });
-    loadListItems.Add(new SelectListItem { Text = "1 - Colleagues", Value = "1" });
-    loadListItems.Add(new SelectListItem { Text = "2 - Friends", Value = "2" });
-    loadListItems.Add(new SelectListItem { Text = "3 - Family", Value = "3" });
+    loadListItems.Add(new SelectListItem { Text = "0 - " + Resources.Undefined, Value = "0" });
+    loadListItems.Add(new SelectListItem { Text = "1 - " + Resources.Colleagues, Value = "1" });
+    loadListItems.Add(new SelectListItem { Text = "2 - " + Resources.Friends, Value = "2" });
+    loadListItems.Add(new SelectListItem { Text = "3 - " + Resources.Family, Value = "3" });
 
     loadListItems[Model.connection].Selected = true;
 }
 
-<h2>Edit</h2>
+<h2>@Resources.Edit</h2>
 
-<h2>Friend</h2>
+<h2>@Resources.Friends</h2>
 @if (Model.user1 != ViewBag.username)
 {
     <td>@Model.user1</td>
@@ -30,7 +30,7 @@ else
     @Html.Hidden("user1", Model.user1);
     @Html.Hidden("user2", Model.user2);
 
-    <h2>Connection</h2>
+    <h2>@Resources.ConStr</h2>
     @Html.DropDownList("strenghtList", loadListItems);
 
     <div class="form-group">
