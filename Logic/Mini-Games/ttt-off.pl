@@ -1,10 +1,10 @@
 %receive
 %Table = old table
-%Play = Place where Player plays
+%Play = Place where Player plays {1..9}
 %Return = Table after plays
 
 receive(Table,Play,Return):-
-	(integer(Play),
+	(integer(Play), !,
 	process(Table, 'Humano', 'X', Play, Return));
 	Return = Table.
 
@@ -14,11 +14,11 @@ process(TabuleiroAntigo, Turno, Valor, TempPos, TabuleiroNovo) :-
     defineSquare(TabuleiroAntigo, Posicao, Valor, TempTabuleiro),
     change(Valor, NovoValor),
     change(Turno, NovoTurno),
-    (Turno='Humano',
+    !,
+    (Turno='Humano', !,
     process(TempTabuleiro, NovoTurno, NovoValor,
 	     _, TabuleiroNovo);
-    receive(TempTabuleiro, _,_)
-    ).
+    TabuleiroNovo = TempTabuleiro).
 
 %responsible to pass the play (used when its a human)
 passTurn(Tabuleiro, 'Humano', _, Retorno, TempPos) :-
