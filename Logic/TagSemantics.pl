@@ -17,3 +17,6 @@ tag('cat',['animal']).
 tag('dog',['animal']).
 
 tag('family',[]).
+
+tag('WP', ['smartphone', 'phone']).
+tag('Android', ['dummyphone', 'phone']).
