@@ -5,84 +5,84 @@
 
 receive(Table,Play,Return):-
 	(integer(Play), !,
-	process(Table, 'Humano', 'X', Play, Return));
+	process(Table, 'Human', 'X', Play, Return));
 	Return = Table.
 
 %main_loop
-process(TabuleiroAntigo, Turno, Valor, TempPos, TabuleiroNovo) :-
-    passTurn(TabuleiroAntigo, Turno, Valor, Posicao, TempPos),
-    defineSquare(TabuleiroAntigo, Posicao, Valor, TempTabuleiro),
-    change(Valor, NovoValor),
-    change(Turno, NovoTurno),
+process(OldBoard, Turn, Value, TempPos, NewBoard) :-
+    passTurn(OldBoard, Turn, Value, Position, TempPos),
+    defineSquare(OldBoard, Position, Value, TempBoard),
+    change(Value, NewValue),
+    change(Turn, NewTurn),
     !,
-    (Turno='Humano', !,
-    process(TempTabuleiro, NovoTurno, NovoValor,
-	     _, TabuleiroNovo);
-    TabuleiroNovo = TempTabuleiro).
+    (Turn='Human', !,
+    process(TempBoard, NewTurn, NewValue,
+	     _, NewBoard);
+    NewBoard = TempBoard).
 
 %responsible to pass the play (used when its a human)
-passTurn(Tabuleiro, 'Humano', _, Retorno, TempPos) :-
-	checkSquare(Retorno, Tabuleiro, TempPos).
+passTurn(Board, 'Human', _, Return, TempPos) :-
+	checkSquare(Return, Board, TempPos).
 
 %responsible to pass the play (used when its the AI)
-passTurn(Tabuleiro, 'Maquina', Valor, Retorno,_) :-
-	response(Tabuleiro, Valor, Retorno).
+passTurn(Board, 'Maquina', Value, Return,_) :-
+	response(Board, Value, Return).
 
 %defines the value of a square
-defineSquare(Tabuleiro, Posicao, Valor, NovoTabuleiro) :-
-    converts(Posicao, SPosicao),
-    defineValueInLine(Tabuleiro, SPosicao, Valor, NovoTabuleiro).
+defineSquare(Board, Position, Value, NewBoard) :-
+    converts(Position, SPosition),
+    defineValueInLine(Board, SPosition, Value, NewBoard).
 
 %returns the value of a square
-returnSquare(Tabuleiro, Posicao, Retorno) :-
-    converts(Posicao, SPosicao),
-    returnValueInLine(Tabuleiro, SPosicao, Retorno).
+returnSquare(Board, Position, Return) :-
+    converts(Position, SPosition),
+    returnValueInLine(Board, SPosition, Return).
 
 %define first line
-defineValueInLine([Linha1, Linha2, Linha3], [1, Coluna], Valor, [Retorno, Linha2, Linha3]) :-
-	defineValueInColumn(Linha1, Coluna, Valor, Retorno).
+defineValueInLine([Line1, Line2, Line3], [1, Column], Value, [Return, Line2, Line3]) :-
+	defineValueInColumn(Line1, Column, Value, Return).
 %define second line
-defineValueInLine([Linha1, Linha2, Linha3], [2, Coluna], Valor, [Linha1, Retorno, Linha3]) :-
-	defineValueInColumn(Linha2, Coluna, Valor, Retorno).
+defineValueInLine([Line1, Line2, Line3], [2, Column], Value, [Line1, Return, Line3]) :-
+	defineValueInColumn(Line2, Column, Value, Return).
 %define third line
-defineValueInLine([Linha1, Linha2, Linha3], [3, Coluna], Valor, [Linha1, Linha2, Retorno]) :-
-	defineValueInColumn(Linha3, Coluna, Valor, Retorno).
+defineValueInLine([Line1, Line2, Line3], [3, Column], Value, [Line1, Line2, Return]) :-
+	defineValueInColumn(Line3, Column, Value, Return).
 
 %define first value
-defineValueInColumn([_, Coluna2, Coluna3], 1, Valor, [Valor, Coluna2, Coluna3]).
+defineValueInColumn([_, Column2, Column3], 1, Value, [Value, Column2, Column3]).
 %define second value
-defineValueInColumn([Coluna1, _, Coluna3], 2, Valor, [Coluna1, Valor, Coluna3]).
+defineValueInColumn([Column1, _, Column3], 2, Value, [Column1, Value, Column3]).
 %define third value
-defineValueInColumn([Coluna1, Coluna2, _], 3, Valor, [Coluna1, Coluna2, Valor]).
+defineValueInColumn([Column1, Column2, _], 3, Value, [Column1, Column2, Value]).
 
 %returns first line
-returnValueInLine([Linha1, _, _], [1, Coluna], Retorno) :- returnValueInColumn(Linha1, Coluna, Retorno).
+returnValueInLine([Line1, _, _], [1, Column], Return) :- returnValueInColumn(Line1, Column, Return).
 %returns second line
-returnValueInLine([_, Linha2, _], [2, Coluna], Retorno) :- returnValueInColumn(Linha2, Coluna, Retorno).
+returnValueInLine([_, Line2, _], [2, Column], Return) :- returnValueInColumn(Line2, Column, Return).
 %returns third line
-returnValueInLine([_, _, Linha3], [3, Coluna], Retorno) :- returnValueInColumn(Linha3, Coluna, Retorno).
+returnValueInLine([_, _, Line3], [3, Column], Return) :- returnValueInColumn(Line3, Column, Return).
 
 %return first value
-returnValueInColumn([Casa1, _, _], 1, Casa1).
+returnValueInColumn([Square1, _, _], 1, Square1).
 %return second value
-returnValueInColumn([_, Casa2, _], 2, Casa2).
+returnValueInColumn([_, Square2, _], 2, Square2).
 %return third value
-returnValueInColumn([_, _, Casa3], 3, Casa3).
+returnValueInColumn([_, _, Square3], 3, Square3).
 
 %check if the square isn't filled already
-checkSquare(Posicao, Tabuleiro, TempPos) :-
- not(alreadyCheckedHouse(Tabuleiro, TempPos)), Posicao is TempPos.
+checkSquare(Position, Board, TempPos) :-
+ not(alreadyCheckedHouse(Board, TempPos)), Position is TempPos.
 
 %see if the house is checked
-alreadyCheckedHouse(Tabuleiro, Posicao) :-
-    returnSquare(Tabuleiro, Posicao, Retorno),
-    check_if_play(Retorno).
+alreadyCheckedHouse(Board, Position) :-
+    returnSquare(Board, Position, Return),
+    check_if_play(Return).
 
 %converts the number in matrix place
-converts(Posicao, [Linha, Coluna]) :-
-    Temp is Posicao - 1,
-    Linha  is 1 + (Temp // 3),
-    Coluna is 1 + (Temp mod 3).
+converts(Position, [Line, Column]) :-
+    Temp is Position - 1,
+    Line  is 1 + (Temp // 3),
+    Column is 1 + (Temp mod 3).
 
 %check_if_play
 check_if_play('X').
@@ -95,79 +95,79 @@ change('X', 'O').
 change('O', 'X').
 
 % change the value
-change('Maquina', 'Humano').
+change('Maquina', 'Human').
 
 % changes the value
-change('Humano', 'Maquina').
+change('Human', 'Maquina').
 
 %machine AI implementation
 
 %response from the machine
-response(Tabuleiro, Valor, X) :-
-    bestMovement(Tabuleiro, Valor, X),
-    not(alreadyCheckedHouse(Tabuleiro, X)).
+response(Board, Value, X) :-
+    bestMovement(Board, Value, X),
+    not(alreadyCheckedHouse(Board, X)).
 
 % machine rules definition
-bestMovement(Tabuleiro, Valor, X) :- tryWin(Tabuleiro, Valor, X).
-bestMovement(Tabuleiro, Valor, X) :- tryDefend(Tabuleiro, Valor, X).
-bestMovement(Tabuleiro, _, X) :- tryCenter(Tabuleiro, X).
-bestMovement(Tabuleiro, _, X) :- tryCorner(Tabuleiro, X).
-bestMovement(Tabuleiro, _, X) :- tryEdges(Tabuleiro, X).
+bestMovement(Board, Value, X) :- tryWin(Board, Value, X).
+bestMovement(Board, Value, X) :- tryDefend(Board, Value, X).
+bestMovement(Board, _, X) :- tryCenter(Board, X).
+bestMovement(Board, _, X) :- tryCorner(Board, X).
+bestMovement(Board, _, X) :- tryEdges(Board, X).
 
-tryWin(Tabuleiro, Valor, 1) :- riskIt(Tabuleiro, Valor, 1).
-tryWin(Tabuleiro, Valor, 2) :- riskIt(Tabuleiro, Valor, 2).
-tryWin(Tabuleiro, Valor, 3) :- riskIt(Tabuleiro, Valor, 3).
-tryWin(Tabuleiro, Valor, 4) :- riskIt(Tabuleiro, Valor, 4).
-tryWin(Tabuleiro, Valor, 5) :- riskIt(Tabuleiro, Valor, 5).
-tryWin(Tabuleiro, Valor, 6) :- riskIt(Tabuleiro, Valor, 6).
-tryWin(Tabuleiro, Valor, 7) :- riskIt(Tabuleiro, Valor, 7).
-tryWin(Tabuleiro, Valor, 8) :- riskIt(Tabuleiro, Valor, 8).
-tryWin(Tabuleiro, Valor, 9) :- riskIt(Tabuleiro, Valor, 9).
+tryWin(Board, Value, 1) :- riskIt(Board, Value, 1).
+tryWin(Board, Value, 2) :- riskIt(Board, Value, 2).
+tryWin(Board, Value, 3) :- riskIt(Board, Value, 3).
+tryWin(Board, Value, 4) :- riskIt(Board, Value, 4).
+tryWin(Board, Value, 5) :- riskIt(Board, Value, 5).
+tryWin(Board, Value, 6) :- riskIt(Board, Value, 6).
+tryWin(Board, Value, 7) :- riskIt(Board, Value, 7).
+tryWin(Board, Value, 8) :- riskIt(Board, Value, 8).
+tryWin(Board, Value, 9) :- riskIt(Board, Value, 9).
 
-riskIt(Tabuleiro, Valor, X) :-
-    defineSquare(Tabuleiro, X, Valor, TempTabuleiro),
-    wonGame(TempTabuleiro).
+riskIt(Board, Value, X) :-
+    defineSquare(Board, X, Value, TempBoard),
+    wonGame(TempBoard).
 
-tryDefend(Tabuleiro, Valor, 1) :- bar(Tabuleiro, Valor, 1).
-tryDefend(Tabuleiro, Valor, 2) :- bar(Tabuleiro, Valor, 2).
-tryDefend(Tabuleiro, Valor, 3) :- bar(Tabuleiro, Valor, 3).
-tryDefend(Tabuleiro, Valor, 4) :- bar(Tabuleiro, Valor, 4).
-tryDefend(Tabuleiro, Valor, 5) :- bar(Tabuleiro, Valor, 5).
-tryDefend(Tabuleiro, Valor, 6) :- bar(Tabuleiro, Valor, 6).
-tryDefend(Tabuleiro, Valor, 7) :- bar(Tabuleiro, Valor, 7).
-tryDefend(Tabuleiro, Valor, 8):- bar(Tabuleiro, Valor, 8).
-tryDefend(Tabuleiro, Valor, 9) :- bar(Tabuleiro, Valor, 9).
+tryDefend(Board, Value, 1) :- bar(Board, Value, 1).
+tryDefend(Board, Value, 2) :- bar(Board, Value, 2).
+tryDefend(Board, Value, 3) :- bar(Board, Value, 3).
+tryDefend(Board, Value, 4) :- bar(Board, Value, 4).
+tryDefend(Board, Value, 5) :- bar(Board, Value, 5).
+tryDefend(Board, Value, 6) :- bar(Board, Value, 6).
+tryDefend(Board, Value, 7) :- bar(Board, Value, 7).
+tryDefend(Board, Value, 8) :- bar(Board, Value, 8).
+tryDefend(Board, Value, 9) :- bar(Board, Value, 9).
 
-bar(Tabuleiro, Valor, X) :-
-    change(Valor, ValorNovo),
-    defineSquare(Tabuleiro, X, ValorNovo, TempTabuleiro),
-    wonGame(TempTabuleiro).
+bar(Board, Value, X) :-
+    change(Value, ValueNew),
+    defineSquare(Board, X, ValueNew, TempBoard),
+    wonGame(TempBoard).
 
-tryCenter(Tabuleiro, 5) :- returnSquare(Tabuleiro, 5, '5').
+tryCenter(Board, 5) :- returnSquare(Board, 5, '5').
 
-tryCorner(Tabuleiro, 1) :- returnSquare(Tabuleiro, 1, '1').
-tryCorner(Tabuleiro, 3) :- returnSquare(Tabuleiro, 3, '3').
-tryCorner(Tabuleiro, 7) :- returnSquare(Tabuleiro, 7, '7').
-tryCorner(Tabuleiro, 9) :- returnSquare(Tabuleiro, 9, '9').
+tryCorner(Board, 1) :- returnSquare(Board, 1, '1').
+tryCorner(Board, 3) :- returnSquare(Board, 3, '3').
+tryCorner(Board, 7) :- returnSquare(Board, 7, '7').
+tryCorner(Board, 9) :- returnSquare(Board, 9, '9').
 
-tryEdges(Tabuleiro, 2) :- returnSquare(Tabuleiro, 2, '2').
-tryEdges(Tabuleiro, 4) :- returnSquare(Tabuleiro, 4, '4').
-tryEdges(Tabuleiro, 6) :- returnSquare(Tabuleiro, 6, '6').
-tryEdges(Tabuleiro, 8) :- returnSquare(Tabuleiro, 8, '8').
+tryEdges(Board, 2) :- returnSquare(Board, 2, '2').
+tryEdges(Board, 4) :- returnSquare(Board, 4, '4').
+tryEdges(Board, 6) :- returnSquare(Board, 6, '6').
+tryEdges(Board, 8) :- returnSquare(Board, 8, '8').
 
 % Check if wins game
 %   All victory possibilities in the game
-wonGame(Tabuleiro) :- found(Tabuleiro, [1, 2, 3]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [4, 5, 6]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [7, 8, 9]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [1, 4, 7]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [2, 5, 8]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [3, 6, 9]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [1, 5, 9]), !.
-wonGame(Tabuleiro) :- found(Tabuleiro, [3, 5, 7]).
+wonGame(Board) :- found(Board, [1, 2, 3]), !.
+wonGame(Board) :- found(Board, [4, 5, 6]), !.
+wonGame(Board) :- found(Board, [7, 8, 9]), !.
+wonGame(Board) :- found(Board, [1, 4, 7]), !.
+wonGame(Board) :- found(Board, [2, 5, 8]), !.
+wonGame(Board) :- found(Board, [3, 6, 9]), !.
+wonGame(Board) :- found(Board, [1, 5, 9]), !.
+wonGame(Board) :- found(Board, [3, 5, 7]).
 
 % Checks if found sequence
-found(Tabuleiro, [Casa1, Casa2, Casa3]) :-
-    returnSquare(Tabuleiro, Casa1, Retorno),
-    returnSquare(Tabuleiro, Casa2, Retorno),
-    returnSquare(Tabuleiro, Casa3, Retorno).
+found(Board, [Square1, Square2, Square3]) :-
+    returnSquare(Board, Square1, Return),
+    returnSquare(Board, Square2, Return),
+    returnSquare(Board, Square3, Return).
