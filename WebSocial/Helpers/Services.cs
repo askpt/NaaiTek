@@ -139,7 +139,7 @@ namespace WebSocial.Helpers
         {
             HttpClient client = new HttpClient();
 
-            var url = string.Format(_baseUrl + "/remove_connection?personA={0}&personB={1}&tag={2}", user1, user2);
+            var url = string.Format(_baseUrl + "/remove_connection?personA={0}&personB={1}", user1, user2);
             await client.GetAsync(url);
 
             return true;

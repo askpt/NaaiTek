@@ -1,7 +1,60 @@
-﻿
+﻿@using WebSocial.Helpers.Models;
+@model WebSocial.Helpers.Models.Path
+
 @{
     ViewBag.Title = Resources.Delete;
 }
 
 <h2>@Resources.Delete</h2>
+
+<h2>@Resources.Friends</h2>
+@if (Model.user1 != ViewBag.username)
+{
+    <td>@Model.user1</td>
+}
+else
+{
+    <td>@Model.user2</td>
+}
+
+<br />
+
+<h2>@Resources.ConStr</h2>
+@Model.connection
+
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            @Resources.YourTags
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (string item in Model.tags)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
+
+</table>
+@using (Html.BeginForm())
+{
+     @Html.AntiForgeryToken()
+    
+    @Html.Hidden("user1", Model.user1);
+    @Html.Hidden("user2", Model.user2);
+
+    <p>Wanna delete this friendship?</p>
+
+    <div class="form-actions no-color">
+        <input type="submit" value="@Resources.Delete" class="btn btn-default" /> |
+        @Html.ActionLink(Resources.BackToList, "Index")
+    </div>
+}
+
 

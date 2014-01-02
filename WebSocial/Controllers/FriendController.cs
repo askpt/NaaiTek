@@ -122,19 +122,36 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                List<Path> friends = await Services.GetOnlyFriends(user.UserName);
+                ViewBag.username = user.UserName;
+
+                return View(friends[id]);
+            }
+
             return View();
         }
 
         //
         // POST: /Friend/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                string user1 = collection["user1"];
+
+                string user2 = collection["user2"];
+
+                await Services.RemoveFriend(user1, user2);
 
                 return RedirectToAction("Index");
             }
