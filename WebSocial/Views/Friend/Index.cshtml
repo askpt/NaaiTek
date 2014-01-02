@@ -44,11 +44,12 @@
             </td>
             <td>
                 @Html.ActionLink(Resources.Edit, "Edit", new { id = i })
+                <text>|</text>
+                @Html.ActionLink(Resources.Delete, "Delete", new { id = i })
             </td>
         </tr>
     }
 
 </table>
-
 
 
