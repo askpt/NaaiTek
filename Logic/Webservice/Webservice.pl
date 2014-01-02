@@ -175,7 +175,8 @@ remove_connection(_Request) :-
 %update connection strenght
 update_connection_strenght(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, []), strenght(Strenght, [])]),
-               (editConnectionByStrenght(PersonA, PersonB, Strenght),
+                atom_number(Strenght, Number),
+               (editConnectionByStrenght(PersonA, PersonB, Number),
                 prolog_to_json(message('connection edited', 'ok'), JSON_Object);
                 prolog_to_json(message('connection not edited or not exists', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
