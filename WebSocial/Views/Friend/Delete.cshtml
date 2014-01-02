@@ -49,7 +49,7 @@ else
     @Html.Hidden("user1", Model.user1);
     @Html.Hidden("user2", Model.user2);
 
-    <p>Wanna delete this friendship?</p>
+    <p>@Resources.DeleteConfirmation</p>
 
     <div class="form-actions no-color">
         <input type="submit" value="@Resources.Delete" class="btn btn-default" /> |
