@@ -99,8 +99,20 @@ namespace WebSocial.Helpers
                 var url = string.Format(_baseUrl + "/update_connection_strenght?personA={0}&personB={1}&strenght={2}", user1, user2, strenght);
                 await client.GetAsync(url);
             }
-            
+
             return true;
+        }
+
+        public static async Task<List<string>> GetAllTags()
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/get_all_tags");
+            string jsonResponse = await client.GetStringAsync(url);
+
+            ConnectionTag tags = JsonConvert.DeserializeObject<ConnectionTag>(jsonResponse);
+
+            return tags.tags;
         }
     }
 

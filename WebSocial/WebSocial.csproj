@@ -170,6 +170,7 @@
     <Compile Include="Controllers\FriendController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Helpers\Models\ConnectionTag.cs" />
     <Compile Include="Helpers\Services.cs" />
     <Compile Include="Migrations\201312291432273_CorrectError.cs" />
     <Compile Include="Migrations\201312291432273_CorrectError.Designer.cs">
