@@ -62,7 +62,7 @@ define_valor_na_coluna([Coluna1, Coluna2, Coluna3], 3, Valor, [Coluna1, Coluna2,
 %   TabuleiroNovo   - tabuleiro novo.
 %
 processa(TabuleiroAntigo, _, _, _, TabuleiroNovo) :-
-    gameover(TabuleiroAntigo), !,       % checa se é gameover.
+    %%gameover(TabuleiroAntigo), !,       % checa se é gameover.
     TabuleiroNovo = TabuleiroAntigo.        % se o tabuleiro anterior ao processamento é igual ao novo.
 
 % Responsavel pelo loop principal do jogo.
@@ -195,8 +195,8 @@ tentarBordas(Tabuleiro, 8) :- retornaCasa(Tabuleiro, 8, '8').
 
 % Verifica se o jogo acabou.
 %   Alguem fez linha ou o Tabuleiro esta cheio.
-gameover(Tabuleiro) :- tabuleiroCheio(Tabuleiro), !.
-gameover(Tabuleiro) :- fezLinha(Tabuleiro).
+%%gameover(Tabuleiro) :- tabuleiroCheio(Tabuleiro), !.
+%%gameover(Tabuleiro) :- fezLinha(Tabuleiro).
 
 % Vericia se alguem fez linha.
 %   Todas as possibilidades de vitoria no jogo.
