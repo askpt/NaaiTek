@@ -83,6 +83,8 @@ namespace WebSocial.Controllers
                 List<Path> friends = await Services.GetOnlyFriends(user.UserName);
 
                 ViewBag.username = user.UserName;
+                ViewBag.allTags = await Services.GetAllTags();
+
                 return View(friends[id]);
             }
 
@@ -139,6 +141,11 @@ namespace WebSocial.Controllers
             {
                 return View();
             }
+        }
+
+        public bool ConnectionHasTag(string allTag, List<string> tags)
+        {
+            return (tags.Contains(allTag));
         }
     }
 }

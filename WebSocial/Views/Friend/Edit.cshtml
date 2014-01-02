@@ -39,4 +39,53 @@ else
         </div>
     </div>
 }
+<br />
 
+<table class="table">
+    <tr>
+        <th>
+            @Resources.YourTags
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (string item in Model.tags)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
+
+</table>
+
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Resources.AllTags
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (string item in ViewBag.allTags)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+            <td>
+                @if (Html.Action("ConnectionHasTag", new { allTag = item, tags = Model.tags }).ToString() == "True")
+                {
+                    @Html.ActionLink(Resources.Remove, "RemoveTag", new { tag = item, user1 = Model.user1, user2 = Model.user2 });
+                }
+                else
+                {
+                    @Html.ActionLink(Resources.Add, "AddTag", new { tag = item, user1 = Model.user1, user2 = Model.user2 });
+                }
+
+            </td>
+        </tr>
+    }
+</table>
