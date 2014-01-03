@@ -222,13 +222,13 @@ gameResponseRequest(User1, User2):-pending(User2, User1, 'request'),
 	assert(pending(User2, User1, 'game')).
 
 %friend request accept response
-acceptResponseRequest(User1, User2):-(pending(User1, User2, 'request'),!,
+acceptResponseRequest(User2, User1):-(pending(User1, User2, 'request'),!,
 	retractall(pending(User1, User2, 'request')),
 	assert(pending(User1, User2, 'accept')),
 	assert(connects(User1, User2, 0, [])));
-	(pending(User1, User2, 'game'),!,
-	retractall(pending(User1, User2, 'game')),
-	assert(pending(User2, User1, 'accept')),
+	(pending(User2, User1, 'game'),!,
+	retractall(pending(User2, User1, 'game')),
+	assert(pending(User1, User2, 'accept')),
 	assert(connects(User1, User2, 0, []))).
 
 %check the received friend requests
