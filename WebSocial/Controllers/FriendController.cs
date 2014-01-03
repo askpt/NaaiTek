@@ -324,8 +324,23 @@ namespace WebSocial.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public ActionResult Notification()
+        public async Task<ActionResult> Notification()
         {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                // received friend requests
+                ViewBag.pendingRequests = await Services.CheckFriendRequests(user.UserName);
+
+                //received game responses
+                ViewBag.gameRequests = await Services.CheckGameFriendRequests(user.UserName);
+
+                //check accepted requests notifications
+                ViewBag.requestNotification = await Services.CheckAcceptedFriendRequests(user.UserName);
+            }
 
             return View();
         }

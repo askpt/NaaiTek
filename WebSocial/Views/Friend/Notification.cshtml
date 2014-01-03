@@ -14,3 +14,36 @@
 }
 
 <h2>@Resources.Notification</h2>
+
+<h3>Pending Requests</h3>
+<table>
+    @foreach (string item in ViewBag.pendingRequests)
+    {
+        <tr>
+            <td>@item</td>
+        </tr>
+    }
+
+</table>
+
+<h3>Game Requests</h3>
+<table>
+    @foreach (string item in ViewBag.gameRequests)
+    {
+        <tr>
+            <td>@item</td>
+        </tr>
+    }
+
+</table>
+
+<h3>Accepted Requests</h3>
+<table>
+    @foreach (string item in ViewBag.requestNotification)
+    {
+        <tr>
+            <td>@item</td>
+        </tr>
+    }
+
+</table>
