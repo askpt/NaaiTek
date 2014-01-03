@@ -52,4 +52,19 @@
 
 </table>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Resources.Friends</th>
+        </tr>
+    </thead>
+    @foreach (string item in ViewBag.suggestedFriends)
+    {
+        <tr>
+            <td>@item</td>
+        </tr>
+    }
+
+</table>
+
 
