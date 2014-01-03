@@ -16,8 +16,8 @@ using namespace std;
 typedef struct
 {
 	int matrix[3][3];
-	int win = 0;
-	int loose = 0;
+	int win;
+	int loose;
 }Game;
 
 
@@ -623,24 +623,27 @@ void mouse(int btn, int mouseState, int x, int y)
 	}
 }
 
-void prologConnection()
+/*this method will be called every time that the user select a square*/
+void IAConnection()
 {
-	char *plargv[] = { "swipl.dll", "-s", "teste.pl", NULL };
+	char *plargv[] = { "swipl.dll", "-s", "ttt-off.pl", NULL };
 	PlEngine e(3, plargv);
-	PlTermv av(2);
-	av[1] = PlCompound("jose");
-	PlQuery q("ancestral", av);
+	PlTermv av(3);
+	av[1] = PlCompound("['1','2','3'],['4','5','6'],['7','8','9']");
+	//av[2] = PlCompound("2");
+	//av[3] = PlCompound("L");
+	PlQuery q("receive", av);
 	while (q.next_solution())
 	{
 		cout << (char*)av[0] << endl;
 	}
-	//cin.get();
+	cin.get();
 }
 
 int main(int argc, char **argv)
 {
 	
-	prologConnection();
+	IAConnection();
 	
 	glutInit(&argc, argv);
 
