@@ -386,4 +386,7 @@
   <data name="SugFriends" xml:space="preserve">
     <value>Suggested Friends</value>
   </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
 </root>

@@ -1,0 +1,16 @@
+﻿@using WebSocial.Helpers.Models;
+
+@{
+    ViewBag.Title = @Resources.Notification;
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+}
+
+@helper selected(string c, string culture)
+{
+    if (c == culture)
+    {
+        @:checked="checked"
+    }
+}
+
+<h2>@Resources.Notification</h2>

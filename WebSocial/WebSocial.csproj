@@ -286,6 +286,7 @@
     <Content Include="Views\Friend\Index.cshtml" />
     <Content Include="Views\Friend\Edit.cshtml" />
     <Content Include="Views\Friend\Delete.cshtml" />
+    <Content Include="Views\Friend\Notification.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -322,5 +322,13 @@ namespace WebSocial.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "User")]
+        public ActionResult Notification()
+        {
+
+            return View();
+        }
+
     }
 }

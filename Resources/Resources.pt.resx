@@ -386,4 +386,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="SugFriends" xml:space="preserve">
     <value>Sugestão de Amigos</value>
   </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notificações</value>
+  </data>
 </root>
