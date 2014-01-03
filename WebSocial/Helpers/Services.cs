@@ -145,21 +145,39 @@ namespace WebSocial.Helpers
             return true;
         }
 
-        public static async Task<List<Path>> GetThirdLevelFriends(string username)
+        public static async Task<List<string>> GetThirdLevelFriends(string username)
         {
             UserGraph graph = await GetUserGraph(username);
 
-            List<Path> friends = new List<Path>();
+            List<Path> friends = await GetOnlyFriends(username);
+
+            List<string> friendsName = new List<string>();
+
+            friendsName.Add(username);
 
             foreach (Path item in graph.paths)
             {
-                if (item.user1 != username && item.user2 != username)
+                if (item.user1 == username || item.user2 == username)
                 {
-                    friends.Add(item);
+                    if (item.user1 != username)
+                    {
+                        friendsName.Add(item.user1);
+                    }
+                    else
+                    {
+                        friendsName.Add(item.user2);
+                    }
                 }
             }
 
-            return friends;
+            List<string> thirdFriends = graph.nodes;
+
+            foreach (string item in friendsName)
+            {
+                thirdFriends.Remove(item);
+            }
+
+            return thirdFriends;
         }
     }
 
