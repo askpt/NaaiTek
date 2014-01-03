@@ -198,6 +198,39 @@ namespace WebSocial.Helpers
             var url = string.Format(_baseUrl + "/request_friend?personA={0}&personB={1}", user, friend);
             await client.GetAsync(url);
         }
+
+        public static async Task<List<string>> CheckFriendRequests(string user)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/check_requests?user={0}", user);
+            string jsonResponse = await client.GetStringAsync(url);
+            UserRequests users = JsonConvert.DeserializeObject<UserRequests>(jsonResponse);
+
+            return users.users;
+        }
+
+        public static async Task<List<string>> CheckGameFriendRequests(string user)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/check_game_requests?user={0}", user);
+            string jsonResponse = await client.GetStringAsync(url);
+            UserRequests users = JsonConvert.DeserializeObject<UserRequests>(jsonResponse);
+
+            return users.users;
+        }
+
+        public static async Task<List<string>> CheckAcceptedFriendRequests(string user)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/check_friend_notifications?user={0}", user);
+            string jsonResponse = await client.GetStringAsync(url);
+            UserRequests users = JsonConvert.DeserializeObject<UserRequests>(jsonResponse);
+
+            return users.users;
+        }
     }
 
 
