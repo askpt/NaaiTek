@@ -45,22 +45,31 @@ namespace WebSocial.Controllers
         {
             List<string> suggestedFriends = new List<string>();
             IList<int> userTagIDs = (from userToTag in db.UsersTags where (userToTag.UserID == userId) select userToTag.TagID).ToList();
+            List<string> pendingRequests = await Services.GetAllPendingRequests(username);
 
-            suggestedFriends = await GetFriendsSuggestedThirdLevel(username, userTagIDs);
+            suggestedFriends = await GetFriendsSuggestedThirdLevel(username, userTagIDs, pendingRequests);
 
             if (suggestedFriends.Count == 0)
             {
-                suggestedFriends = await GetAllFriendsSuggested(username, userTagIDs);
+                suggestedFriends = await GetAllFriendsSuggested(username, userTagIDs, pendingRequests);
             }
 
             return suggestedFriends;
         }
 
-        private async Task<List<string>> GetAllFriendsSuggested(string username, IList<int> userTagIDs)
+        private async Task<List<string>> GetAllFriendsSuggested(string username, IList<int> userTagIDs, List<string> pendingRequests)
         {
             List<string> suggestedFriends = new List<string>();
-
             List<string> allUsers = await GetAllUsers(username);
+
+            foreach (string item in pendingRequests)
+            {
+                if (allUsers.Contains(item))
+                {
+                    allUsers.Remove(item);
+                }
+            }
+
             List<string> allUsersId = FindFriendIds(allUsers);
 
             foreach (string friendId in allUsersId)
@@ -100,11 +109,19 @@ namespace WebSocial.Controllers
             return usernames;
         }
 
-        private async Task<List<string>> GetFriendsSuggestedThirdLevel(string username, IList<int> userTagIDs)
+        private async Task<List<string>> GetFriendsSuggestedThirdLevel(string username, IList<int> userTagIDs, List<string> pendingRequests)
         {
             List<string> suggestedFriends = new List<string>();
 
             List<string> thirdLevelFriends = await Services.GetThirdLevelFriends(username);
+
+            foreach (string item in pendingRequests)
+            {
+                if (thirdLevelFriends.Contains(item))
+                {
+                    thirdLevelFriends.Remove(item);
+                }
+            }
 
             if (thirdLevelFriends.Count > 0)
             {
