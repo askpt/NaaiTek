@@ -389,4 +389,22 @@
   <data name="Notification" xml:space="preserve">
     <value>Notifications</value>
   </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="ARequests" xml:space="preserve">
+    <value>Accepted Requests</value>
+  </data>
+  <data name="Game" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="GRequests" xml:space="preserve">
+    <value>Game Requests</value>
+  </data>
+  <data name="PRequests" xml:space="preserve">
+    <value>Pending Requests</value>
+  </data>
+  <data name="NoNotifications" xml:space="preserve">
+    <value>No new notifications available!</value>
+  </data>
 </root>

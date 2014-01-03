@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         public static string Account {
@@ -103,6 +112,15 @@ namespace Resources {
         public static string AllTags {
             get {
                 return ResourceManager.GetString("AllTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accepted Requests.
+        /// </summary>
+        public static string ARequests {
+            get {
+                return ResourceManager.GetString("ARequests", resourceCulture);
             }
         }
         
@@ -458,6 +476,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Game.
+        /// </summary>
+        public static string Game {
+            get {
+                return ResourceManager.GetString("Game", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Requests.
+        /// </summary>
+        public static string GRequests {
+            get {
+                return ResourceManager.GetString("GRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello.
         /// </summary>
         public static string Hello {
@@ -620,6 +656,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No new notifications available!.
+        /// </summary>
+        public static string NoNotifications {
+            get {
+                return ResourceManager.GetString("NoNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notifications.
         /// </summary>
         public static string Notification {
@@ -661,6 +706,15 @@ namespace Resources {
         public static string Position {
             get {
                 return ResourceManager.GetString("Position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending Requests.
+        /// </summary>
+        public static string PRequests {
+            get {
+                return ResourceManager.GetString("PRequests", resourceCulture);
             }
         }
         

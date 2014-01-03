@@ -389,4 +389,22 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="Notification" xml:space="preserve">
     <value>Notificações</value>
   </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceitar</value>
+  </data>
+  <data name="ARequests" xml:space="preserve">
+    <value>Pedidos Aceites</value>
+  </data>
+  <data name="Game" xml:space="preserve">
+    <value>Jogo</value>
+  </data>
+  <data name="GRequests" xml:space="preserve">
+    <value>Pedidos de Jogo</value>
+  </data>
+  <data name="PRequests" xml:space="preserve">
+    <value>Pedidos Pendentes</value>
+  </data>
+  <data name="NoNotifications" xml:space="preserve">
+    <value>Sem Novas Notificações Disponíveis!</value>
+  </data>
 </root>

@@ -15,45 +15,59 @@
 
 <h2>@Resources.Notification</h2>
 
-<h3>Pending Requests</h3>
-<table>
-    @foreach (string item in ViewBag.pendingRequests)
-    {
-        <tr>
-            <td>@item</td>
-            <td>
-                @Html.ActionLink("Accept", "AcceptRequest", new { friend = item })
-                <text>|</text>
-                @Html.ActionLink("Game", "GameResponse", new { friend = item})
-                <text>|</text>
-                @Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item})
-            </td>
+@if (((List<string>)ViewBag.pendingRequests).Count == 0 && ((List<string>)ViewBag.gameRequests).Count == 0 && ((List<string>)ViewBag.requestNotification).Count == 0)
+{
+    <h3>@Resources.NoNotifications</h3>
+}
 
-        </tr>
-    }
+@if (((List<string>)ViewBag.pendingRequests).Count > 0)
+{
+    <h3>@Resources.PRequests</h3>
+    <table class="table">
+        @foreach (string item in ViewBag.pendingRequests)
+        {
+            <tr>
+                <td>@item</td>
+                <td>
+                    @Html.ActionLink(Resources.Accept, "AcceptRequest", new { friend = item })
+                    <text>|</text>
+                    @Html.ActionLink(Resources.Game, "GameResponse", new { friend = item })
+                    <text>|</text>
+                    @Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })
+                </td>
 
-</table>
+            </tr>
+        }
 
-<h3>Game Requests</h3>
-<table>
-    @foreach (string item in ViewBag.gameRequests)
-    {
-        <tr>
-            <td>@item</td>
-            <td>@Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })</td>
-        </tr>
-    }
+    </table>
+}
 
-</table>
+@if (((List<string>)ViewBag.gameRequests).Count > 0)
+{
+    <h3>@Resources.GRequests</h3>
+    <table class="table">
+        @foreach (string item in ViewBag.gameRequests)
+        {
+            <tr>
+                <td>@item</td>
+                <td>@Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })</td>
+            </tr>
+        }
 
-<h3>Accepted Requests</h3>
-<table>
-    @foreach (string item in ViewBag.requestNotification)
-    {
-        <tr>
-            <td>@item</td>
-            <td>@Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })</td>
-        </tr>
-    }
+    </table>
+}
 
-</table>
+@if (((List<string>)ViewBag.requestNotification).Count > 0)
+{
+    <h3>@Resources.ARequests</h3>
+    <table class="table">
+        @foreach (string item in ViewBag.requestNotification)
+        {
+            <tr>
+                <td>@item</td>
+                <td>@Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })</td>
+            </tr>
+        }
+
+    </table>
+}
