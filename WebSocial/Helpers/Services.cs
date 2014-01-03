@@ -231,6 +231,30 @@ namespace WebSocial.Helpers
 
             return users.users;
         }
+
+        public static async Task DeleteFriendRequest(string user, string friend)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/remove_request&personA={0}&personB={1}", user, friend);
+            await client.GetAsync(url);
+        }
+
+        public static async Task GameResponseFriendRequest(string user, string friend)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/game_response&personA={0}&personB={1}", user, friend);
+            await client.GetAsync(url);
+        }
+
+        public static async Task AcceptResponseFriendRequest(string user, string friend)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/accept_response&personA={0}&personB={1}", user, friend);
+            await client.GetAsync(url);
+        }
     }
 
 
