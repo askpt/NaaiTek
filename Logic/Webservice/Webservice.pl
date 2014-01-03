@@ -93,6 +93,9 @@
 % request to get all tags
 :-http_handler(root(get_all_tags), get_all_tags, []).
 
+% request to get all pending requests
+:- http_handler(root(get_all_pending_requests), get_all_pending_requests, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -319,3 +322,8 @@ get_all_tags(_Request):-getAllTags(List),
                 prolog_to_json(tags(List, 'ok'), JSON_Object),
                 reply_json(JSON_Object).
                 
+%get all pending requests
+get_all_pending_requests(_Request):-http_parameters(_Request, [user(User, [])]),
+                checkPendingRequest(User, List),
+                prolog_to_json(users(List, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
