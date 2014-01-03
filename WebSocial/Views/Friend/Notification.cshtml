@@ -21,6 +21,14 @@
     {
         <tr>
             <td>@item</td>
+            <td>
+                @Html.ActionLink("Accept", "AcceptRequest", new { friend = item })
+                <text>|</text>
+                @Html.ActionLink("Game", "GameResponse", new { friend = item})
+                <text>|</text>
+                @Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item})
+            </td>
+
         </tr>
     }
 
@@ -32,6 +40,7 @@
     {
         <tr>
             <td>@item</td>
+            <td>@Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })</td>
         </tr>
     }
 
@@ -43,6 +52,7 @@
     {
         <tr>
             <td>@item</td>
+            <td>@Html.ActionLink(Resources.Delete, "DeleteResponse", new { friend = item })</td>
         </tr>
     }
 

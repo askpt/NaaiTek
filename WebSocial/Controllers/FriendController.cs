@@ -345,5 +345,46 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        public async Task<ActionResult> AcceptRequest(string friend)
+        {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                await Services.AcceptResponseFriendRequest(user.UserName, friend);
+            }
+
+            return RedirectToAction("Notification");
+        }
+
+        public async Task<ActionResult> GameResponse(string friend)
+        {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                await Services.GameResponseFriendRequest(user.UserName, friend);
+            }
+
+            return RedirectToAction("Notification");
+        }
+
+        public async Task<ActionResult> DeleteResponse(string friend)
+        {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                await Services.DeleteFriendRequest(user.UserName, friend);
+            }
+
+            return RedirectToAction("Notification");
+        }
     }
 }
