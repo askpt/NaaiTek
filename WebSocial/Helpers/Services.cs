@@ -236,7 +236,7 @@ namespace WebSocial.Helpers
         {
             HttpClient client = new HttpClient();
 
-            var url = string.Format(_baseUrl + "/remove_request&personA={0}&personB={1}", user, friend);
+            var url = string.Format(_baseUrl + "/remove_request?personA={0}&personB={1}", user, friend);
             await client.GetAsync(url);
         }
 
@@ -244,7 +244,7 @@ namespace WebSocial.Helpers
         {
             HttpClient client = new HttpClient();
 
-            var url = string.Format(_baseUrl + "/game_response&personA={0}&personB={1}", user, friend);
+            var url = string.Format(_baseUrl + "/game_response?personA={0}&personB={1}", user, friend);
             await client.GetAsync(url);
         }
 
@@ -252,7 +252,7 @@ namespace WebSocial.Helpers
         {
             HttpClient client = new HttpClient();
 
-            var url = string.Format(_baseUrl + "/accept_response&personA={0}&personB={1}", user, friend);
+            var url = string.Format(_baseUrl + "/accept_response?personA={0}&personB={1}", user, friend);
             await client.GetAsync(url);
         }
     }
