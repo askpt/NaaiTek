@@ -5,8 +5,8 @@
 % Ans = Answer
 % AnsList = AnswerList
 
-hangman:-
-    getPhrase(Ans),
+hangman(Category):-
+    getPhrase(Category,Ans),
     !,
     write('Welcome to hangman.'),
     nl,
@@ -14,11 +14,20 @@ hangman:-
     makeBlanks(AnsList, BlankList),
     getGuess(AnsList,BlankList).
 
+%Possible categories to guess
+
+categories(['Nature',
+	    'Physics',
+	    'Web_Sites',
+	    'Programming_Languages']).
 
 % Randomly returns a phrase from the list of possibilities.
 
-getPhrase(Ans):-
-    phrases(L),
+getPhrase(Category,Ans):-
+    ((Category = 'Nature', phrases_Nature(L));
+    (Category = 'Physics', phrases_Physics(L));
+    (Category = 'Web_Sites', phrases_Web_Sites(L));
+    (Category = 'Programming_Languages', phrases_Programming_Languages(L))),
     length(L, X),
     R is random(X),
     N is R+1,
@@ -26,12 +35,12 @@ getPhrase(Ans):-
 
 % Possible phrases to guess.
 
-phrases([
-    'a_picture',
-    'one_for_the_money',
-    'dead_or_alive',
-    'computer_science'
-]).
+phrases_Nature(['dog','tree','flower','bush']).
+phrases_Physics(['strings_theory','newton',
+		 'universe','black_hole']).
+phrases_Web_Sites(['google','facebook','youtube','bing']).
+phrases_Programming_Languages(['java','c_sharp',
+			       'perl','g_portugol']).
 
 % Asks the user for a letter guess.  Starts by writing the
 % current "display phrase" with blanks, then asks for a guess and
@@ -115,18 +124,6 @@ answer_blank(Ans, Blank) :-
 
 % Also, since the predicate doesn't deal directly with character codes, this should also work:
 % substitute(['c','s','c'],['c','*','c'],'s',L).  L should be ['c','s','c'].
-
-substitute(AnsCodes, BlankCodes, GuessName, NewBlanks) :-
-     maplist(place_guess(GuessName), AnsCodes, BlankCodes, NewBlanks).
-
-place_guess(Guess, Ans, Blank, Display) :-
-    Guess == Ans -> Display = Ans ; Display = Blank.
-
-makeBlanks(AnsCodes, BlankCodes) :-
-  maplist(answer_blank, AnsCodes, BlankCodes).
-
-answer_blank(Ans, Blank) :-
-  Ans == 0'_ -> Blank = Ans ; Blank = 0'* .
 
 substitute(AnsCodes, BlankCodes, GuessName, NewBlanks) :-
      maplist(place_guess(GuessName), AnsCodes, BlankCodes, NewBlanks).
