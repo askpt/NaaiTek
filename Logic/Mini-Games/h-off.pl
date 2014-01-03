@@ -16,31 +16,27 @@ hangman(Category):-
 
 %Possible categories to guess
 
-categories(['Nature',
-	    'Physics',
-	    'Web_Sites',
-	    'Programming_Languages']).
+category(1,'Nature').
+category(2,'Physics').
+category(3,'Web_Sites').
+category(4,'Programming_Languages').
 
 % Randomly returns a phrase from the list of possibilities.
 
 getPhrase(Category,Ans):-
-    ((Category = 'Nature', phrases_Nature(L));
-    (Category = 'Physics', phrases_Physics(L));
-    (Category = 'Web_Sites', phrases_Web_Sites(L));
-    (Category = 'Programming_Languages', phrases_Programming_Languages(L))),
-    length(L, X),
-    R is random(X),
-    N is R+1,
-    getNth(L, N, Ans).
+	category(ID,Category),
+	phrases([ID|L]),
+	length(L, X),
+	R is random(X),
+	N is R+1,
+	getNth(L, N, Ans).
 
 % Possible phrases to guess.
 
-phrases_Nature(['dog','tree','flower','bush']).
-phrases_Physics(['strings_theory','newton',
-		 'universe','black_hole']).
-phrases_Web_Sites(['google','facebook','youtube','bing']).
-phrases_Programming_Languages(['java','c_sharp',
-			       'perl','g_portugol']).
+phrases([1,'dog','tree','flower','bush']).
+phrases([2,'strings_theory','newton','universe','black_hole']).
+phrases([3,'google','facebook','youtube','bing']).
+phrases([4,'java','c_sharp','perl','g_portugol']).
 
 % Asks the user for a letter guess.  Starts by writing the
 % current "display phrase" with blanks, then asks for a guess and
