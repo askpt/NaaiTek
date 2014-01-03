@@ -20,6 +20,7 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/
+        [Authorize(Roles = "User")]
         public async Task<ActionResult> Index()
         {
             string userID = User.Identity.GetUserId();
@@ -147,6 +148,7 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/Details/5
+        [Authorize(Roles = "User")]
         public ActionResult Details(int id)
         {
             return View();
@@ -154,6 +156,7 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/Create
+        [Authorize(Roles = "User")]
         public ActionResult Create()
         {
             return View();
@@ -162,6 +165,7 @@ namespace WebSocial.Controllers
         //
         // POST: /Friend/Create
         [HttpPost]
+        [Authorize(Roles = "User")]
         public ActionResult Create(FormCollection collection)
         {
             try
@@ -178,6 +182,7 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/Edit/5
+        [Authorize(Roles = "User")]
         public async Task<ActionResult> Edit(int id)
         {
             string userID = User.Identity.GetUserId();
@@ -201,6 +206,7 @@ namespace WebSocial.Controllers
         //
         // POST: /Friend/Edit/5
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult> Edit(int id, FormCollection collection)
         {
             try
@@ -228,6 +234,7 @@ namespace WebSocial.Controllers
 
         //
         // GET: /Friend/Delete/5
+        [Authorize(Roles = "User")]
         public async Task<ActionResult> Delete(int id)
         {
             string userID = User.Identity.GetUserId();
@@ -248,6 +255,7 @@ namespace WebSocial.Controllers
         //
         // POST: /Friend/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id, FormCollection collection)
         {
