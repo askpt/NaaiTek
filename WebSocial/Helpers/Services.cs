@@ -179,6 +179,17 @@ namespace WebSocial.Helpers
 
             return thirdFriends;
         }
+
+        public static async Task<List<string>> GetAllPendingRequests(string username)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/get_all_pending_requests?user={0}", username);
+            string jsonResponse = await client.GetStringAsync(url);
+            UserRequests user = JsonConvert.DeserializeObject<UserRequests>(jsonResponse);
+
+            return user.users;
+        }
     }
 
 
