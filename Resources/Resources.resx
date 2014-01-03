@@ -383,4 +383,7 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="SugFriends" xml:space="preserve">
+    <value>Suggested Friends</value>
+  </data>
 </root>

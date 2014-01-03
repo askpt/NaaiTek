@@ -782,6 +782,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suggested Friends.
+        /// </summary>
+        public static string SugFriends {
+            get {
+                return ResourceManager.GetString("SugFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tag.
         /// </summary>
         public static string Tag {
