@@ -47,7 +47,56 @@ namespace WebSocial.Controllers
 
             suggestedFriends = await GetFriendsSuggestedThirdLevel(username, userTagIDs);
 
+            if (suggestedFriends.Count == 0)
+            {
+                suggestedFriends = await GetAllFriendsSuggested(username, userTagIDs);
+            }
+
             return suggestedFriends;
+        }
+
+        private async Task<List<string>> GetAllFriendsSuggested(string username, IList<int> userTagIDs)
+        {
+            List<string> suggestedFriends = new List<string>();
+
+            List<string> allUsers = await GetAllUsers(username);
+            List<string> allUsersId = FindFriendIds(allUsers);
+
+            foreach (string friendId in allUsersId)
+            {
+                IList<int> friendTagIds = (from userToTag in db.UsersTags where (userToTag.UserID == friendId) select userToTag.TagID).ToList();
+
+                if (userTagIDs.Intersect(friendTagIds).ToList().Count > 0)
+                {
+                    ApplicationUser friend = db.Users.Find(friendId);
+
+                    suggestedFriends.Add(friend.UserName);
+                }
+            }
+
+            if (suggestedFriends.Count == 0)
+            {
+                suggestedFriends = allUsers;
+            }
+
+            return suggestedFriends;
+        }
+
+        private async Task<List<string>> GetAllUsers(string username)
+        {
+            UserDimension usersDim = await Services.GetAllUsers();
+            List<UserDim> allUsers = usersDim.users;
+
+            List<string> usernames = new List<string>();
+            foreach (UserDim item in allUsers)
+            {
+                if (item.user != username)
+                {
+                    usernames.Add(item.user);
+                }
+            }
+
+            return usernames;
         }
 
         private async Task<List<string>> GetFriendsSuggestedThirdLevel(string username, IList<int> userTagIDs)
