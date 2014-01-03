@@ -190,6 +190,14 @@ namespace WebSocial.Helpers
 
             return user.users;
         }
+
+        public static async Task SendUserRequest(string user, string friend)
+        {
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/request_friend?personA={0}&personB={1}", user, friend);
+            await client.GetAsync(url);
+        }
     }
 
 

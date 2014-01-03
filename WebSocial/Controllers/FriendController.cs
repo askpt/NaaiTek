@@ -308,5 +308,19 @@ namespace WebSocial.Controllers
             await Services.RemoveTag(user1, user2, tag);
             return RedirectToAction("Edit/" + last);
         }
+
+        public async Task<ActionResult> RequestFriend(string friend)
+        {
+            string userID = User.Identity.GetUserId();
+
+            if (userID != null)
+            {
+                ApplicationUser user = db.Users.Find(userID);
+
+                await Services.SendUserRequest(user.UserName, friend);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

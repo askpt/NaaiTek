@@ -65,6 +65,10 @@
     {
         <tr>
             <td>@item</td>
+
+            <td>
+                @Html.ActionLink(@Resources.Add, "RequestFriend", new { friend = item })
+            </td>
         </tr>
     }
 
