@@ -638,6 +638,84 @@ void mouse(int btn, int mouseState, int x, int y)
 	}
 }
 
+/*function to check if machine win*/
+
+void checkMachineWin()
+{
+	if (game.matrix[0][0] == 'o' && game.matrix[0][1] == 'o' && game.matrix[0][2] == 'o')
+	{
+
+	}
+	if (game.matrix[1][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[1][2] == 'o')
+	{
+
+	}
+	if (game.matrix[2][0] == 'o' && game.matrix[2][1] == 'o' && game.matrix[2][2] == 'o')
+	{
+
+	}
+	if (game.matrix[0][0] == 'o' && game.matrix[1][0] == 'o' && game.matrix[2][0] == 'o')
+	{
+
+	}
+	if (game.matrix[0][1] == 'o' && game.matrix[1][1] == 'o' && game.matrix[2][1] == 'o')
+	{
+
+	}
+	if (game.matrix[0][2] == 'o' && game.matrix[1][2] == 'o' && game.matrix[2][2] == 'o')
+	{
+
+	}
+
+	if (game.matrix[0][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[2][2] == 'o')
+	{
+
+	}
+	if (game.matrix[2][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[0][2] == 'o')
+	{
+
+	}
+}
+
+/*function to check if user win*/
+
+void checkUserWin()
+{
+
+	if (game.matrix[0][0] == 'x' && game.matrix[0][1] == 'x' && game.matrix[0][2] == 'x')
+	{
+
+	}
+	if (game.matrix[1][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[1][2] == 'x')
+	{
+
+	}
+	if (game.matrix[2][0] == 'x' && game.matrix[2][1] == 'x' && game.matrix[2][2] == 'x')
+	{
+
+	}
+	if (game.matrix[0][0] == 'x' && game.matrix[1][0] == 'x' && game.matrix[2][0] == 'x')
+	{
+
+	}
+	if (game.matrix[0][1] == 'x' && game.matrix[1][1] == 'x' && game.matrix[2][1] == 'x')
+	{
+
+	}
+	if (game.matrix[0][2] == 'x' && game.matrix[1][2] == 'x' && game.matrix[2][2] == 'x')
+	{
+
+	}
+
+	if (game.matrix[0][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[2][2] == 'x')
+	{
+
+	}
+	if (game.matrix[2][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[0][2] == 'x')
+	{
+
+	}
+}
 /*function to update the bordergame*/
 
 void updateBorderGame(string border)
@@ -734,7 +812,6 @@ void updateBorderGame(string border)
 /*this method will be called every time that the user select a square*/
 void IAConnection(char play)
 {
-	cout << "entrei" << endl;
 	char *plargv[] = { "swipl.dll", "-s", "ttt-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(3);
