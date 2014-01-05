@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdlib.h>
+#include <string>
 #include <stdlib.h>     
 #include <GL\glut.h>
 #include <SWI-cpp.h>
@@ -15,7 +16,7 @@ using namespace std;
 
 typedef struct
 {
-	int matrix[3][3];
+	char matrix[3][3];
 	int win;
 	int loose;
 }Game;
@@ -37,14 +38,17 @@ Game game;
 /**function to init the game parametrers**/
 void initGameData()
 {
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3;j++)
-		{
-			game.matrix[i][j] = 0;
-			
-		}
-	}
+	game.matrix[0][0] = '1';
+	game.matrix[0][1] = '2';
+	game.matrix[0][2] = '3';
+	game.matrix[1][0] = '4';
+	game.matrix[1][1] = '5';
+	game.matrix[1][2] = '6';
+	game.matrix[2][0] = '7';
+	game.matrix[2][1] = '8';
+	game.matrix[2][2] = '9';
+
+
 }
 
 /*function to call prolog and send border game*/
@@ -57,7 +61,7 @@ void requestAnswer()
 
 void myInit()
 {
-	initGameData();
+
 	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glShadeModel(GL_FLAT);
@@ -68,7 +72,7 @@ void myInit()
 
 	gluOrtho2D(0.0, (GLdouble)WindowWidth, (GLdouble)WindowHeight, 0.0);
 	glMatrixMode(GL_MODELVIEW);
-	
+
 
 
 }
@@ -270,7 +274,7 @@ void drawX(int x, int y)
 	}
 	else
 
-	//square2
+		//square2
 	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
 	{
 		glBegin(GL_LINES);
@@ -444,7 +448,7 @@ void drawO(int x, int y)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
-		GLfloat x0 = (100 + 2*squareWidth + (squareWidth / 2.0));
+		GLfloat x0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
 		GLfloat y0 = (100 + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
@@ -466,8 +470,8 @@ void drawO(int x, int y)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
-		GLfloat x0 = (100+(squareWidth/2.0));
-		GLfloat y0 = (100 + squareWidth+(squareWidth / 2.0));
+		GLfloat x0 = (100 + (squareWidth / 2.0));
+		GLfloat y0 = (100 + squareWidth + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
 		glBegin(GL_POLYGON);
@@ -487,7 +491,7 @@ void drawO(int x, int y)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
-		GLfloat x0 = (100 + squareWidth+(squareWidth / 2.0));
+		GLfloat x0 = (100 + squareWidth + (squareWidth / 2.0));
 		GLfloat y0 = (100 + squareWidth + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
@@ -508,7 +512,7 @@ void drawO(int x, int y)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
-		GLfloat x0 = (100 + 2*squareWidth + (squareWidth / 2.0));
+		GLfloat x0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
 		GLfloat y0 = (100 + squareWidth + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
@@ -531,7 +535,7 @@ void drawO(int x, int y)
 		GLint i;
 		GLfloat t, xTemp, yTemp;
 		GLfloat x0 = (100 + (squareWidth / 2.0));
-		GLfloat y0 = (100 + 2*squareWidth + (squareWidth / 2.0));
+		GLfloat y0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
 		glBegin(GL_POLYGON);
@@ -551,7 +555,7 @@ void drawO(int x, int y)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
-		GLfloat x0 = (100 + squareWidth+ (squareWidth / 2.0));
+		GLfloat x0 = (100 + squareWidth + (squareWidth / 2.0));
 		GLfloat y0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
@@ -572,7 +576,7 @@ void drawO(int x, int y)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
-		GLfloat x0 = (100 + 2*squareWidth+(squareWidth / 2.0));
+		GLfloat x0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
 		GLfloat y0 = (100 + 2 * squareWidth + (squareWidth / 2.0));
 		t = 0.0, xTemp = 0.0, yTemp = 0.0;
 		GLfloat r = squareWidth / 2.5;
@@ -617,10 +621,19 @@ void mouse(int btn, int mouseState, int x, int y)
 
 		if (mouseState == GLUT_DOWN)
 		{
-			//drawX(x, y);
-			drawO(x, y);
+			drawX(x, y);
 		}
 	}
+}
+
+/*function to update the bordergame*/
+
+void updateBorderGame(string border)
+{
+	char temp = border.at(2);
+	cout << temp << endl;
+	char temp2 = border.at(4);
+	cout << temp2 << endl;
 }
 
 /*this method will be called every time that the user select a square*/
@@ -629,37 +642,39 @@ void IAConnection()
 	char *plargv[] = { "swipl.dll", "-s", "ttt-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(3);
-	av[1] = PlCompound("['1','2','3'],['4','5','6'],['7','8','9']");
-	//av[2] = PlCompound("2");
-	//av[3] = PlCompound("L");
+
+	char boardgame[100];
+	sprintf_s(boardgame, "[[%c,%c,%c],[%c,%c,%c],[%c,%c,%c]]", game.matrix[0][0], game.matrix[0][1], game.matrix[0][2], game.matrix[1][0], game.matrix[1][1], game.matrix[1][2], game.matrix[2][0], game.matrix[2][1], game.matrix[2][2]);
+
+	av[0] = PlCompound(boardgame);
+	string borderReceived;
+	av[1] = PlCompound("2");
 	PlQuery q("receive", av);
+
 	while (q.next_solution())
 	{
-		cout << (char*)av[0] << endl;
+		borderReceived = (string)av[2];
+		//cout << borderReceived << endl;
 	}
-	cin.get();
+	updateBorderGame(borderReceived);
 }
 
 int main(int argc, char **argv)
 {
-	
-	IAConnection();
-	
-	glutInit(&argc, argv);
 
+	initGameData();
+	IAConnection();
+	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glutInitWindowSize(WindowWidth, WindowHeight); 
+	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("TIC-TAC-TOE");
 	//glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
 	//glutKeyboardFunc(keyboard);
 	//glutSpecialFunc(Special);
 	glutMouseFunc(mouse);
-
 	myInit();
 	glutMainLoop();
-	
-	
-	
+
 	return 0;
 }
