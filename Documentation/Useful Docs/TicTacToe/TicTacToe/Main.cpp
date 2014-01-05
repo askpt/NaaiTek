@@ -51,6 +51,8 @@ void initGameData()
 
 }
 
+void IAConnection(char play);
+
 /*function to call prolog and send border game*/
 
 void requestAnswer()
@@ -259,7 +261,7 @@ void drawX(int x, int y)
 	glLineWidth(4.0);
 
 	//square1
-	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
+	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth) && game.matrix[0][0]!='x' && game.matrix[0][0]!='o')
 	{
 
 		glBegin(GL_LINES);
@@ -271,11 +273,13 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+
+		IAConnection('1');
 	}
 	else
 
 		//square2
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth && game.matrix[0][1] != 'x' && game.matrix[0][1] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + squareWidth, 100);
@@ -286,10 +290,11 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('2');
 	}
 	else
 		//square3
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth && game.matrix[0][2] != 'x' && game.matrix[0][2] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + 2 * squareWidth, 100);
@@ -300,10 +305,11 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('3');
 	}
 	else
 		//square4
-	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth))
+	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth) && game.matrix[1][0] != 'x' && game.matrix[1][0] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100, 100 + squareWidth);
@@ -314,11 +320,12 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('4');
 	}
 
 	else
 		//square5
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth && game.matrix[1][1] != 'x' && game.matrix[1][1] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + squareWidth, 100 + squareWidth);
@@ -330,10 +337,11 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('5');
 	}
 	else
 		//square6
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth && game.matrix[1][2] != 'x' && game.matrix[1][2] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
@@ -344,10 +352,11 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('6');
 	}
 	else
 		//square7
-	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth))
+	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth) && game.matrix[2][0] != 'x' && game.matrix[2][0] != 'o')
 	{
 
 		glBegin(GL_LINES);
@@ -359,10 +368,11 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('7');
 	}
 	else
 		//square8
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth && game.matrix[2][1] != 'x' && game.matrix[2][1] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
@@ -373,10 +383,11 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('8');
 	}
 	else
 		//square9
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth && game.matrix[2][2] != 'x' && game.matrix[2][2] != 'o')
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
@@ -387,6 +398,7 @@ void drawX(int x, int y)
 
 		glEnd();
 		glFlush();
+		IAConnection('9');
 	}
 
 }
@@ -630,15 +642,99 @@ void mouse(int btn, int mouseState, int x, int y)
 
 void updateBorderGame(string border)
 {
-	char temp = border.at(2);
-	cout << temp << endl;
-	char temp2 = border.at(4);
-	cout << temp2 << endl;
+	char square1 = border.at(2);
+	char square2 = border.at(4);
+	char square3 = border.at(6);
+	char square4 = border.at(10);
+	char square5 = border.at(12);
+	char square6 = border.at(14);
+	char square7 = border.at(18);
+	char square8 = border.at(20);
+	char square9 = border.at(22);
+
+	if (square1 != game.matrix[0][0])
+	{
+		game.matrix[0][0] = square1;
+		if (square1 == 'o')
+		{
+			drawO(110, 110);
+		}
+	}
+	if (square2 != game.matrix[0][1])
+	{
+		game.matrix[0][1] = square2;
+		if (square2 == 'o')
+		{
+			drawO(110+squareWidth, 110);
+		}
+	}
+	if (square3 != game.matrix[0][2])
+	{
+		game.matrix[0][2] = square3;
+		if (square3 == 'o')
+		{
+			drawO(110 + 2*squareWidth, 110);
+		}
+	}
+	if (square4 != game.matrix[1][0])
+	{
+		game.matrix[1][0] = square4;
+		if (square4 == 'o')
+		{
+			drawO(110, 110+squareWidth);
+		}
+	}
+	if (square5 != game.matrix[1][1])
+	{
+		game.matrix[1][1] = square5;
+		if (square5 == 'o')
+		{
+			drawO(110 + squareWidth, 110+squareWidth);
+		}
+	}
+	if (square6 != game.matrix[1][2])
+	{
+		game.matrix[1][2] = square6;
+		if (square6 == 'o')
+		{
+			drawO(110 + 2*squareWidth, 110+squareWidth);
+		}
+	}
+	if (square7 != game.matrix[2][0])
+	{
+		if (square7 == 'o')
+		{
+			drawO(110 , 110 + 2*squareWidth);
+		}
+		game.matrix[2][0] = square7;
+	}
+	if (square8 != game.matrix[2][1])
+	{
+		game.matrix[2][1] = square8;
+		if (square8 == 'o')
+		{
+			drawO(110 +  squareWidth, 110 + 2*squareWidth);
+		}
+	}
+	if (square9 != game.matrix[2][2])
+	{
+		game.matrix[2][2] = square9;
+		if (square9 == 'o')
+		{
+			drawO(110 + 2 * squareWidth, 110 + 2*squareWidth);
+		}
+	}
+
+	
+
 }
 
+
+
 /*this method will be called every time that the user select a square*/
-void IAConnection()
+void IAConnection(char play)
 {
+	cout << "entrei" << endl;
 	char *plargv[] = { "swipl.dll", "-s", "ttt-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(3);
@@ -648,13 +744,15 @@ void IAConnection()
 
 	av[0] = PlCompound(boardgame);
 	string borderReceived;
-	av[1] = PlCompound("2");
+	char userPlay[10];
+	sprintf_s(userPlay, "%c", play);
+	av[1] = PlCompound(userPlay);
 	PlQuery q("receive", av);
 
 	while (q.next_solution())
 	{
 		borderReceived = (string)av[2];
-		//cout << borderReceived << endl;
+		cout << borderReceived << endl;
 	}
 	updateBorderGame(borderReceived);
 }
@@ -663,7 +761,7 @@ int main(int argc, char **argv)
 {
 
 	initGameData();
-	IAConnection();
+	//IAConnection();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);

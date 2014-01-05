@@ -86,7 +86,7 @@ converts(Position, [Line, Column]) :-
 
 %check_if_play
 check_if_play(x).
-check_if_play(x).
+check_if_play(o).
 
 % change the value
 change(x, o).
