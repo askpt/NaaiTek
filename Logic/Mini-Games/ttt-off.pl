@@ -5,7 +5,7 @@
 
 receive(Table,Play,Return):-
 	(integer(Play), !,
-	process(Table, 'Human', 'X', Play, Return));
+	process(Table, 'Human', x, Play, Return));
 	Return = Table.
 
 %main_loop
@@ -85,14 +85,14 @@ converts(Position, [Line, Column]) :-
     Column is 1 + (Temp mod 3).
 
 %check_if_play
-check_if_play('X').
-check_if_play('O').
+check_if_play(x).
+check_if_play(x).
 
 % change the value
-change('X', 'O').
+change(x, o).
 
 % change the value
-change('O', 'X').
+change(o, x).
 
 % change the value
 change('Maquina', 'Human').
@@ -143,17 +143,17 @@ bar(Board, Value, X) :-
     defineSquare(Board, X, ValueNew, TempBoard),
     wonGame(TempBoard).
 
-tryCenter(Board, 5) :- returnSquare(Board, 5, '5').
+tryCenter(Board, 5) :- returnSquare(Board, 5, 5).
 
-tryCorner(Board, 1) :- returnSquare(Board, 1, '1').
-tryCorner(Board, 3) :- returnSquare(Board, 3, '3').
-tryCorner(Board, 7) :- returnSquare(Board, 7, '7').
-tryCorner(Board, 9) :- returnSquare(Board, 9, '9').
+tryCorner(Board, 1) :- returnSquare(Board, 1, 1).
+tryCorner(Board, 3) :- returnSquare(Board, 3, 3).
+tryCorner(Board, 7) :- returnSquare(Board, 7, 7).
+tryCorner(Board, 9) :- returnSquare(Board, 9, 9).
 
-tryEdges(Board, 2) :- returnSquare(Board, 2, '2').
-tryEdges(Board, 4) :- returnSquare(Board, 4, '4').
-tryEdges(Board, 6) :- returnSquare(Board, 6, '6').
-tryEdges(Board, 8) :- returnSquare(Board, 8, '8').
+tryEdges(Board, 2) :- returnSquare(Board, 2, 2).
+tryEdges(Board, 4) :- returnSquare(Board, 4, 4).
+tryEdges(Board, 6) :- returnSquare(Board, 6, 6).
+tryEdges(Board, 8) :- returnSquare(Board, 8, 8).
 
 % Check if wins game
 %   All victory possibilities in the game
