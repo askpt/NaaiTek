@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include <iostream>
+#include <SWI-cpp.h>
 using namespace std;
 
 vector<vector<int>> GenerateMaze(int x, int y)
@@ -110,6 +111,19 @@ int main()
 				printf(".");
 		}
 		printf("\n");
+	}
+
+	cin.get();
+	char* argv[] = { "swipl.dll", "-s", "mz_off.pl", NULL };      
+	
+	PlEngine e(3, argv);
+	PlTermv av(2);
+	av[1] = PlCompound("jose");                       
+	PlQuery q("testpredicate", av);    
+	
+	while (q.next_solution())  
+	{ 
+		cout << (char*)av[0] << endl; 
 	}
 
 	cin.get();

@@ -1,0 +1,1 @@
+testpredicate(A,A).
