@@ -334,8 +334,7 @@ get_all_pending_requests(_Request):-http_parameters(_Request, [user(User, [])]),
 % assert words to user added categories
 add_word_hangman(_Request) :-
                 http_parameters(_Request, [word(Word, [])]),        
-                %assertz,
-				List = ['Word'],
-                prolog_to_json(path(List, 'ok'), JSON_Object);
-                prolog_to_json(message('path not found', 'error'), JSON_Object)),
-				reply_json(JSON_Object).
+                ((saveWord(Word),
+				prolog_to_json(message('Word added successfully', 'ok'), JSON_Object));
+				(prolog_to_json(message('Word exists', 'fail'), JSON_Object))),
+                reply_json(JSON_Object).

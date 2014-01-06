@@ -14,29 +14,23 @@ hangman(Category):-
     makeBlanks(AnsList, BlankList),
     getGuess(AnsList,BlankList).
 
-%Possible categories to guess
+% Possible categories
+category(nature).
+category(physics).
+category(web_sites).
+category(programming_language).
+category(user_added).
 
-category(1,'Nature').
-category(2,'Physics').
-category(3,'Web_Sites').
-category(4,'Programming_Languages').
 
 % Randomly returns a phrase from the list of possibilities.
 
 getPhrase(Category,Ans):-
-	category(ID,Category),
-	phrases([ID|L]),
+	category(Category),
+	findall(Word,phrases(Category,Word),L),
 	length(L, X),
 	R is random(X),
 	N is R+1,
-	getNth(L, N, Ans).
-
-% Possible phrases to guess.
-
-phrases([1,'dog','tree','flower','bush']).
-phrases([2,'strings_theory','newton','universe','black_hole']).
-phrases([3,'google','facebook','youtube','bing']).
-phrases([4,'java','c_sharp','perl','g_portugol']).
+	getNth(L, N, Ans), !.
 
 % Asks the user for a letter guess.  Starts by writing the
 % current "display phrase" with blanks, then asks for a guess and

@@ -248,3 +248,8 @@ removeRequest(User1, User2):-retractall(pending(User1, User2, _));
 checkPendingRequest(User, L):-findall(U, (pending(User, U, _);
 	pending(U, User, _)), L1),
 	list_to_set(L1, L).
+	
+%save word
+saveWord(Word):- not(phrases(_,Word)),
+	assert(phrases('user_added',Word)).
+	

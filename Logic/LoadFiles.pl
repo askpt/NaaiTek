@@ -13,3 +13,6 @@
 
 % loads graph search algorittms
 :- compile('GraphSearchAlgorithms.pl').
+
+% loads word base
+:- compile('WordBase.pl').
