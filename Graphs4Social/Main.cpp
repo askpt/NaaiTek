@@ -117,34 +117,44 @@ void Timer(int value)
 
 	glutTimerFunc(state.timer, Timer, 0);
 
+	double vel = 5, k = 1;
+
 	if (state.keys.up)
 	{
+		GLdouble xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
+		state.camera.center[0] = xp;
+		GLdouble yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
+		state.camera.center[1] = yp;
 
 	}
 	if (state.keys.down)
 	{
-
+		GLdouble xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
+		state.camera.center[0] = xp;
+		GLdouble yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
+		state.camera.center[1] = yp;
 	}
 	if (state.keys.left)
 	{
-
-
+		state.camera.dir_long += rad(5);
 	}
 	if (state.keys.right)
 	{
+		state.camera.dir_long -= rad(5);
 
 	}
 	if (state.keys.a)
 	{
-
+		GLdouble zp = state.camera.center[2] - k * vel;
+		state.camera.center[2] = zp;
 	}
 	if (state.keys.q)
 	{
-
+		GLdouble zp = state.camera.center[2] + k * vel;
+		state.camera.center[2] = zp;
 	}
 
 	glutPostRedisplay();
-
 }
 
 void initModel(){
@@ -527,7 +537,7 @@ void setCamera(){
 
 	glLoadIdentity();
 	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
-	glRotated(degrees(M_PI / 2.0 - state.camera.dir_lat), 0.0, 0.0, 1.0);
+	glRotated(degrees(M_PI / 2.0 - state.camera.dir_long), 0.0, 0.0, 1.0);
 	glTranslated(-state.camera.center[0], -state.camera.center[1], -state.camera.center[2]);
 
 	if (state.light){
@@ -641,18 +651,7 @@ void keyboard(unsigned char key, int x, int y)
 	case 'A':
 		state.keys.a = GL_TRUE;
 		break;
-	case GLUT_KEY_UP:
-		state.keys.up = GL_TRUE;
-		break;
-	case GLUT_KEY_DOWN:
-		state.keys.down = GL_TRUE;
-		break;
-	case GLUT_KEY_LEFT:
-		state.keys.left = GL_TRUE;
-		break;
-	case GLUT_KEY_RIGHT:
-		state.keys.right = GL_TRUE;
-		break;
+
 	}
 }
 
@@ -669,6 +668,14 @@ void keyboardUp(unsigned char key, int x, int y)
 	case 'A':
 		state.keys.a = GL_FALSE;
 		break;
+
+	}
+}
+
+void SpecialUp(int key, int x, int y)
+{
+	switch (key)
+	{
 	case GLUT_KEY_UP:
 		state.keys.up = GL_FALSE;
 		break;
@@ -682,6 +689,7 @@ void keyboardUp(unsigned char key, int x, int y)
 		state.keys.right = GL_FALSE;
 		break;
 	}
+
 }
 
 void Special(int key, int x, int y){
@@ -694,7 +702,18 @@ void Special(int key, int x, int y){
 		readGraph();
 		glutPostRedisplay();
 		break;
-
+	case GLUT_KEY_UP:
+		state.keys.up = GL_TRUE;
+		break;
+	case GLUT_KEY_DOWN:
+		state.keys.down = GL_TRUE;
+		break;
+	case GLUT_KEY_LEFT:
+		state.keys.left = GL_TRUE;
+		break;
+	case GLUT_KEY_RIGHT:
+		state.keys.right = GL_TRUE;
+		break;
 	}
 }
 
@@ -890,6 +909,7 @@ void main(int argc, char **argv)
 	glutKeyboardFunc(keyboard);
 	glutKeyboardUpFunc(keyboardUp);
 	glutSpecialFunc(Special);
+	glutSpecialUpFunc(SpecialUp);
 	glutMouseFunc(mouse);
 
 	glutTimerFunc(state.timer, Timer, 0);
