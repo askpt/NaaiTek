@@ -15,7 +15,7 @@ process(OldBoard, Turn, Value, TempPos, NewBoard) :-
     change(Value, NewValue),
     change(Turn, NewTurn),
     !,
-    (Turn='Human', !,
+    (Turn='Human', not(wonGame(TempBoard)), !,
     process(TempBoard, NewTurn, NewValue,
 	     _, NewBoard);
     NewBoard = TempBoard).
@@ -86,7 +86,7 @@ converts(Position, [Line, Column]) :-
 
 %check_if_play
 check_if_play(x).
-check_if_play(x).
+check_if_play(o).
 
 % change the value
 change(x, o).
