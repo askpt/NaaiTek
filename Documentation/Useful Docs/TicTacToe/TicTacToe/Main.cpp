@@ -17,6 +17,7 @@ using namespace std;
 typedef struct
 {
 	char matrix[3][3];
+	bool gameOver;
 	int win;
 	int loose;
 }Game;
@@ -47,6 +48,7 @@ void initGameData()
 	game.matrix[2][0] = '7';
 	game.matrix[2][1] = '8';
 	game.matrix[2][2] = '9';
+	game.gameOver = false;
 
 
 }
@@ -261,7 +263,7 @@ void drawX(int x, int y)
 	glLineWidth(4.0);
 
 	//square1
-	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth) && game.matrix[0][0]!='x' && game.matrix[0][0]!='o')
+	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth) && game.matrix[0][0] != 'x' && game.matrix[0][0] != 'o')
 	{
 
 		glBegin(GL_LINES);
@@ -644,36 +646,36 @@ void checkMachineWin()
 {
 	if (game.matrix[0][0] == 'o' && game.matrix[0][1] == 'o' && game.matrix[0][2] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[1][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[1][2] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[2][0] == 'o' && game.matrix[2][1] == 'o' && game.matrix[2][2] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[0][0] == 'o' && game.matrix[1][0] == 'o' && game.matrix[2][0] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[0][1] == 'o' && game.matrix[1][1] == 'o' && game.matrix[2][1] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[0][2] == 'o' && game.matrix[1][2] == 'o' && game.matrix[2][2] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 
 	if (game.matrix[0][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[2][2] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[2][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[0][2] == 'o')
 	{
-
+		game.gameOver = true;
 	}
 }
 
@@ -684,36 +686,37 @@ void checkUserWin()
 
 	if (game.matrix[0][0] == 'x' && game.matrix[0][1] == 'x' && game.matrix[0][2] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[1][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[1][2] == 'x')
 	{
+		game.gameOver = true;
 
 	}
 	if (game.matrix[2][0] == 'x' && game.matrix[2][1] == 'x' && game.matrix[2][2] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[0][0] == 'x' && game.matrix[1][0] == 'x' && game.matrix[2][0] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[0][1] == 'x' && game.matrix[1][1] == 'x' && game.matrix[2][1] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[0][2] == 'x' && game.matrix[1][2] == 'x' && game.matrix[2][2] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 
 	if (game.matrix[0][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[2][2] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 	if (game.matrix[2][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[0][2] == 'x')
 	{
-
+		game.gameOver = true;
 	}
 }
 /*function to update the bordergame*/
@@ -743,7 +746,7 @@ void updateBorderGame(string border)
 		game.matrix[0][1] = square2;
 		if (square2 == 'o')
 		{
-			drawO(110+squareWidth, 110);
+			drawO(110 + squareWidth, 110);
 		}
 	}
 	if (square3 != game.matrix[0][2])
@@ -751,7 +754,7 @@ void updateBorderGame(string border)
 		game.matrix[0][2] = square3;
 		if (square3 == 'o')
 		{
-			drawO(110 + 2*squareWidth, 110);
+			drawO(110 + 2 * squareWidth, 110);
 		}
 	}
 	if (square4 != game.matrix[1][0])
@@ -759,7 +762,7 @@ void updateBorderGame(string border)
 		game.matrix[1][0] = square4;
 		if (square4 == 'o')
 		{
-			drawO(110, 110+squareWidth);
+			drawO(110, 110 + squareWidth);
 		}
 	}
 	if (square5 != game.matrix[1][1])
@@ -767,7 +770,7 @@ void updateBorderGame(string border)
 		game.matrix[1][1] = square5;
 		if (square5 == 'o')
 		{
-			drawO(110 + squareWidth, 110+squareWidth);
+			drawO(110 + squareWidth, 110 + squareWidth);
 		}
 	}
 	if (square6 != game.matrix[1][2])
@@ -775,14 +778,14 @@ void updateBorderGame(string border)
 		game.matrix[1][2] = square6;
 		if (square6 == 'o')
 		{
-			drawO(110 + 2*squareWidth, 110+squareWidth);
+			drawO(110 + 2 * squareWidth, 110 + squareWidth);
 		}
 	}
 	if (square7 != game.matrix[2][0])
 	{
 		if (square7 == 'o')
 		{
-			drawO(110 , 110 + 2*squareWidth);
+			drawO(110, 110 + 2 * squareWidth);
 		}
 		game.matrix[2][0] = square7;
 	}
@@ -791,7 +794,7 @@ void updateBorderGame(string border)
 		game.matrix[2][1] = square8;
 		if (square8 == 'o')
 		{
-			drawO(110 +  squareWidth, 110 + 2*squareWidth);
+			drawO(110 + squareWidth, 110 + 2 * squareWidth);
 		}
 	}
 	if (square9 != game.matrix[2][2])
@@ -799,11 +802,16 @@ void updateBorderGame(string border)
 		game.matrix[2][2] = square9;
 		if (square9 == 'o')
 		{
-			drawO(110 + 2 * squareWidth, 110 + 2*squareWidth);
+			drawO(110 + 2 * squareWidth, 110 + 2 * squareWidth);
 		}
 	}
+	checkMachineWin();
+	checkUserWin();
+	if (game.gameOver == true){
+		cout << "TESTE" << endl;
+		//exit(0);
+	}
 
-	
 
 }
 
@@ -838,15 +846,11 @@ int main(int argc, char **argv)
 {
 
 	initGameData();
-	//IAConnection();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("TIC-TAC-TOE");
-	//glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
-	//glutKeyboardFunc(keyboard);
-	//glutSpecialFunc(Special);
 	glutMouseFunc(mouse);
 	myInit();
 	glutMainLoop();
