@@ -96,6 +96,9 @@
 % request to get all pending requests
 :- http_handler(root(get_all_pending_requests), get_all_pending_requests, []).
 
+% request for adding a word to the hangman minigame
+:- http_handler(root(add_word_hangman), add_word_hangman, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -327,3 +330,12 @@ get_all_pending_requests(_Request):-http_parameters(_Request, [user(User, [])]),
                 checkPendingRequest(User, List),
                 prolog_to_json(users(List, 'ok'), JSON_Object),
                 reply_json(JSON_Object).
+				
+% assert words to user added categories
+add_word_hangman(_Request) :-
+                http_parameters(_Request, [word(Word, [])]),        
+                %assertz,
+				List = ['Word'],
+                prolog_to_json(path(List, 'ok'), JSON_Object);
+                prolog_to_json(message('path not found', 'error'), JSON_Object)),
+				reply_json(JSON_Object).
