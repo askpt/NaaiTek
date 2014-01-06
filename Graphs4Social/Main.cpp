@@ -475,9 +475,16 @@ void drawManyAxis(){
 
 void setCamera(){
 	Vertex eye;
+	
+	
 	eye[0] = state.camera.center[0] + state.camera.dist*cos(state.camera.dir_long)*cos(state.camera.dir_lat);
 	eye[1] = state.camera.center[1] + state.camera.dist*sin(state.camera.dir_long)*cos(state.camera.dir_lat);
 	eye[2] = state.camera.center[2] + state.camera.dist*sin(state.camera.dir_lat);
+	
+	glLoadIdentity();
+	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
+	glRotated(degrees(M_PI / 2.0 - state.camera.dir_lat), 0.0, 0.0, 1.0);
+	glTranslated(-state.camera.center[0], -state.camera.center[1], -state.camera.center[2]);
 
 	if (state.light){
 		gluLookAt(eye[0], eye[1], eye[2], state.camera.center[0], state.camera.center[1], state.camera.center[2], 0, 0, 1);
@@ -487,6 +494,7 @@ void setCamera(){
 		putLights((GLfloat*)white_light);
 		gluLookAt(eye[0], eye[1], eye[2], state.camera.center[0], state.camera.center[1], state.camera.center[2], 0, 0, 1);
 	}
+
 }
 
 void display(void)
