@@ -15,7 +15,7 @@ process(OldBoard, Turn, Value, TempPos, NewBoard) :-
     change(Value, NewValue),
     change(Turn, NewTurn),
     !,
-    (Turn='Human', !,
+    (Turn='Human', not(wonGame(TempBoard)), !,
     process(TempBoard, NewTurn, NewValue,
 	     _, NewBoard);
     NewBoard = TempBoard).
