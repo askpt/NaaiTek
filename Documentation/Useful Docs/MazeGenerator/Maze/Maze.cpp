@@ -8,7 +8,7 @@
 using namespace std;
 
 
-int maze()
+vector<vector<int>> mazeBuilder()
 {
 	srand(time(0));
     
@@ -101,7 +101,5 @@ int maze()
 		printf("\n");
 	}
     
-	cin.get();
-    
-	return 0;
+	return maze;
 }

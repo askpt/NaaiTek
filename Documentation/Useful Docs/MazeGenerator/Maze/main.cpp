@@ -19,6 +19,7 @@
 #include "ImageLoader.h"
 #include "text3d.h"
 #include "Maze.h"
+#include <vector>
 
 using namespace std;
 
@@ -40,6 +41,9 @@ float g_scale;
 // text to be written on screen
 //const char * stringVector[4] = { "Naai Tek", "presents", "LAPR5", "2013" };
 
+// data structure for maze
+vector < vector < int > > maze;
+
 
 //************************************************************************
 // forward declarations of OpenGL callback functions
@@ -52,6 +56,7 @@ void update(int value);
 GLuint loadTexture(Image* image);
 float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
 void cleanUp();
+vector<vector<int>> mazeBuilder();
 
 
 /**
@@ -59,13 +64,15 @@ void cleanUp();
  */
 int main(int argc, char *argv[])
 {
+    maze = mazeBuilder();
+    
 	// initializing GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(400, 400);
+	glutInitWindowSize(800, 600);
     
 	// creating the window
-	glutCreateWindow("Text");
+	glutCreateWindow("Maze");
 	initRendering();
     
     //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
@@ -93,7 +100,7 @@ void handleKeypress(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-            // ESC key
+        // ESC key
 		case 27:
 			exit(0);
 	}
@@ -239,3 +246,4 @@ void cleanUp()
 {
     t3dCleanup();
 }
+
