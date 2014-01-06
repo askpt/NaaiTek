@@ -117,23 +117,27 @@ void Timer(int value)
 
 	glutTimerFunc(state.timer, Timer, 0);
 
-	double vel = 5, k = 1;
+	double vel = 10, k = 1;
 
+	// get the y pos
 	if (state.keys.up)
 	{
+		state.camera.dir_lat = -state.camera.dir_long;
 		GLdouble xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
-		state.camera.center[0] = xp;
 		GLdouble yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
+		state.camera.center[0] = xp;
 		state.camera.center[1] = yp;
 
 	}
 	if (state.keys.down)
 	{
+		state.camera.dir_lat = -state.camera.dir_long;
 		GLdouble xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
-		state.camera.center[0] = xp;
 		GLdouble yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
+		state.camera.center[0] = xp;
 		state.camera.center[1] = yp;
 	}
+
 	if (state.keys.left)
 	{
 		state.camera.dir_long += rad(5);
@@ -143,6 +147,7 @@ void Timer(int value)
 		state.camera.dir_long -= rad(5);
 
 	}
+
 	if (state.keys.a)
 	{
 		GLdouble zp = state.camera.center[2] - k * vel;
@@ -527,18 +532,12 @@ void drawManyAxis(){
 	glPopMatrix();
 }
 
-void setCamera(){
+void setLight(){
 	Vertex eye;
-
 
 	eye[0] = state.camera.center[0] + state.camera.dist*cos(state.camera.dir_long)*cos(state.camera.dir_lat);
 	eye[1] = state.camera.center[1] + state.camera.dist*sin(state.camera.dir_long)*cos(state.camera.dir_lat);
 	eye[2] = state.camera.center[2] + state.camera.dist*sin(state.camera.dir_lat);
-
-	glLoadIdentity();
-	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
-	glRotated(degrees(M_PI / 2.0 - state.camera.dir_long), 0.0, 0.0, 1.0);
-	glTranslated(-state.camera.center[0], -state.camera.center[1], -state.camera.center[2]);
 
 	if (state.light){
 		gluLookAt(eye[0], eye[1], eye[2], state.camera.center[0], state.camera.center[1], state.camera.center[2], 0, 0, 1);
@@ -548,7 +547,13 @@ void setCamera(){
 		putLights((GLfloat*)white_light);
 		gluLookAt(eye[0], eye[1], eye[2], state.camera.center[0], state.camera.center[1], state.camera.center[2], 0, 0, 1);
 	}
+}
 
+void setCamera(){
+	glLoadIdentity();
+	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
+	glRotated(degrees(M_PI / 2.0 - state.camera.dir_long), 0.0, 0.0, 1.0);
+	glTranslated(-state.camera.center[0], -state.camera.center[1], -state.camera.center[2]);
 }
 
 void display(void)
@@ -557,6 +562,8 @@ void display(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	
+	setLight();
 	setCamera();
 
 	material(slate);
