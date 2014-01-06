@@ -6,7 +6,8 @@
 #include <GL\glut.h>
 #include <SWI-cpp.h>
 #include <iostream>
-
+#include "ImageLoader.h"
+#include "text3d.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795
@@ -22,7 +23,9 @@ typedef struct
 	int loose;
 }Game;
 
+float g_scale;
 
+const char * stringVetor[2] = { "You won!", "You Lost!" };
 
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
@@ -55,11 +58,18 @@ void initGameData()
 
 void IAConnection(char play);
 
-/*function to call prolog and send border game*/
+/*function to draw the result of the game*/
 
-void requestAnswer()
+void drawText()
 {
-
+	//glScalef(g_scale, g_scale, g_scale);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex2d(50, 490);
+	glVertex2d(550, 490);
+	glVertex2d(550, 590);
+	glVertex2d(50, 590);
+	glEnd();
 }
 /*function to initialize OpenGL*/
 
@@ -148,7 +158,7 @@ P(100+3*squareWidth,100+3*squareWidth)
 
 void drawTable()
 {
-
+	
 	glColor3b(1.0, 0.0, 0.0);
 
 	glLineWidth(4.0);
@@ -249,6 +259,7 @@ void drawTable()
 	glVertex2d(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
 	glEnd();
+	drawText();
 
 }
 
@@ -636,6 +647,8 @@ void mouse(int btn, int mouseState, int x, int y)
 		if (mouseState == GLUT_DOWN)
 		{
 			drawX(x, y);
+			cout << x << endl;
+			cout << y << endl;
 		}
 	}
 }
@@ -807,6 +820,8 @@ void updateBorderGame(string border)
 	}
 	checkMachineWin();
 	checkUserWin();
+
+	
 	if (game.gameOver == true){
 		cout << "TESTE" << endl;
 		//exit(0);
@@ -839,6 +854,7 @@ void IAConnection(char play)
 		borderReceived = (string)av[2];
 		cout << borderReceived << endl;
 	}
+
 	updateBorderGame(borderReceived);
 }
 
@@ -853,6 +869,7 @@ int main(int argc, char **argv)
 	glutDisplayFunc(display);
 	glutMouseFunc(mouse);
 	myInit();
+
 	glutMainLoop();
 
 	return 0;
