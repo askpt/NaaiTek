@@ -56,6 +56,9 @@ inline material_type operator++(material_type &rs, int) {
 typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
+typedef struct Keys_t{
+	GLboolean   up, down, left, right, q, a;
+}Keys_t;
 
 typedef struct Camera{
 	GLfloat fov;
@@ -74,6 +77,8 @@ typedef struct State{
 	GLint		lightViewer;
 	GLint		translateAxis;
 	GLdouble	axis[3];
+	Keys_t		keys;
+	GLint		timer;
 }State;
 
 typedef struct Model {
@@ -101,6 +106,45 @@ void initState(){
 	state.light = GL_FALSE;
 	state.showNormals = GL_FALSE;
 	state.lightViewer = 1;
+	state.timer = 100;
+}
+
+void Timer(int value)
+{
+	static int time;
+
+	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
+
+	glutTimerFunc(state.timer, Timer, 0);
+
+	if (state.keys.up)
+	{
+
+	}
+	if (state.keys.down)
+	{
+
+	}
+	if (state.keys.left)
+	{
+
+
+	}
+	if (state.keys.right)
+	{
+
+	}
+	if (state.keys.a)
+	{
+
+	}
+	if (state.keys.q)
+	{
+
+	}
+
+	glutPostRedisplay();
+
 }
 
 void initModel(){
@@ -475,12 +519,12 @@ void drawManyAxis(){
 
 void setCamera(){
 	Vertex eye;
-	
-	
+
+
 	eye[0] = state.camera.center[0] + state.camera.dist*cos(state.camera.dir_long)*cos(state.camera.dir_lat);
 	eye[1] = state.camera.center[1] + state.camera.dist*sin(state.camera.dir_long)*cos(state.camera.dir_lat);
 	eye[2] = state.camera.center[2] + state.camera.dist*sin(state.camera.dir_lat);
-	
+
 	glLoadIdentity();
 	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
 	glRotated(degrees(M_PI / 2.0 - state.camera.dir_lat), 0.0, 0.0, 1.0);
@@ -589,6 +633,54 @@ void keyboard(unsigned char key, int x, int y)
 		initModel();
 		glutPostRedisplay();
 		break;
+	case 'q':
+	case'Q':
+		state.keys.q = GL_TRUE;
+		break;
+	case 'a':
+	case 'A':
+		state.keys.a = GL_TRUE;
+		break;
+	case GLUT_KEY_UP:
+		state.keys.up = GL_TRUE;
+		break;
+	case GLUT_KEY_DOWN:
+		state.keys.down = GL_TRUE;
+		break;
+	case GLUT_KEY_LEFT:
+		state.keys.left = GL_TRUE;
+		break;
+	case GLUT_KEY_RIGHT:
+		state.keys.right = GL_TRUE;
+		break;
+	}
+}
+
+void keyboardUp(unsigned char key, int x, int y)
+{
+
+	switch (key)
+	{
+	case 'q':
+	case'Q':
+		state.keys.q = GL_FALSE;
+		break;
+	case 'a':
+	case 'A':
+		state.keys.a = GL_FALSE;
+		break;
+	case GLUT_KEY_UP:
+		state.keys.up = GL_FALSE;
+		break;
+	case GLUT_KEY_DOWN:
+		state.keys.down = GL_FALSE;
+		break;
+	case GLUT_KEY_LEFT:
+		state.keys.left = GL_FALSE;
+		break;
+	case GLUT_KEY_RIGHT:
+		state.keys.right = GL_FALSE;
+		break;
 	}
 }
 
@@ -602,14 +694,7 @@ void Special(int key, int x, int y){
 		readGraph();
 		glutPostRedisplay();
 		break;
-	case GLUT_KEY_UP:
-		state.camera.dist -= 1;
-		glutPostRedisplay();
-		break;
-	case GLUT_KEY_DOWN:
-		state.camera.dist += 1;
-		glutPostRedisplay();
-		break;
+
 	}
 }
 
@@ -803,8 +888,11 @@ void main(int argc, char **argv)
 	glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutKeyboardUpFunc(keyboardUp);
 	glutSpecialFunc(Special);
 	glutMouseFunc(mouse);
+
+	glutTimerFunc(state.timer, Timer, 0);
 
 	myInit();
 
