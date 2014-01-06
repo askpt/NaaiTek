@@ -109,6 +109,27 @@ void initState(){
 	state.timer = 100;
 }
 
+GLboolean detectCameraColision(GLfloat nx, GLfloat ny, GLfloat nz){
+	//Check_Nodes => nodes;
+
+	for (int i = 0; i < numNodes; i++)
+	{
+		//((nx - nodes[i].x)*(nx - nodes[i].x)) + ((ny - nodes[i].y)*(ny - nodes[i].y)) <= ((nodes[i].width/2)*(nodes[i].width/2))
+		if (((nx > nodes[i].x - nodes[i].width) && (nx < nodes[i].x + nodes[i].width))
+			&& ((ny > nodes[i].y - nodes[i].width) && (ny < nodes[i].y + nodes[i].width))
+			&& ((nz > nodes[i].z - nodes[i].width) && (nz < nodes[i].z + nodes[i].width))){
+			return GL_TRUE;
+		}
+	}
+	return GL_FALSE;
+
+	//Check_Nodes => paths;
+	//for (int i = 0; i < numPaths; i++)
+	//{
+	//if (){}
+	//}
+}
+
 void Timer(int value)
 {
 	static int time;
@@ -119,23 +140,37 @@ void Timer(int value)
 
 	double vel = 10, k = 1;
 
+	GLdouble xp = state.camera.center[0];
+	GLdouble yp = state.camera.center[1];
+	GLdouble zp = state.camera.center[2];
 	// get the y pos
 	if (state.keys.up)
 	{
 		state.camera.dir_lat = -state.camera.dir_long;
-		GLdouble xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
-		GLdouble yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
-		state.camera.center[0] = xp;
-		state.camera.center[1] = yp;
-
+		xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
+		yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
 	}
-	if (state.keys.down)
+	else if (state.keys.down)
 	{
 		state.camera.dir_lat = -state.camera.dir_long;
-		GLdouble xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
-		GLdouble yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
+		xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
+		yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
+	}
+
+	if (state.keys.a)
+	{
+		zp = state.camera.center[2] - k * vel;
+	}
+	else if (state.keys.q)
+	{
+		zp = state.camera.center[2] + k * vel;
+	}
+
+	GLboolean colide = detectCameraColision(xp, yp, zp);
+	if (colide != GL_TRUE){
 		state.camera.center[0] = xp;
 		state.camera.center[1] = yp;
+		state.camera.center[2] = zp;
 	}
 
 	if (state.keys.left)
@@ -147,18 +182,6 @@ void Timer(int value)
 		state.camera.dir_long -= rad(5);
 
 	}
-
-	if (state.keys.a)
-	{
-		GLdouble zp = state.camera.center[2] - k * vel;
-		state.camera.center[2] = zp;
-	}
-	if (state.keys.q)
-	{
-		GLdouble zp = state.camera.center[2] + k * vel;
-		state.camera.center[2] = zp;
-	}
-
 	glutPostRedisplay();
 }
 
@@ -329,7 +352,7 @@ void drawNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], material_
 	glEnable(GL_LIGHTING);
 }
 
-void drawCircumference(GLint n, Node node)
+void drawSphere(GLint n, Node node)
 {
 	GLfloat x0 = node.x;
 	GLfloat y0 = node.y;
@@ -385,7 +408,7 @@ void drawNode(int no){
 
 	material(blue);
 	for (int i = 0; i < numNodes; i++){
-		drawCircumference(32, nodes[no]);
+		drawSphere(32, nodes[no]);
 	}
 
 }
@@ -909,7 +932,7 @@ void main(int argc, char **argv)
 	/* need both double buffering and z buffer */
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(640, 480);
+	glutInitWindowSize(800, 450);
 	glutCreateWindow("OpenGL");
 	glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
