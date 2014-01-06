@@ -1,6 +1,8 @@
 // Simple Maze Generator in C++ by Jakub Debski '2006 
 // http://www.roguebasin.com/index.php?title=Simple_maze
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <time.h>
 #include <vector>
 #include <list>
@@ -91,6 +93,44 @@ vector<vector<int>> GenerateMaze(int x, int y)
 	return maze;
 }
 
+vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y)
+{
+	char* argv[] = { "swipl.dll", "-s", "mz_off.pl", NULL };
+
+	PlEngine e(3, argv);
+
+	for (size_t x = 0; x < size_x; x++)
+	{
+		for (size_t y = 0; y < size_y; y++)
+		{
+			if (maze[x][y] == 1)
+			{
+				PlFrame fr;
+				PlTermv av(1);
+
+				char cx[20], cy[20];
+				_itoa(x, cx, 10);
+				_itoa(y, cy, 10);
+
+				av[0] = PlCompound("pos", PlTermv(PlTerm(cx), PlTerm(cy)));
+				PlQuery q("assert", av);
+				q.next_solution();
+			}
+		}
+	}
+	
+	PlTermv av1(1);
+	PlQuery qq("findPath", av1);
+	while (qq.next_solution())
+	{
+		cout << (char*)av1[0] << endl;
+	}
+
+	cin.get();
+
+	return maze;
+}
+
 
 int main()
 {
@@ -98,6 +138,7 @@ int main()
 	int maze_size_y = 20;
 	vector<vector<int>> maze = GenerateMaze(maze_size_x, maze_size_y);
 
+	maze = GetPath(maze, maze_size_x, maze_size_y);
 	// Done 
 	for (size_t x = 0; x < maze_size_y; x++)
 	{
@@ -114,19 +155,8 @@ int main()
 	}
 
 	cin.get();
-	char* argv[] = { "swipl.dll", "-s", "mz_off.pl", NULL };      
 	
-	PlEngine e(3, argv);
-	PlTermv av(2);
-	av[1] = PlCompound("jose");                       
-	PlQuery q("testpredicate", av);    
 	
-	while (q.next_solution())  
-	{ 
-		cout << (char*)av[0] << endl; 
-	}
-
-	cin.get();
 
 	return 0;
 }
