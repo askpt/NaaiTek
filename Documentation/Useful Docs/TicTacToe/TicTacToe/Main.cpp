@@ -14,11 +14,13 @@
 #endif
 
 using namespace std;
-
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 typedef struct
 {
 	char matrix[3][3];
 	bool gameOver;
+	bool winUser;
+	bool winMachine;
 	int win;
 	int loose;
 }Game;
@@ -26,18 +28,14 @@ typedef struct
 float g_scale;
 
 const char * stringVetor[2] = { "You won!", "You Lost!" };
+const char * stringHelp[2] = { "F1->New Game", "F10->Exit" };
 
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
 int WindowHeight = 600;
-
-
 int GLUTWindowHandle = 0;
-
 float squareWidth = WindowWidth / 5.0;
-
 Game game;
-
 
 /**function to init the game parametrers**/
 void initGameData()
@@ -51,8 +49,8 @@ void initGameData()
 	game.matrix[2][0] = '7';
 	game.matrix[2][1] = '8';
 	game.matrix[2][2] = '9';
-	game.gameOver = false;
-
+	game.winMachine = false;
+	game.winUser = false;
 
 }
 
@@ -60,9 +58,23 @@ void IAConnection(char play);
 
 /*function to draw the result of the game*/
 
-void drawText()
+void writeTextOnBox(int x, int y, const char *string)
 {
-	//glScalef(g_scale, g_scale, g_scale);
+	//glLoadIdentity();
+	int len, i;
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glRasterPos2f(x, y);
+	len = (int)strlen(string);
+	for (i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, string[i]);
+	}
+	glFlush();
+}
+
+/*function to insert text into a specific area of the window*/
+void drawTextBox()
+{
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_QUADS);
 	glVertex2d(50, 490);
@@ -70,28 +82,26 @@ void drawText()
 	glVertex2d(550, 590);
 	glVertex2d(50, 590);
 	glEnd();
+	writeTextOnBox(60, 510, stringHelp[0]);
+	writeTextOnBox(60, 530, stringHelp[1]);
 }
+
 /*function to initialize OpenGL*/
 
 void myInit()
 {
+	
 
-	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glShadeModel(GL_FLAT);
-
 	glViewport(0, 0, WindowWidth, WindowHeight);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 	gluOrtho2D(0.0, (GLdouble)WindowWidth, (GLdouble)WindowHeight, 0.0);
-	glMatrixMode(GL_MODELVIEW);
-
-
-
+	
 }
 
-/*this function draw 9 squares forming one big square
+/*
 Square1:
 
 A(100,100)
@@ -154,11 +164,11 @@ K(100+2*squareWidth,100+2*squareWidth)
 L(100+3*squareWidth,100+2*squareWidth)
 O(100+2*squareWidth,100+3*squareWidth)
 P(100+3*squareWidth,100+3*squareWidth)
-*/
 
+
+/*this function draw 9 squares forming one big square*/
 void drawTable()
 {
-	
 	glColor3b(1.0, 0.0, 0.0);
 
 	glLineWidth(4.0);
@@ -176,7 +186,6 @@ void drawTable()
 	glVertex2d(100 + squareWidth, 100);
 	glEnd();
 
-	glColor3b(1.0, 0.0, 0.0);
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
 
@@ -191,7 +200,6 @@ void drawTable()
 
 	glEnd();
 
-	glColor3b(1.0, 0.0, 0.0);
 	glLineWidth(4.0);
 	glBegin(GL_LINES);
 
@@ -206,7 +214,6 @@ void drawTable()
 
 	glEnd();
 
-	glColor3b(1.0, 0.0f, 0.0f);
 	glLineWidth(4.0);
 
 	glBegin(GL_LINES);
@@ -233,7 +240,7 @@ void drawTable()
 
 	glEnd();
 
-	glColor3b(1.0, 0.0, 0.0);
+
 	glLineWidth(4.0);
 
 	glBegin(GL_LINES);
@@ -259,22 +266,20 @@ void drawTable()
 	glVertex2d(100 + 3 * squareWidth, 100 + 3 * squareWidth);
 
 	glEnd();
-	drawText();
+	drawTextBox();
+	
 
 }
 
 /*function called by the mouse callback to draw X's on the specific squad*/
 void drawX(int x, int y)
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
 	glColor3b(1.0, 0.0, 0.0);
 
 	glLineWidth(4.0);
 
 	//square1
-	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth) && game.matrix[0][0] != 'x' && game.matrix[0][0] != 'o')
+	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth) && game.matrix[0][0] != 'x' && game.matrix[0][0] != 'o' && game.winMachine == false && game.winUser == false)
 	{
 
 		glBegin(GL_LINES);
@@ -292,7 +297,7 @@ void drawX(int x, int y)
 	else
 
 		//square2
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth && game.matrix[0][1] != 'x' && game.matrix[0][1] != 'o')
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth && game.matrix[0][1] != 'x' && game.matrix[0][1] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + squareWidth, 100);
@@ -307,7 +312,7 @@ void drawX(int x, int y)
 	}
 	else
 		//square3
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth && game.matrix[0][2] != 'x' && game.matrix[0][2] != 'o')
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth && game.matrix[0][2] != 'x' && game.matrix[0][2] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + 2 * squareWidth, 100);
@@ -322,7 +327,7 @@ void drawX(int x, int y)
 	}
 	else
 		//square4
-	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth) && game.matrix[1][0] != 'x' && game.matrix[1][0] != 'o')
+	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth) && game.matrix[1][0] != 'x' && game.matrix[1][0] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100, 100 + squareWidth);
@@ -338,7 +343,7 @@ void drawX(int x, int y)
 
 	else
 		//square5
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth && game.matrix[1][1] != 'x' && game.matrix[1][1] != 'o')
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth && game.matrix[1][1] != 'x' && game.matrix[1][1] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + squareWidth, 100 + squareWidth);
@@ -354,7 +359,7 @@ void drawX(int x, int y)
 	}
 	else
 		//square6
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth && game.matrix[1][2] != 'x' && game.matrix[1][2] != 'o')
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth && game.matrix[1][2] != 'x' && game.matrix[1][2] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + 2 * squareWidth, 100 + squareWidth);
@@ -369,7 +374,7 @@ void drawX(int x, int y)
 	}
 	else
 		//square7
-	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth) && game.matrix[2][0] != 'x' && game.matrix[2][0] != 'o')
+	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth) && game.matrix[2][0] != 'x' && game.matrix[2][0] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 
 		glBegin(GL_LINES);
@@ -385,7 +390,7 @@ void drawX(int x, int y)
 	}
 	else
 		//square8
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth && game.matrix[2][1] != 'x' && game.matrix[2][1] != 'o')
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth && game.matrix[2][1] != 'x' && game.matrix[2][1] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + squareWidth, 100 + 2 * squareWidth);
@@ -400,7 +405,7 @@ void drawX(int x, int y)
 	}
 	else
 		//square9
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth && game.matrix[2][2] != 'x' && game.matrix[2][2] != 'o')
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth && game.matrix[2][2] != 'x' && game.matrix[2][2] != 'o'  && game.winMachine == false && game.winUser == false)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(100 + 2 * squareWidth, 100 + 2 * squareWidth);
@@ -419,14 +424,9 @@ void drawX(int x, int y)
 /*function called by the mouse callback to draw X's on the specific squad*/
 void drawO(int x, int y)
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
 	glColor3b(1.0, 0.0, 0.0);
-
-
 	//square1
-	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth))
+	if (x > 100 && x<(100 + squareWidth) && y>100 && y < (100 + squareWidth) && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -447,7 +447,7 @@ void drawO(int x, int y)
 	}
 	else
 		//square2
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth)
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 && y < 100 + squareWidth  && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -469,7 +469,7 @@ void drawO(int x, int y)
 
 	else
 		//square3
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth)
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 && y < 100 + squareWidth  && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -491,7 +491,7 @@ void drawO(int x, int y)
 
 	else
 		//square4
-	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth))
+	if (x > 100 && x<(100 + squareWidth) && y>100 + squareWidth && y < (100 + 2 * squareWidth) && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -512,7 +512,7 @@ void drawO(int x, int y)
 	}
 	else
 		//square5
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth  && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -533,7 +533,7 @@ void drawO(int x, int y)
 	}
 	else
 		//square6
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth)
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + squareWidth && y < 100 + 2 * squareWidth  && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -555,7 +555,7 @@ void drawO(int x, int y)
 
 	else
 		//square7
-	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth))
+	if (x > 100 && x<(100 + squareWidth) && y>100 + 2 * squareWidth && y < (100 + 3 * squareWidth) && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -576,7 +576,7 @@ void drawO(int x, int y)
 	}
 	else
 		//square8
-	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	if (x > 100 + squareWidth  && x< 100 + 2 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth  && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -597,7 +597,7 @@ void drawO(int x, int y)
 	}
 	else
 		//square9
-	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth)
+	if (x > 100 + 2 * squareWidth  && x< 100 + 3 * squareWidth && y>100 + 2 * squareWidth && y < 100 + 3 * squareWidth  && game.winMachine == false && game.winUser == false)
 	{
 		GLint i;
 		GLfloat t, xTemp, yTemp;
@@ -621,8 +621,6 @@ void drawO(int x, int y)
 void display(void)
 {
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT);
 	drawTable();
 	glFlush();
@@ -647,10 +645,23 @@ void mouse(int btn, int mouseState, int x, int y)
 		if (mouseState == GLUT_DOWN)
 		{
 			drawX(x, y);
-			cout << x << endl;
-			cout << y << endl;
 		}
 	}
+}
+
+/*callback special key of keyobard*/
+void keyBoard(int key, int x, int y)
+{
+	switch (key) {
+	case GLUT_KEY_F1:
+		glutPostRedisplay();
+		initGameData();
+		break;
+	case GLUT_KEY_F10:
+		exit(0);
+		break;
+	}
+
 }
 
 /*function to check if machine win*/
@@ -659,36 +670,36 @@ void checkMachineWin()
 {
 	if (game.matrix[0][0] == 'o' && game.matrix[0][1] == 'o' && game.matrix[0][2] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 	if (game.matrix[1][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[1][2] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 	if (game.matrix[2][0] == 'o' && game.matrix[2][1] == 'o' && game.matrix[2][2] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 	if (game.matrix[0][0] == 'o' && game.matrix[1][0] == 'o' && game.matrix[2][0] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 	if (game.matrix[0][1] == 'o' && game.matrix[1][1] == 'o' && game.matrix[2][1] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 	if (game.matrix[0][2] == 'o' && game.matrix[1][2] == 'o' && game.matrix[2][2] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 
 	if (game.matrix[0][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[2][2] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 	if (game.matrix[2][0] == 'o' && game.matrix[1][1] == 'o' && game.matrix[0][2] == 'o')
 	{
-		game.gameOver = true;
+		game.winMachine = true;
 	}
 }
 
@@ -699,37 +710,37 @@ void checkUserWin()
 
 	if (game.matrix[0][0] == 'x' && game.matrix[0][1] == 'x' && game.matrix[0][2] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 	if (game.matrix[1][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[1][2] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 
 	}
 	if (game.matrix[2][0] == 'x' && game.matrix[2][1] == 'x' && game.matrix[2][2] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 	if (game.matrix[0][0] == 'x' && game.matrix[1][0] == 'x' && game.matrix[2][0] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 	if (game.matrix[0][1] == 'x' && game.matrix[1][1] == 'x' && game.matrix[2][1] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 	if (game.matrix[0][2] == 'x' && game.matrix[1][2] == 'x' && game.matrix[2][2] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 
 	if (game.matrix[0][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[2][2] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 	if (game.matrix[2][0] == 'x' && game.matrix[1][1] == 'x' && game.matrix[0][2] == 'x')
 	{
-		game.gameOver = true;
+		game.winUser = true;
 	}
 }
 /*function to update the bordergame*/
@@ -820,17 +831,27 @@ void updateBorderGame(string border)
 	}
 	checkMachineWin();
 	checkUserWin();
+	if (game.winMachine)
+	{
+		writeTextOnBox(60, 550, stringVetor[1]);
+	}
+	if (game.winUser)
+	{
+		writeTextOnBox(60, 550, stringVetor[0]);
 
-	
-	if (game.gameOver == true){
-		cout << "TESTE" << endl;
-		//exit(0);
 	}
 
-
 }
-
-
+/*function to return wich user win*/
+bool checkWinnerToMainGame()
+{
+	if (game.winUser)
+	{
+		return true;
+	}
+	else
+		return false;
+}
 
 /*this method will be called every time that the user select a square*/
 void IAConnection(char play)
@@ -848,19 +869,22 @@ void IAConnection(char play)
 	sprintf_s(userPlay, "%c", play);
 	av[1] = PlCompound(userPlay);
 	PlQuery q("receive", av);
+	bool flag = false;
+
 
 	while (q.next_solution())
 	{
-		borderReceived = (string)av[2];
-		cout << borderReceived << endl;
-	}
+		flag = true;
 
-	updateBorderGame(borderReceived);
+		borderReceived = (string)av[2];
+	}
+	if (flag)
+		updateBorderGame(borderReceived);
+
 }
 
 int main(int argc, char **argv)
 {
-
 	initGameData();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -868,9 +892,8 @@ int main(int argc, char **argv)
 	glutCreateWindow("TIC-TAC-TOE");
 	glutDisplayFunc(display);
 	glutMouseFunc(mouse);
+	glutSpecialFunc(keyBoard);
 	myInit();
-
 	glutMainLoop();
-
 	return 0;
 }
