@@ -7,12 +7,12 @@
 #include <iostream>
 using namespace std;
 
-int main()
+vector<vector<int>> GenerateMaze(int x, int y)
 {
 	srand(time(0));
 
-	const int maze_size_x = 20;
-	const int maze_size_y = 20;
+	const int maze_size_x = x;
+	const int maze_size_y = y;
 	vector < vector < int > > maze;
 	list < pair < int, int> > drillers;
 
@@ -87,15 +87,27 @@ int main()
 		}
 	}
 
+	return maze;
+}
+
+
+int main()
+{
+	int maze_size_x = 20;
+	int maze_size_y = 20;
+	vector<vector<int>> maze = GenerateMaze(maze_size_x, maze_size_y);
+
 	// Done 
-	for (size_t y = 0; y < maze_size_y; y++)
+	for (size_t x = 0; x < maze_size_y; x++)
 	{
-		for (size_t x = 0; x < maze_size_x; x++)
+		for (size_t y = 0; y < maze_size_x; y++)
 		{
-			if (maze[y][x] == 1)
+			if (maze[x][y] == 1)
 				printf(" ");
-			else
+			else if (maze[x][y] == 0)
 				printf("#");
+			else if (maze[x][y] == 1)
+				printf(".");
 		}
 		printf("\n");
 	}
