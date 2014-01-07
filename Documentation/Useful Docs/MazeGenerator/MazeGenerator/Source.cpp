@@ -119,12 +119,27 @@ vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y)
 		}
 	}
 	
+	PlTermv av1(2);
+	PlQuery qq("eachpos", av1);
+	while (qq.next_solution())
+	{
+		cout << "X: ";
+		cout << ((char*)av1[0]) << endl;
+		cout << "Y: ";
+		cout << ((char*)av1[1]) << endl;
+	}
+	
+	/*char *path;
 	PlTermv av1(1);
 	PlQuery qq("findPath", av1);
 	while (qq.next_solution())
 	{
-		cout << (char*)av1[0] << endl;
-	}
+
+		cout << ((char*)av1[0]) << endl;
+
+	}*/
+
+	//cout << path << endl;
 
 	cin.get();
 
