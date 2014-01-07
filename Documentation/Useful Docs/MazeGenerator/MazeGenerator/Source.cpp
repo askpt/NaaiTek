@@ -93,7 +93,7 @@ vector<vector<int>> GenerateMaze(int x, int y)
 	return maze;
 }
 
-vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y)
+vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y, double x_ini, double y_ini, double x_end, double y_end)
 {
 	char* argv[] = { "swipl.dll", "-s", "mz_off.pl", NULL };
 
@@ -105,12 +105,10 @@ vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y)
 		{
 			if (maze[x][y] == 1)
 			{
-				PlFrame fr;
+				//PlFrame fr;
 				PlTermv av(1);
 
-				char cx[20], cy[20];
-				_itoa(x, cx, 10);
-				_itoa(y, cy, 10);
+				double cx = x, cy = y;
 
 				av[0] = PlCompound("pos", PlTermv(PlTerm(cx), PlTerm(cy)));
 				PlQuery q("assert", av);
@@ -119,42 +117,40 @@ vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y)
 		}
 	}
 	
-	PlTermv av1(2);
-	PlQuery qq("eachpos", av1);
-	while (qq.next_solution())
-	{
-		cout << "X: ";
-		cout << ((char*)av1[0]) << endl;
-		cout << "Y: ";
-		cout << ((char*)av1[1]) << endl;
-	}
+	PlTermv av1(6);
+
+	av1[2] = PlTerm(x_ini);
+	av1[3] = PlTerm(y_ini);
+	av1[4] = PlTerm(x_end);
+	av1[5] = PlTerm(y_end);
 	
-	/*char *path;
-	PlTermv av1(1);
-	PlQuery qq("findPath", av1);
+	PlQuery qq("eachPosMazeSol", av1);
 	while (qq.next_solution())
 	{
+		
+		int x = atoi((char*)av1[0]);
+		int y = atoi((char*)av1[1]);
 
-		cout << ((char*)av1[0]) << endl;
+		maze[x][y] = 2;
+	}
 
-	}*/
+	/*
+	char *path;
+	PlTermv av2(1);
+	PlQuery qq1("findPath", av2);
+	while (qq1.next_solution())
+	{
+	cout << ((char*)av2[0]) << endl;
+	}
+	*/
 
 	//cout << path << endl;
-
-	cin.get();
 
 	return maze;
 }
 
-
-int main()
+void PrintMaze(vector<vector<int>> maze, int maze_size_x, int maze_size_y)
 {
-	int maze_size_x = 20;
-	int maze_size_y = 20;
-	vector<vector<int>> maze = GenerateMaze(maze_size_x, maze_size_y);
-
-	maze = GetPath(maze, maze_size_x, maze_size_y);
-	// Done 
 	for (size_t x = 0; x < maze_size_y; x++)
 	{
 		for (size_t y = 0; y < maze_size_x; y++)
@@ -163,15 +159,39 @@ int main()
 				printf(" ");
 			else if (maze[x][y] == 0)
 				printf("#");
-			else if (maze[x][y] == 1)
+			else if (maze[x][y] == 2)
 				printf(".");
 		}
 		printf("\n");
 	}
+}
 
+int main()
+{
+	int maze_size_x = 20;
+	int maze_size_y = 20;
+	vector<vector<int>> maze = GenerateMaze(maze_size_x, maze_size_y);
+
+	PrintMaze(maze, maze_size_x, maze_size_y);
 	cin.get();
+
+	double x_ini, y_ini, x_end, y_end;
+
+	cout << "X ini" << endl;
+	cin >> x_ini;
+	cout << "Y ini" << endl;
+	cin >> y_ini;
+	cout << "X end" << endl;
+	cin >> x_end;
+	cout << "y end" << endl;
+	cin >> y_end;
+
+	maze = GetPath(maze, maze_size_x, maze_size_y, x_ini, y_ini, x_end, y_end);
+
+	PrintMaze(maze, maze_size_x, maze_size_y);
 	
-	
+	cin.get();
+	cin.get();
 
 	return 0;
 }
