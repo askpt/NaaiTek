@@ -170,10 +170,13 @@ void drawScene()
     // standard stuff
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
+    
 	glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, -5.0f);
-    
-    drawWallAtScreenPosition(0.0f, 0.0f);
+    drawWallAtScreenPosition(0.1f, 0.1f);
+
+	glTranslatef(1.0f, 0.0f, -5.0f);
+    drawWallAtScreenPosition(0.2f, 0.2f);
     
 	glutSwapBuffers();
 }
@@ -182,10 +185,10 @@ void drawScene()
 void drawWallAtScreenPosition(float x, float y)
 {
     glBegin(GL_QUADS);
-        glVertex3f(-0.1f, -0.1f, 0.0f);
-        glVertex3f(0.1f, -0.1f, 0.0f);
-        glVertex3f(0.1f, 0.1f, 0.0f);
-        glVertex3f(-0.1f, 0.1f, 0.0f);
+        glVertex3f(-x, -y, 0.0f);
+        glVertex3f(x, -y, 0.0f);
+        glVertex3f(x, y, 0.0f);
+        glVertex3f(-x, y, 0.0f);
     glEnd();
 }
 
