@@ -1,5 +1,6 @@
 #include "User.h"
 #include "Connection.h"
+#include <string>
 #ifndef _GRAPH_INCLUDE
 #define _GRAPH_INCLUDE
 
@@ -37,5 +38,6 @@ Path createPath(int, int, float, float);
 
 void saveGraph();
 void readGraph();
+void readGraphUser(std::string);
 
 #endif

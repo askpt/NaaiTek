@@ -138,3 +138,38 @@ void readGraph(){
 			nodes[i].width = paths[j].width;
 	}
 }
+
+void readGraphUser(std::string user)
+{
+	wstring wsTmp(user.begin(), user.end());
+
+	utility::string_t userWs = wsTmp;
+	utility::string_t url = L"http://localhost:5000/get_graph?user=" + userWs;
+	
+	utility::string_t urlDim = L"http://localhost:5000/get_users_dimension";
+
+
+	json::value graph = RequestJSONValueAsync(url).get();
+	json::value usersDim = RequestJSONValueAsync(urlDim).get();
+
+	numNodes = graph[L"nodes"].size();
+	
+	
+	for (auto iter = graph[L"nodes"].begin(); iter != graph[L"nodes"].end(); ++iter)
+	{
+		for (auto iterDim = usersDim[L"users"].begin(); iterDim != usersDim[L"users"].end(); ++iterDim)
+		{
+			if (iterDim->second[L"user"] == iter->second)
+			{
+				wcout << iter->first;
+				wcout << iter->second;
+				wcout << iterDim->second[L"dimension"]<< endl;
+			}  
+		}
+
+
+		
+	}
+
+	numPaths = graph[L"paths"].size();
+}

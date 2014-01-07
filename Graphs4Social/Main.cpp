@@ -224,6 +224,7 @@ void myInit()
 	gluQuadricNormals(model.quad, GLU_OUTSIDE);
 
 	readGraph();
+	readGraphUser("Andre");
 }
 
 void printHelp(void)
