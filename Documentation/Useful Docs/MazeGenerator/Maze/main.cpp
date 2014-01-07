@@ -57,6 +57,7 @@ GLuint loadTexture(Image* image);
 float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
 void cleanUp();
 vector<vector<int>> mazeBuilder();
+void drawWallAtScreenPosition(float x, float y);
 
 
 /**
@@ -64,8 +65,6 @@ vector<vector<int>> mazeBuilder();
  */
 int main(int argc, char *argv[])
 {
-    maze = mazeBuilder();
-    
 	// initializing GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -76,6 +75,9 @@ int main(int argc, char *argv[])
 	initRendering();
     
     //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
+    
+    // building a random maze
+    maze = mazeBuilder();
     
 	// setting handler functions
 	glutDisplayFunc(drawScene);
@@ -169,17 +171,22 @@ void drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -8.0f);
+	glTranslatef(0.0f, 0.0f, -5.0f);
     
-    // test only
-    glBegin(GL_QUADS); //Begin quadrilateral coordinates
-        glVertex3f(-0.7f, -1.5f, -5.0f);
-        glVertex3f(0.7f, -1.5f, -5.0f);
-        glVertex3f(0.4f, -0.5f, -5.0f);
-        glVertex3f(-0.4f, -0.5f, -5.0f);
-    glEnd(); //End quadrilateral coordinates
+    drawWallAtScreenPosition(0.0f, 0.0f);
     
 	glutSwapBuffers();
+}
+
+
+void drawWallAtScreenPosition(float x, float y)
+{
+    glBegin(GL_QUADS);
+        glVertex3f(-0.1f, -0.1f, 0.0f);
+        glVertex3f(0.1f, -0.1f, 0.0f);
+        glVertex3f(0.1f, 0.1f, 0.0f);
+        glVertex3f(-0.1f, 0.1f, 0.0f);
+    glEnd();
 }
 
 
