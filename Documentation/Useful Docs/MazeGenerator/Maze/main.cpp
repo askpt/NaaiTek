@@ -49,6 +49,7 @@ float g_translationFactorOnVerticalAxis;
 
 // textures
 GLuint g_textureId;
+GLuint g_pathTexture;
 
 // scale for drawing text
 float g_scale;
@@ -158,9 +159,13 @@ void initRendering()
 	glShadeModel(GL_SMOOTH);
     
     // loading the image as texture
-    //Image* image = loadBMP("/Users/joaocarreira/Desktop/OpenGL/Text/Text/vtr.bmp");
-	//g_textureId = loadTexture(image);
-	//delete image;
+    Image* image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/wall.bmp");
+	g_textureId = loadTexture(image);
+	delete image;
+    
+    image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/path.bmp");
+    g_pathTexture = loadTexture(image);
+    delete image;
     
     t3dInit();
 }
@@ -268,12 +273,22 @@ void drawWallAtScreenPosition(float x, float y)
     glLoadIdentity();
     glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
     
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, g_textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_QUADS);
+        //glNormal3f(0.0, 1.0f, 0.0f);
         glVertex3f(-g_wallSize, -g_wallSize, 0.0f);
+        glTexCoord2f(0.0f, 0.0f);
         glVertex3f(g_wallSize, -g_wallSize, 0.0f);
+        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(g_wallSize, g_wallSize, 0.0f);
+        glTexCoord2f(1.0f, 1.0f);
         glVertex3f(-g_wallSize, g_wallSize, 0.0f);
+        glTexCoord2f(0.0f, 1.0f);
     glEnd();
 }
 
@@ -286,11 +301,20 @@ void drawPathAtScreenPosition(float x, float y)
     glLoadIdentity();
     glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
     
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, g_pathTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glColor3f(1.0f, 1.50f, 0.0f);
     glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f);
         glVertex3f(-g_wallSize, -g_wallSize, 0.0f);
+        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(g_wallSize, -g_wallSize, 0.0f);
+        glTexCoord2f(1.0f, 1.0f);
         glVertex3f(g_wallSize, g_wallSize, 0.0f);
+        glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-g_wallSize, g_wallSize, 0.0f);
     glEnd();
 }
