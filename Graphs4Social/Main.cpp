@@ -9,7 +9,7 @@ using namespace std;
 
 #define degrees(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
-#define K_CIRCLE 1.5
+#define K_SPHERE 2.1
 
 // luzes e materiais
 
@@ -66,6 +66,8 @@ typedef struct Camera{
 	GLdouble dir_long;
 	GLfloat dist;
 	Vertex center;
+	GLfloat dimension;
+	GLdouble velv, velh;
 
 }Camera;
 
@@ -96,93 +98,20 @@ void initState(){
 	state.camera.dir_lat = M_PI / 4;
 	state.camera.dir_long = -M_PI / 4;
 	state.camera.fov = 60;
-	state.camera.dist = 100;
+	state.camera.dist = 3;
 	state.axis[0] = 0;
 	state.axis[1] = 0;
 	state.axis[2] = 0;
 	state.camera.center[0] = 0;
 	state.camera.center[1] = 0;
 	state.camera.center[2] = 0;
+	state.camera.dimension = 2;
+	state.camera.velv = 10;
+	state.camera.velh = 10;
 	state.light = GL_FALSE;
 	state.showNormals = GL_FALSE;
 	state.lightViewer = 1;
 	state.timer = 100;
-}
-
-GLboolean detectCameraColision(GLfloat nx, GLfloat ny, GLfloat nz){
-	//Check_Nodes => nodes;
-
-	for (int i = 0; i < numNodes; i++)
-	{
-		//((nx - nodes[i].x)*(nx - nodes[i].x)) + ((ny - nodes[i].y)*(ny - nodes[i].y)) <= ((nodes[i].width/2)*(nodes[i].width/2))
-		if (((nx > nodes[i].x - nodes[i].width) && (nx < nodes[i].x + nodes[i].width))
-			&& ((ny > nodes[i].y - nodes[i].width) && (ny < nodes[i].y + nodes[i].width))
-			&& ((nz > nodes[i].z - nodes[i].width) && (nz < nodes[i].z + nodes[i].width))){
-			return GL_TRUE;
-		}
-	}
-	return GL_FALSE;
-
-	//Check_Nodes => paths;
-	//for (int i = 0; i < numPaths; i++)
-	//{
-	//if (){}
-	//}
-}
-
-void Timer(int value)
-{
-	static int time;
-
-	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
-
-	glutTimerFunc(state.timer, Timer, 0);
-
-	double vel = 10, k = 1;
-
-	GLdouble xp = state.camera.center[0];
-	GLdouble yp = state.camera.center[1];
-	GLdouble zp = state.camera.center[2];
-	// get the y pos
-	if (state.keys.up)
-	{
-		state.camera.dir_lat = -state.camera.dir_long;
-		xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
-		yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
-	}
-	else if (state.keys.down)
-	{
-		state.camera.dir_lat = -state.camera.dir_long;
-		xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
-		yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
-	}
-
-	if (state.keys.a)
-	{
-		zp = state.camera.center[2] - k * vel;
-	}
-	else if (state.keys.q)
-	{
-		zp = state.camera.center[2] + k * vel;
-	}
-
-	GLboolean colide = detectCameraColision(xp, yp, zp);
-	if (colide != GL_TRUE){
-		state.camera.center[0] = xp;
-		state.camera.center[1] = yp;
-		state.camera.center[2] = zp;
-	}
-
-	if (state.keys.left)
-	{
-		state.camera.dir_long += rad(5);
-	}
-	if (state.keys.right)
-	{
-		state.camera.dir_long -= rad(5);
-
-	}
-	glutPostRedisplay();
 }
 
 void initModel(){
@@ -204,7 +133,7 @@ void myInit()
 
 	GLfloat LuzAmbiente[] = { 0.5, 0.5, 0.5, 0.0 };
 
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(0.55, 0.75, 1.0, 0.0);
 
 	glEnable(GL_SMOOTH); /*enable smooth shading */
 	glEnable(GL_LIGHTING); /* enable lighting */
@@ -219,12 +148,9 @@ void myInit()
 
 	initModel();
 	initState();
-	model.quad = gluNewQuadric();
-	gluQuadricDrawStyle(model.quad, GLU_FILL);
-	gluQuadricNormals(model.quad, GLU_OUTSIDE);
 
 	readGraph();
-	readGraphUser("Andre");
+	//readGraphUser("Andre");
 }
 
 void printHelp(void)
@@ -260,11 +186,7 @@ void material(enum material_type mat)
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess[mat]);
 }
 
-const GLfloat red_light[] = { 1.0, 0.0, 0.0, 1.0 };
-const GLfloat green_light[] = { 0.0, 1.0, 0.0, 1.0 };
-const GLfloat blue_light[] = { 0.0, 0.0, 1.0, 1.0 };
 const GLfloat white_light[] = { 1.0, 1.0, 1.0, 1.0 };
-
 
 void putLights(GLfloat* diffuse)
 {
@@ -284,95 +206,31 @@ void putLights(GLfloat* diffuse)
 	glEnable(GL_LIGHT1);
 }
 
-void drawGround(){
-#define STEP 10
-	glBegin(GL_QUADS);
-	glNormal3f(0, 0, 1);
-	for (int i = -300; i < 300; i += STEP)
-	for (int j = -300; j < 300; j += STEP){
-		glVertex2f(i, j);
-		glVertex2f(i + STEP, j);
-		glVertex2f(i + STEP, j + STEP);
-		glVertex2f(i, j + STEP);
-	}
-	glEnd();
-}
-
-void CrossProduct(GLdouble v1[], GLdouble v2[], GLdouble cross[])
-{
-	cross[0] = v1[1] * v2[2] - v1[2] * v2[1];
-	cross[1] = v1[2] * v2[0] - v1[0] * v2[2];
-	cross[2] = v1[0] * v2[1] - v1[1] * v2[0];
-}
-
-GLdouble VectorNormalize(GLdouble v[])
-{
-	int		i;
-	GLdouble	length;
-
-	if (fabs(v[1] - 0.000215956) < 0.0001)
-		i = 1;
-
-	length = 0;
-	for (i = 0; i < 3; i++)
-		length += v[i] * v[i];
-	length = sqrt(length);
-	if (length == 0)
-		return 0;
-
-	for (i = 0; i < 3; i++)
-		v[i] /= length;
-
-	return length;
-}
-
-void drawNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], material_type mat){
-
-	switch (mat){
-	case red_plastic:
-		glColor3f(1, 0, 0);
-		break;
-	case blue:
-		glColor3f(0, 0, 1);
-		break;
-	case emerald:
-		glColor3f(0, 1, 0);
-		break;
-	default:
-		glColor3f(1, 1, 0);
-	}
-	glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glTranslated(x, y, z);
-	glScaled(0.4, 0.4, 0.4);
-	glBegin(GL_LINES);
-	glVertex3d(0, 0, 0);
-	glVertex3dv(normal);
-	glEnd();
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
-}
-
-void drawSphere(GLint n, Node node)
+#define no 70
+void drawNode(Node node)
 {
 	GLfloat x0 = node.x;
 	GLfloat y0 = node.y;
 	GLfloat z0 = node.z + INFINITESIMAL;
 
-	GLfloat r = K_CIRCLE * node.width / 2.0;
+	GLfloat r = K_SPHERE * node.width / 2.0;
 
+	glPushName(no);
 	glPushMatrix();
 	glTranslatef(x0, y0, z0);
 
 	glBegin(GL_POLYGON);
 	GLUquadricObj* pQuadric = gluNewQuadric();
-	gluSphere(pQuadric, r, n, n*4.0);
 
+	gluSphere(pQuadric, r, 32.0, 32.0 * 4.0);
+	
+	gluDeleteQuadric(pQuadric);
 	glEnd();
 	glPopMatrix();
+	glPopName();
 }
 
-void drawCylinder(Node noi, Node nof, Path p)
+void drawPath(Node noi, Node nof, Path p)
 {
 	GLfloat xf = nof.x;
 	GLfloat yf = nof.y;
@@ -403,157 +261,120 @@ void drawCylinder(Node noi, Node nof, Path p)
 
 }
 
-void drawNode(int no){
-	Path path = paths[0];
-	Node *noi = &nodes[no], *nof;
-
-	material(blue);
-	for (int i = 0; i < numNodes; i++){
-		drawSphere(32, nodes[no]);
-	}
-
-}
-
-//void drawConnectionElement(Node noi, Node nof, Path path)
-//{
-//	GLfloat xf = nof.x;
-//	GLfloat yf = nof.y;
-//	GLfloat zf = nof.z;
-//
-//	GLfloat xi = noi.x;
-//	GLfloat yi = noi.y;
-//	GLfloat zi = noi.z;
-//
-//	GLfloat ri = K_CIRCLE * noi.width / 2.0;
-//	GLfloat si = K_CONNECTION * ri;
-//
-//	GLfloat wij = path.width;
-//	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
-//
-//	glPushMatrix();
-//	glTranslatef(xi, yi, zi);
-//	glRotatef(aij, 0.0, 0.0, 1.0);
-//	glTranslatef(si / 2.0, 0.0, 0.0);
-//
-//	material(red_plastic);
-//	glBegin(GL_QUADS);
-//	glNormal3f(0.0, 0.0, 1.0);
-//
-//	glVertex3f(-si / 2.0, -wij / 2.0, 0.0);
-//	glVertex3f(si / 2.0, -wij / 2.0, 0.0);
-//	glVertex3f(si / 2.0, wij / 2.0, 0.0);
-//	glVertex3f(-si / 2.0, wij / 2.0, 0.0);
-//	glEnd();
-//	glPopMatrix();
-//}
-
-void drawPath(Path path){
-	Node *noi, *nof;
-
-	if (nodes[path.nodei].y < nodes[path.nodef].y){
-		noi = &nodes[path.nodei];
-		nof = &nodes[path.nodef];
-	}
-	else{
-		nof = &nodes[path.nodei];
-		noi = &nodes[path.nodef];
-	}
-
-	//drawCilinder
-	drawCylinder(*noi, *nof, path);
-
-}
-
 void drawGraph(){
-	glPushMatrix();
-	glTranslatef(0, 0, 0.05);
-	glScalef(5, 5, 5);
-	material(red_plastic);
-	for (int i = 0; i < numNodes; i++){
-		glPushMatrix();
-		glTranslatef(nodes[i].x, nodes[i].y, nodes[i].z + 0.25);
-		glPopMatrix();
-		glNormal3f(0, 0, 1);
-		drawNode(i);
-	}
-	material(emerald);
-	for (int i = 0; i < numPaths; i++)
-		drawPath(paths[i]);
-	glPopMatrix();
-}
-
-void drawAxis(){
-	gluCylinder(model.quad, 0.5, 0.5, 20, 16, 15);
-	glPushMatrix();
-	glTranslatef(0, 0, 20);
-	glPushMatrix();
-	glRotatef(180, 0, 1, 0);
-	gluDisk(model.quad, 0.5, 2, 16, 6);
-	glPopMatrix();
-	gluCylinder(model.quad, 2, 0, 5, 16, 15);
-	glPopMatrix();
-}
-
-#define AXIS_X		1
-#define AXIS_Y		2
-#define AXIS_Z		3
-
-void drawDragPlan(int axis){
-	glPushMatrix();
-	glTranslated(state.axis[0], state.axis[1], state.axis[2]);
-	switch (axis) {
-	case AXIS_Y:
-		if (abs(state.camera.dir_lat)<M_PI / 4)
-			glRotatef(-90, 0, 0, 1);
-		else
-			glRotatef(90, 1, 0, 0);
-		material(red_plastic);
-		break;
-	case AXIS_X:
-		if (abs(state.camera.dir_lat)>M_PI / 6)
-			glRotatef(90, 1, 0, 0);
-		material(blue);
-		break;
-	case AXIS_Z:
-		if (abs(cos(state.camera.dir_long)) > 0.5)
-			glRotatef(90, 0, 0, 1);
-
-		material(emerald);
-		break;
-	}
-	glBegin(GL_QUADS);
-	glNormal3f(0, 1, 0);
-	glVertex3f(-100, 0, -100);
-	glVertex3f(100, 0, -100);
-	glVertex3f(100, 0, 100);
-	glVertex3f(-100, 0, 100);
-	glEnd();
-	glPopMatrix();
-}
-
-void drawManyAxis(){
-
-	glPushMatrix();
-	glTranslated(state.axis[0], state.axis[1], state.axis[2]);
-	material(emerald);
-	glPushName(AXIS_Z);
-	drawAxis();
-	glPopName();
-	glPushName(AXIS_Y);
-	glPushMatrix();
-	glRotatef(-90, 1, 0, 0);
-	material(red_plastic);
-	drawAxis();
-	glPopMatrix();
-	glPopName();
-	glPushName(AXIS_X);
-	glPushMatrix();
-	glRotatef(90, 0, 1, 0);
 	material(blue);
-	drawAxis();
+	for (int i = 0; i < numNodes; i++){
+		drawNode(nodes[i]);
+	}
+	material(red_plastic);
+	for (int i = 0; i < numPaths; i++){
+		Node* noi = &nodes[paths[i].nodei];
+		Node* nof = &nodes[paths[i].nodef];
+		drawPath(*noi, *nof, paths[i]);
+	}
+}
+
+
+int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
+	int i, n, objid = 0;
+	double zmin = 10.0;
+	GLuint buffer[100], *ptr;
+
+	glSelectBuffer(100, buffer);
+	glRenderMode(GL_SELECT);
+	glInitNames();
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix(); // saves projection
+	glLoadIdentity();
+	glOrtho(-state.camera.dimension / 2.0, state.camera.dimension / 2.0,
+		-state.camera.dimension / 2.0, state.camera.dimension / 2.0,
+		0.0, state.camera.dimension / 2.0 + (state.camera.velv + state.camera.velh));
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glRotatef(degrees(-M_PI / 2.0 - atan2(state.camera.velv, state.camera.velh)), 1.0, 0.0, 0.0);
+	glRotatef(degrees(M_PI / 2.0 - state.camera.dir_long), 0.0, 0.0, 1.0);
+	glTranslatef(-xp, -yp, -zp);
+	drawGraph();
+
+	n = glRenderMode(GL_RENDER);
+	if (n > 0)
+	{
+		ptr = buffer;
+		for (i = 0; i < n; i++)
+		{
+			if (zmin >(double) ptr[1] / UINT_MAX) {
+				zmin = (double)ptr[1] / UINT_MAX;
+				objid = ptr[3];
+			}
+			ptr += 3 + ptr[0]; // ptr[0] contains the number of names (usually 1); 3 corresponds to numnomes, zmin e zmax
+		}
+	}
+
+
+	glMatrixMode(GL_PROJECTION); //puts back projection matrix
 	glPopMatrix();
-	glPopName();
-	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
+	cout << objid << endl;
+	return objid;
+}
+
+void Timer(int value)
+{
+	static int time;
+
+	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
+
+	glutTimerFunc(state.timer, Timer, 0);
+
+	double vel = 10, k = 0.25;
+
+	GLdouble xp = state.camera.center[0];
+	GLdouble yp = state.camera.center[1];
+	GLdouble zp = state.camera.center[2];
+	// get the y pos
+	if (state.keys.up)
+	{
+		state.camera.dir_lat = -state.camera.dir_long;
+		xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
+		yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
+	}
+	else if (state.keys.down)
+	{
+		state.camera.dir_lat = -state.camera.dir_long;
+		xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
+		yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
+	}
+
+	if (state.keys.a)
+	{
+		zp = state.camera.center[2] - k * vel / 4.0;
+	}
+	else if (state.keys.q)
+	{
+		zp = state.camera.center[2] + k * vel / 4.0;
+	}
+
+	int colide = detectCameraColision(state.camera.center[0], state.camera.center[1], state.camera.center[2]);
+	if (colide == 0){
+		state.camera.center[0] = xp;
+		state.camera.center[1] = yp;
+		state.camera.center[2] = zp;
+	}
+
+	if (state.keys.left)
+	{
+		state.camera.dir_long += rad(5);
+	}
+	if (state.keys.right)
+	{
+		state.camera.dir_long -= rad(5);
+
+	}
+	glutPostRedisplay();
 }
 
 void setLight(){
@@ -582,32 +403,16 @@ void setCamera(){
 
 void display(void)
 {
-
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	
+
 	setLight();
 	setCamera();
 
-	material(slate);
-	drawGround();
-
-
-	drawManyAxis();
-
 	drawGraph();
-
-	if (state.translateAxis) {
-		// draw translation plan
-		cout << "Translate... " << state.translateAxis << endl;
-		drawDragPlan(state.translateAxis);
-
-	}
 
 	glFlush();
 	glutSwapBuffers();
-
 }
 
 
@@ -782,6 +587,7 @@ void motionRotate(int x, int y){
 	glutPostRedisplay();
 }
 
+// NOT WORKING
 void motionZoom(int x, int y){
 #define ZOOM_SCALE	0.5
 	state.camera.dist -= (state.yMouse - y)*ZOOM_SCALE;
@@ -791,58 +597,6 @@ void motionZoom(int x, int y){
 	if (state.camera.dist>200)
 		state.camera.dist = 200;
 	state.yMouse = y;
-	glutPostRedisplay();
-}
-
-void motionDrag(int x, int y){
-	GLuint buffer[100];
-	GLint vp[4];
-	GLdouble proj[16], mv[16];
-	int n;
-	GLdouble newx, newy, newz;
-
-	glSelectBuffer(100, buffer);
-	glRenderMode(GL_SELECT);
-	glInitNames();
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix(); // guarda a projecção
-	glLoadIdentity();
-	setProjection(x, y, GL_TRUE);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	setCamera();
-	drawDragPlan(state.translateAxis);
-
-	n = glRenderMode(GL_RENDER);
-	if (n > 0) {
-		glGetIntegerv(GL_VIEWPORT, vp);
-		glGetDoublev(GL_PROJECTION_MATRIX, proj);
-		glGetDoublev(GL_MODELVIEW_MATRIX, mv);
-		gluUnProject(x, glutGet(GLUT_WINDOW_HEIGHT) - y, (double)buffer[2] / UINT_MAX, mv, proj, vp, &newx, &newy, &newz);
-		printf("Novo x:%lf, y:%lf, z:%lf\n\n", newx, newy, newz);
-		switch (state.translateAxis) {
-		case AXIS_X:
-			state.axis[0] = newx;
-			//state.axis[1]=newy;
-			break;
-		case AXIS_Y:
-			state.axis[1] = newy;
-			//state.axis[2]=newz;
-			break;
-		case AXIS_Z:
-			//state.axis[0]=newx;
-			state.axis[2] = newz;
-			break;
-		}
-		glutPostRedisplay();
-	}
-
-
-	glMatrixMode(GL_PROJECTION); //repõe matriz projecção
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
 	glutPostRedisplay();
 }
 
@@ -863,7 +617,7 @@ int picking(int x, int y){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	setCamera();
-	drawManyAxis();
+	//drawManyAxis();
 
 	n = glRenderMode(GL_RENDER);
 	if (n > 0)
@@ -897,30 +651,19 @@ void mouse(int btn, int mouseState, int x, int y){
 				glutMotionFunc(motionZoom);
 			else
 				glutMotionFunc(motionRotate);
-			cout << "Left down\n";
+			cout << "Right down\n";
 		}
 		else{
 			glutMotionFunc(NULL);
-			cout << "Left up\n";
+			cout << "Right up\n";
 		}
 		break;
 	case GLUT_LEFT_BUTTON:
 		if (mouseState == GLUT_DOWN){
-			state.translateAxis = picking(x, y);
-			if (state.translateAxis)
-				glutMotionFunc(motionDrag);
-			cout << "Right down - object:" << state.translateAxis << endl;
+			cout << "Left down - object:" << state.translateAxis << endl;
 		}
 		else{
-			if (state.translateAxis != 0) {
-				state.camera.center[0] = state.axis[0];
-				state.camera.center[1] = state.axis[1];
-				state.camera.center[2] = state.axis[2];
-				glutMotionFunc(NULL);
-				state.translateAxis = 0;
-				glutPostRedisplay();
-			}
-			cout << "Right up\n";
+			cout << "Left up\n";
 		}
 		break;
 	}
