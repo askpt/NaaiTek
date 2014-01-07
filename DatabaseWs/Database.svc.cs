@@ -16,5 +16,25 @@ namespace DatabaseWs
         {
             return "Test";
         }
+
+        public AspNetUsers GetUser(string user)
+        {
+            AspNetUsers ret = null;
+
+            using (var db = new UserContext())
+            {
+                foreach (AspNetUsers item in db.AspNetUsers)
+                {
+                    if (item.UserName == user)
+                    {
+                        ret = item;
+                    }
+                }
+            }
+
+
+            return ret;
+        }
     }
+
 }

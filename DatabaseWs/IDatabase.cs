@@ -19,5 +19,13 @@ namespace DatabaseWs
                     UriTemplate = "data")]
 
         string DoWork();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+                    ResponseFormat = WebMessageFormat.Json,
+                    RequestFormat = WebMessageFormat.Json,
+                    UriTemplate = "user/{user}")]
+        AspNetUsers GetUser(string user);
+
     }
 }
