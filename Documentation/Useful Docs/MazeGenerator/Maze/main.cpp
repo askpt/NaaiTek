@@ -39,7 +39,8 @@ float g_zDistance = -5.0f;
 const float g_wallSize = 0.1;
 
 // translation factor (used in maze's wall and path drawing)
-float g_translationFactor;
+float g_translationFactorOnHorizontalAxis;
+float g_translationFactorOnVerticalAxis;
 
 // textures
 GLuint g_textureId;
@@ -68,8 +69,10 @@ void cleanUp();
 vector<vector<int>> mazeBuilder();
 void drawWallAtScreenPosition(float x, float y);
 void drawPathAtScreenPosition(float x, float y);
-void resetTranslationFactor();
-void updateTranslationFactor();
+void resetHorizontalTranslationFactor();
+void updateHorizontalTranslationFactor();
+void resetVerticalTranlationFactor();
+void updateVerticalTranslationFactor();
 
 /**
  * main
@@ -96,7 +99,7 @@ int main(int argc, char *argv[])
 	glutReshapeFunc(handleResize);
     
 	// adding a timer
-	glutTimerFunc(25, update, 0);
+	//glutTimerFunc(25, update, 0);
     
 	glutMainLoop();
     
@@ -182,24 +185,32 @@ void drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
     
+    
     // first wall block
 	glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, g_zDistance);
     
-    resetTranslationFactor();
-    drawWallAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
+    
+    resetHorizontalTranslationFactor();
+    drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
 
     // second wall block
-    updateTranslationFactor();
-    drawWallAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
+    updateHorizontalTranslationFactor();
+    drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
     
     // third wall block
-    updateTranslationFactor();
-    drawPathAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
+    updateHorizontalTranslationFactor();
+    drawPathAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
     
     // 4th wall block
-    updateTranslationFactor();
-    drawWallAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
+    updateHorizontalTranslationFactor();
+    drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
+    
+     
+    // 5h wall block (next line)
+    updateVerticalTranslationFactor();
+    resetHorizontalTranslationFactor();
+    drawPathAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
     
 	glutSwapBuffers();
 }
@@ -241,15 +252,27 @@ void drawPathAtScreenPosition(float x, float y)
 }
 
 
-void resetTranslationFactor()
+void resetHorizontalTranslationFactor()
 {
-    g_translationFactor = 1;
+    g_translationFactorOnHorizontalAxis = 1;
 }
 
 
-void updateTranslationFactor()
+void updateHorizontalTranslationFactor()
 {
-    g_translationFactor += 2;
+    g_translationFactorOnHorizontalAxis += 2;
+}
+
+
+void resetVerticalTranlationFactor()
+{
+    g_translationFactorOnVerticalAxis = 1;
+}
+
+
+void updateVerticalTranslationFactor()
+{
+    g_translationFactorOnVerticalAxis -= 2;
 }
 
 
