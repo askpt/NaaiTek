@@ -37,6 +37,8 @@ float g_zDistance = -5.0f;
 
 // square size (used in maze's wall drawing)
 const float g_wallSize = 0.1;
+int mazeSizeHorizontal;
+int mazeSizeVertical;
 
 // translation factor (used in maze's wall and path drawing)
 float g_translationFactorOnHorizontalAxis;
@@ -62,6 +64,8 @@ void handleKeypress(unsigned char key, int x, int y);
 void initRendering();
 void handleResize(int w, int h);
 void drawScene();
+void drawMaze();
+void drawMazeBootStrap();
 void update(int value);
 GLuint loadTexture(Image* image);
 float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
@@ -73,6 +77,7 @@ void resetHorizontalTranslationFactor();
 void updateHorizontalTranslationFactor();
 void resetVerticalTranlationFactor();
 void updateVerticalTranslationFactor();
+void setPositionToLeftScreen();
 
 /**
  * main
@@ -92,6 +97,8 @@ int main(int argc, char *argv[])
     
     // building a random maze
     maze = mazeBuilder();
+    mazeSizeHorizontal = 20;
+    mazeSizeVertical = 20;
     
 	// setting handler functions
 	glutDisplayFunc(drawScene);
@@ -185,15 +192,51 @@ void drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
     
+    // draws maze
+    //drawMazeBootStrap();
+    drawMaze();
+
+	glutSwapBuffers();
+}
+
+
+void drawMaze()
+{
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, g_zDistance);
     
+    resetHorizontalTranslationFactor();
+    resetVerticalTranlationFactor();
+    
+    for(int i = 0; i < mazeSizeHorizontal; i++)
+    {
+        for(int j = 0; j < mazeSizeVertical; j++)
+        {
+            if(maze[i][j] == 1)
+            {
+                drawPathAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
+            }
+            else
+            {
+                drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
+            }
+            updateHorizontalTranslationFactor();
+        }
+        resetHorizontalTranslationFactor();
+        updateVerticalTranslationFactor();
+    }
+}
+
+
+void drawMazeBootStrap()
+{
     // first wall block
 	glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, g_zDistance);
     
-    
     resetHorizontalTranslationFactor();
     drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
-
+    
     // second wall block
     updateHorizontalTranslationFactor();
     drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
@@ -206,13 +249,11 @@ void drawScene()
     updateHorizontalTranslationFactor();
     drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
     
-     
+    
     // 5h wall block (next line)
     updateVerticalTranslationFactor();
     resetHorizontalTranslationFactor();
     drawPathAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
-    
-	glutSwapBuffers();
 }
 
 
