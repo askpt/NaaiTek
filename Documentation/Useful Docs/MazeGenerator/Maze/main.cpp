@@ -61,6 +61,31 @@ float g_scale;
 vector < vector < int > > maze;
 
 
+// struct for 2D points
+struct float2
+{
+    float2( float _x = 0.0f, float _y = 0.0f ) : x(_x), y(_y) {}
+    float x;
+    float y;
+};
+
+
+// struct representing player
+struct player
+{
+    int x;
+    int y;
+}player;
+
+
+// struct represeting the goal
+struct goal
+{
+    int x;
+    int y;
+};
+
+
 //************************************************************************
 // forward declarations of OpenGL callback functions
 //************************************************************************
@@ -82,6 +107,9 @@ void updateHorizontalTranslationFactor();
 void resetVerticalTranlationFactor();
 void updateVerticalTranslationFactor();
 void setPositionToLeftScreen();
+void drawPlayerAtPosition(int x, int y);
+void drawTriangle(float2 p1, float2 p2, float2 p3);
+
 
 /**
  * main
@@ -203,6 +231,9 @@ void drawScene()
     // draws maze
     //drawMazeBootStrap();
     drawMaze();
+    
+    // draws player
+    drawPlayerAtPosition(0.0f, 0.0f);
 
 	glutSwapBuffers();
 }
@@ -233,6 +264,25 @@ void drawMaze()
         resetHorizontalTranslationFactor();
         updateVerticalTranslationFactor();
     }
+}
+
+
+void drawPlayerAtPosition(int x, int y)
+{
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -1.0f);
+    glColor3f( 0.0f, 1.0f, 0.0f );
+    drawTriangle(float2(0.0f, 0.02f), float2(-0.02f, -0.02f), float2(0.02f, -0.02f ));
+}
+
+
+void drawTriangle(float2 p1, float2 p2, float2 p3)
+{
+    glBegin( GL_TRIANGLES );
+        glVertex2f( p1.x, p1.y );
+        glVertex2f( p2.x, p2.y );
+        glVertex2f( p3.x, p3.y );
+    glEnd();
 }
 
 
