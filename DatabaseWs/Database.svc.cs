@@ -17,9 +17,9 @@ namespace DatabaseWs
             return "Test";
         }
 
-        public AspNetUsers GetUser(string user)
+        public User GetUser(string user)
         {
-            AspNetUsers ret = null;
+            User ret = null;
 
             using (var db = new UserContext())
             {
@@ -27,7 +27,17 @@ namespace DatabaseWs
                 {
                     if (item.UserName == user)
                     {
-                        ret = item;
+                        ret = new User() 
+                        {
+                            Day = item.BirthDate.Value.Day, 
+                            Month = item.BirthDate.Value.Month, 
+                            Year = item.BirthDate.Value.Year,
+                            Username = item.UserName,
+                            City = item.City,
+                            Country = item.Country,
+                            Email = item.Email,
+                            Number = item.Number                        
+                        };
                     }
                 }
             }
@@ -35,6 +45,18 @@ namespace DatabaseWs
 
             return ret;
         }
+    }
+
+    public class User
+    {
+        public int Day { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public string Username { get; set; }
+        public int? Number { get; set; }
+        public string Email { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
     }
 
 }
