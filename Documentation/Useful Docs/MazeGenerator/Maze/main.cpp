@@ -32,6 +32,12 @@ using namespace std;
 float g_angle = -30.0f;
 float g_cameraAngle = 0.0f;
 
+// constante z-distance
+float g_zDistance = -5.0f;
+
+// square size (used in maze's wall drawing)
+const float g_wallSize = 0.1;
+
 // textures
 GLuint g_textureId;
 
@@ -58,6 +64,7 @@ float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float s
 void cleanUp();
 vector<vector<int>> mazeBuilder();
 void drawWallAtScreenPosition(float x, float y);
+void drawNextWallInTheSameRow();
 
 
 /**
@@ -171,17 +178,22 @@ void drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
     
+    // first wall block
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -5.0f);
-    drawWallAtScreenPosition(0.1f, 0.1f);
+	glTranslatef(0.0f, 0.0f, g_zDistance);
+    drawWallAtScreenPosition(g_wallSize, g_wallSize);
 
-	glTranslatef(1.0f, 0.0f, -5.0f);
-    drawWallAtScreenPosition(0.2f, 0.2f);
+    // second wall block
+	drawNextWallInTheSameRow();
+    drawWallAtScreenPosition(g_wallSize, g_wallSize);
     
 	glutSwapBuffers();
 }
 
 
+/**
+ * draws a wall square at the given screen position
+ */
 void drawWallAtScreenPosition(float x, float y)
 {
     glBegin(GL_QUADS);
@@ -190,6 +202,17 @@ void drawWallAtScreenPosition(float x, float y)
         glVertex3f(x, y, 0.0f);
         glVertex3f(-x, y, 0.0f);
     glEnd();
+}
+
+
+/**
+ * auxiliary function that positions the wall immediatly to the right, in the
+ * same row
+ */
+void drawNextWallInTheSameRow()
+{
+    glLoadIdentity();
+    glTranslatef(g_wallSize, 0.0f, g_zDistance);
 }
 
 
