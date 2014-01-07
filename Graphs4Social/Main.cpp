@@ -98,7 +98,7 @@ void initState(){
 	state.camera.dir_lat = M_PI / 4;
 	state.camera.dir_long = -M_PI / 4;
 	state.camera.fov = 60;
-	state.camera.dist = 3;
+	state.camera.dist = 5;
 	state.axis[0] = 0;
 	state.axis[1] = 0;
 	state.axis[2] = 0;
@@ -206,7 +206,7 @@ void putLights(GLfloat* diffuse)
 	glEnable(GL_LIGHT1);
 }
 
-#define no 70
+#define nodeID 43
 void drawNode(Node node)
 {
 	GLfloat x0 = node.x;
@@ -215,7 +215,7 @@ void drawNode(Node node)
 
 	GLfloat r = K_SPHERE * node.width / 2.0;
 
-	glPushName(no);
+	glPushName(nodeID);
 	glPushMatrix();
 	glTranslatef(x0, y0, z0);
 
@@ -223,13 +223,14 @@ void drawNode(Node node)
 	GLUquadricObj* pQuadric = gluNewQuadric();
 
 	gluSphere(pQuadric, r, 32.0, 32.0 * 4.0);
-	
+
 	gluDeleteQuadric(pQuadric);
 	glEnd();
 	glPopMatrix();
 	glPopName();
 }
 
+#define pathID 59
 void drawPath(Node noi, Node nof, Path p)
 {
 	GLfloat xf = nof.x;
@@ -248,6 +249,7 @@ void drawPath(Node noi, Node nof, Path p)
 	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
 	GLfloat bij = degrees(atan2(hij, pij));
 
+	glPushName(pathID);
 	glPushMatrix();
 	glTranslatef(xi, yi, zi);
 	glRotatef(aij, 0, 0, 1.0);
@@ -258,7 +260,7 @@ void drawPath(Node noi, Node nof, Path p)
 	gluCylinder(pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
 	gluDeleteQuadric(pQuadric);
 	glPopMatrix();
-
+	glPopName();
 }
 
 void drawGraph(){
@@ -318,7 +320,20 @@ int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 
-	cout << objid << endl;
+	switch (objid){
+	case 43:
+		cout << "NODE" << endl;
+		break;
+	case 59:
+		cout << "PATH" << endl;
+		break;
+	case 0:
+		cout << "FREE ROAM" << endl;
+		break;
+	default:
+		cout << "FIX ME" << endl;
+		break;
+	}
 	return objid;
 }
 
@@ -363,6 +378,10 @@ void Timer(int value)
 		state.camera.center[0] = xp;
 		state.camera.center[1] = yp;
 		state.camera.center[2] = zp;
+	}
+	else 
+	{
+		state.camera.center[2] = state.camera.center[2] + 1;
 	}
 
 	if (state.keys.left)
@@ -660,6 +679,7 @@ void mouse(int btn, int mouseState, int x, int y){
 		break;
 	case GLUT_LEFT_BUTTON:
 		if (mouseState == GLUT_DOWN){
+			state.translateAxis = picking(x, y);
 			cout << "Left down - object:" << state.translateAxis << endl;
 		}
 		else{
