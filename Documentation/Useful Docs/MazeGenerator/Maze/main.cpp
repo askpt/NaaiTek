@@ -36,9 +36,12 @@ float g_cameraAngle = 0.0f;
 float g_zDistance = -5.0f;
 
 // square size (used in maze's wall drawing)
-const float g_wallSize = 0.1;
+const float g_wallSize = 0.075;
 int mazeSizeHorizontal;
 int mazeSizeVertical;
+
+float g_positionXToTopScreen = -2.0;
+float g_positionYToTopScreen = 1.5;
 
 // translation factor (used in maze's wall and path drawing)
 float g_translationFactorOnHorizontalAxis;
@@ -87,7 +90,7 @@ int main(int argc, char *argv[])
 	// initializing GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(800, 800);
     
 	// creating the window
 	glutCreateWindow("Maze");
@@ -263,7 +266,7 @@ void drawMazeBootStrap()
 void drawWallAtScreenPosition(float x, float y)
 {
     glLoadIdentity();
-    glTranslatef(x, y, g_zDistance);
+    glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
     
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_QUADS);
@@ -281,7 +284,7 @@ void drawWallAtScreenPosition(float x, float y)
 void drawPathAtScreenPosition(float x, float y)
 {
     glLoadIdentity();
-    glTranslatef(x, y, g_zDistance);
+    glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
     
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_QUADS);
