@@ -33,7 +33,7 @@ void handleResize(int x, int y)
 {
 	glViewport(0, 0, x, y);
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	//glLoadIdentity();
 	gluPerspective(45.0, (double)x / (double)y, 1.0, 1.0);
 }
 
@@ -53,47 +53,56 @@ void myInit()
 	glLoadIdentity();
 	gluOrtho2D(0.0, (GLdouble)WindowWidth, (GLdouble)WindowHeight, 0.0);
 }
+
+/*function to draw circles with center (x,y) and radius (radius)*/
+
+void drawCircle(float centerX, float centerY, float radius, int num)
+{
+	glLineWidth(4.0);
+	glBegin(GL_LINE_LOOP);
+
+	for (int i = 0; i < num; i++)
+	{
+		float angle = 2.0f * 3.1415926f * float(i) / float(num);
+
+		float x = radius * cosf(angle);
+		float y = radius * sinf(angle);
+
+		glVertex2f(x + centerX, y + centerY);
+	}
+	glEnd();
+}
+/*function to draw line starting on some point and finishing on other point*/
+
+void drawLine(GLfloat x1,GLfloat y1, GLfloat x2, GLfloat y2)
+{
+	glLineWidth(4.0);
+	glBegin(GL_LINES);
+
+	glVertex2f(x1, y1);
+	glVertex2f(x2, y2);
+	glEnd();
+}
+
 /*function to draw the main scene*/
 
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-
-	glLineWidth(4.0);
-	glBegin(GL_LINES);
-	glVertex2d(100, 100);
-	glVertex2d(100 + 100, 100);
-
-	glVertex2d(100 + 100, 100 + 100);
-	glVertex2d(100, 100 + 100);
-
-	glVertex2d(100, 100);
-	glVertex2d(100, 100 + 100);
-
-	glVertex2d(100 + 100, 100 + 100);
-	glVertex2d(100 + 100, 100);
-	glEnd();
-
+	drawCircle(200, 200, 100, 500);
+	drawLine(400, 500, 450, 400);
 }
 
 int main(int argc, char**argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glutInitWindowSize(WindowWidth, WindowHeight); //Set the window size
-
-	//Create the window
+	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("HANGMAN");
-	//initRendering(); //Initialize rendering
-
-	//Set handler functions for drawing, keypresses, and window resizes
 	glutDisplayFunc(display);
 	myInit();
-	//glutKeyboardFunc(handleKeypress);
-	//glutReshapeFunc(handleResize);
-
-	glutMainLoop(); //Start the main loop.  glutMainLoop doesn't return.
-	return 0; //This line is never reached
+	glutMainLoop();
+	return 0; 
 }
 
 
