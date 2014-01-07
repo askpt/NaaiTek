@@ -38,6 +38,9 @@ float g_zDistance = -5.0f;
 // square size (used in maze's wall drawing)
 const float g_wallSize = 0.1;
 
+// translation factor (used in maze's wall and path drawing)
+float g_translationFactor;
+
 // textures
 GLuint g_textureId;
 
@@ -64,8 +67,9 @@ float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float s
 void cleanUp();
 vector<vector<int>> mazeBuilder();
 void drawWallAtScreenPosition(float x, float y);
-void drawNextWallInTheSameRow();
-
+void drawPathAtScreenPosition(float x, float y);
+void resetTranslationFactor();
+void updateTranslationFactor();
 
 /**
  * main
@@ -181,11 +185,21 @@ void drawScene()
     // first wall block
 	glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, g_zDistance);
-    drawWallAtScreenPosition(g_wallSize, g_wallSize);
+    
+    resetTranslationFactor();
+    drawWallAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
 
     // second wall block
-	drawNextWallInTheSameRow();
-    drawWallAtScreenPosition(g_wallSize, g_wallSize);
+    updateTranslationFactor();
+    drawWallAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
+    
+    // third wall block
+    updateTranslationFactor();
+    drawPathAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
+    
+    // 4th wall block
+    updateTranslationFactor();
+    drawWallAtScreenPosition(g_wallSize * g_translationFactor, g_wallSize * g_translationFactor);
     
 	glutSwapBuffers();
 }
@@ -196,23 +210,46 @@ void drawScene()
  */
 void drawWallAtScreenPosition(float x, float y)
 {
+    glLoadIdentity();
+    glTranslatef(x, y, g_zDistance);
+    
+    glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_QUADS);
-        glVertex3f(-x, -y, 0.0f);
-        glVertex3f(x, -y, 0.0f);
-        glVertex3f(x, y, 0.0f);
-        glVertex3f(-x, y, 0.0f);
+        glVertex3f(-g_wallSize, -g_wallSize, 0.0f);
+        glVertex3f(g_wallSize, -g_wallSize, 0.0f);
+        glVertex3f(g_wallSize, g_wallSize, 0.0f);
+        glVertex3f(-g_wallSize, g_wallSize, 0.0f);
     glEnd();
 }
 
 
 /**
- * auxiliary function that positions the wall immediatly to the right, in the
- * same row
+ * draws a path square at the given screen position
  */
-void drawNextWallInTheSameRow()
+void drawPathAtScreenPosition(float x, float y)
 {
     glLoadIdentity();
-    glTranslatef(g_wallSize, 0.0f, g_zDistance);
+    glTranslatef(x, y, g_zDistance);
+    
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glBegin(GL_QUADS);
+        glVertex3f(-g_wallSize, -g_wallSize, 0.0f);
+        glVertex3f(g_wallSize, -g_wallSize, 0.0f);
+        glVertex3f(g_wallSize, g_wallSize, 0.0f);
+        glVertex3f(-g_wallSize, g_wallSize, 0.0f);
+    glEnd();
+}
+
+
+void resetTranslationFactor()
+{
+    g_translationFactor = 1;
+}
+
+
+void updateTranslationFactor()
+{
+    g_translationFactor += 2;
 }
 
 
