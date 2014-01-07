@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Web.Helpers;
 
 namespace DatabaseWs
 {
@@ -12,6 +14,7 @@ namespace DatabaseWs
     // NOTE: In order to launch WCF Test Client for testing this service, please select Database.svc or Database.svc.cs at the Solution Explorer and start debugging.
     public class Database : IDatabase
     {
+
         public string DoWork()
         {
             return "Test";
@@ -27,16 +30,16 @@ namespace DatabaseWs
                 {
                     if (item.UserName == user)
                     {
-                        ret = new User() 
+                        ret = new User()
                         {
-                            Day = item.BirthDate.Value.Day, 
-                            Month = item.BirthDate.Value.Month, 
+                            Day = item.BirthDate.Value.Day,
+                            Month = item.BirthDate.Value.Month,
                             Year = item.BirthDate.Value.Year,
                             Username = item.UserName,
                             City = item.City,
                             Country = item.Country,
                             Email = item.Email,
-                            Number = item.Number                        
+                            Number = item.Number
                         };
                     }
                 }
@@ -44,6 +47,41 @@ namespace DatabaseWs
 
 
             return ret;
+        }
+
+        public Message Authenticate(string username, string pass)
+        {
+            Message ret = null;
+            bool isAuthenticated = false;
+
+            using (var db = new UserContext())
+            {
+                foreach (AspNetUsers item in db.AspNetUsers)
+                {
+                    if (item.UserName == username)
+                    {
+                        isAuthenticated = ValidateCredentials(pass, item.PasswordHash);
+                    }
+                }
+            }
+
+            if (isAuthenticated)
+            {
+                ret = new Message() { Status = "ok", Msg = "User Authenticated" };
+            }
+            else
+            {
+                ret = new Message() { Status = "fail", Msg = "Password Fail" };
+            }
+
+            return ret;
+        }
+
+
+        public bool ValidateCredentials(string password, string hashedPassword)
+        {
+            var doesPasswordMatch = Crypto.VerifyHashedPassword(hashedPassword, password);
+            return doesPasswordMatch;
         }
     }
 
@@ -57,6 +95,12 @@ namespace DatabaseWs
         public string Email { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+    }
+
+    public class Message
+    {
+        public string Status { get; set; }
+        public string Msg { get; set; }
     }
 
 }
