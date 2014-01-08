@@ -17,7 +17,7 @@ using namespace std;
 /*struct with game usefull data*/
 typedef struct
 {
-	char wrongChar[8];
+	char wrongChar[9];
 	char writeChar[25];
 	bool endGame;
 	bool userWin;
@@ -46,13 +46,13 @@ void drawChar(int x, int y, char c);
 void initGameData();
 void drawErrorChar();
 void drawWord(string word);
-
+void drawHangman();
 
 /*function to init game data*/
 
 void initGameData()
 {
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		game.wrongChar[i] = NULL;
 	}
@@ -92,7 +92,7 @@ void myInit()
 }
 
 /*function to draw circles with center (x,y) and radius (radius)*/
-void drawCircle(float centerX, float centerY, float radius, int num,GLfloat lineWidth)
+void drawCircle(float centerX, float centerY, float radius, int num, GLfloat lineWidth)
 {
 	glLineWidth(lineWidth);
 	glBegin(GL_LINE_LOOP);
@@ -109,7 +109,7 @@ void drawCircle(float centerX, float centerY, float radius, int num,GLfloat line
 	glEnd();
 }
 /*function to draw line starting on some point and finishing on other point*/
-void drawLine(GLfloat x1,GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
+void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
 {
 	glLineWidth(lineWidth);
 	glBegin(GL_LINES);
@@ -149,7 +149,7 @@ void drawErrorChar()
 				drawChar(100 + (50 * i), 100, game.wrongChar[i]);
 		}
 		else
-		for (int j = 0; j < 4;j++){
+		for (int j = 0; j < 5; j++){
 			drawChar(100 + (50 * j), 130, game.wrongChar[i]);
 		}
 	}
@@ -161,23 +161,87 @@ void drawWord(string word)
 	int wordSize = word.length();
 	for (int i = 0; i < wordSize; i++)
 	{
-		drawLine(20+(i*60), 550, 60+(i*60), 550, 3.0);
+		drawLine(20 + (i * 60), 550, 60 + (i * 60), 550, 3.0);
 	}
+}
+/*function to draw hangman parts*/
+void drawHangman()
+{
+	if (game.numErrors == 1)
+	{
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+	}
+	else
+	if (game.numErrors == 2){
+
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+	}
+	else
+	if (game.numErrors == 3){
+
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
+	}
+	else
+	if (game.numErrors == 4){
+		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
+	}
+	else
+	if (game.numErrors == 5){
+		drawLine(WindowWidth - 200, 210, WindowWidth - 200, 280, 4.0);
+	}
+	else
+	if (game.numErrors == 6)
+	{
+
+		drawLine(WindowWidth - 200, 230, WindowWidth - 235, 260, 4.0);
+	}
+	else
+	if (game.numErrors == 7){
+		drawLine(WindowWidth - 200, 230, WindowWidth - 165, 260, 4.0);
+	}
+	else
+	if (game.numErrors == 8){
+		drawLine(WindowWidth - 200, 280, WindowWidth - 235, 320, 4.0);
+	}
+	else
+	if (game.numErrors == 9)
+	{
+		drawLine(WindowWidth - 200, 280, WindowWidth - 165, 320, 4.0);
+	}
+
 }
 /*function to draw the main scene*/
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
 	//drawLine(400, 500, 450, 400,6.0);
-	for (int i = 0; i<8; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		game.wrongChar[i] = 'A';
 	}
 	drawErrorChar();
 	drawWord("arroz");
+	//drawHangman();
 }
 
+/*callback special key of keyobard*/
+void keyBoard(int key, int x, int y)
+{
+	switch (key) {
+	case GLUT_KEY_F1:
+		glutPostRedisplay();
+		initGameData();
+		break;
+	case GLUT_KEY_F10:
+		game.numErrors++;
+		drawHangman();
+		glFlush();
+		break;
+	}
 
+}
 
 int main(int argc, char**argv)
 {
@@ -187,9 +251,11 @@ int main(int argc, char**argv)
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("HANGMAN");
 	glutDisplayFunc(display);
+	glutSpecialFunc(keyBoard);
 	myInit();
+	
 	glutMainLoop();
-	return 0; 
+	return 0;
 }
 
 
