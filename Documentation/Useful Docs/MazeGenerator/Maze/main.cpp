@@ -50,7 +50,6 @@ float g_translationFactorOnVerticalAxis;
 // textures
 GLuint g_textureId;
 GLuint g_pathTexture;
-bool useTexture = false;
 
 // scale for drawing text
 float g_scale;
@@ -187,18 +186,6 @@ void initRendering()
     
 	// enabling smooth shading
 	glShadeModel(GL_SMOOTH);
-    
-    // loading the image as texture
-    if(useTexture == true)
-    {
-        Image* image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/wall.bmp");
-        g_textureId = loadTexture(image);
-        delete image;
-        
-        image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/path.bmp");
-        g_pathTexture = loadTexture(image);
-        delete image;
-    }
     
     t3dInit();
 }
