@@ -104,9 +104,11 @@ void resetVerticalTranlationFactor();
 void updateVerticalTranslationFactor();
 void setPositionToLeftScreen();
 void drawPlayerAtPosition(int x, int y);
-void setPlayerAndTargetPositions();
+void setPlayerPosition(int x, int y);
+void setTargetPosition(int x, int y);
 void drawPlayerAtScreenPosition(float x, float y);
 void drawTargetAtScreenPosition(float x, float y);
+bool isPossibleToMovePlayerToPosition(int x, int y);
 
 
 /**
@@ -131,7 +133,8 @@ int main(int argc, char *argv[])
     mazeSizeVertical = 20;
     
     // defining player's and target's positions
-    setPlayerAndTargetPositions();
+    setPlayerPosition(0, 0);
+    setTargetPosition(1, 1);
     
 	// setting handler functions
 	glutDisplayFunc(drawScene);
@@ -159,7 +162,47 @@ void handleKeypress(unsigned char key, int x, int y)
         // ESC key
 		case 27:
 			exit(0);
-	}
+            break;
+        
+        // UP
+        case 'a':
+            if(isPossibleToMovePlayerToPosition(player.x - 1, player.y))
+            {
+                setPlayerPosition(player.x - 1, player.y);
+                drawScene();
+            }
+            cout << key << endl;
+            break;
+            
+        // DOWN
+        case 'z':
+            if(isPossibleToMovePlayerToPosition(player.x + 1, player.y))
+            {
+                setPlayerPosition(player.x + 1, player.y);
+                drawScene();
+            }
+            cout << key << endl;
+            break;
+            
+        // LEFT
+        case 'q':
+            if(isPossibleToMovePlayerToPosition(player.x, player.y - 1))
+            {
+                setPlayerPosition(player.x, player.y - 1);
+                drawScene();
+            }
+            cout << key << endl;
+            break;
+            
+        // RIGHT
+        case 'w':
+            if(isPossibleToMovePlayerToPosition(player.x, player.y + 1))
+            {
+                setPlayerPosition(player.x, player.y + 1);
+                drawScene();
+            }
+            cout << key << endl;
+        break;    }
 }
 
 
@@ -246,14 +289,13 @@ void drawMaze()
             // checking if the player is in this position
             if(player.x == i && player.y == j)
             {
-                cout << "player" << endl;
+                cout << "Player: " << player.x << " -- " << player.y << endl;
                 drawPlayerAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
             }
             
             // checking if the target is in this position
             if(target.x == i && target.y == j)
             {
-                cout << "target" << endl;
                 drawTargetAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
             }
             
@@ -275,15 +317,25 @@ void drawMaze()
 }
 
 
-void setPlayerAndTargetPositions()
+void setPlayerPosition(int x, int y)
 {
     // player's position
-    player.x = 2;
-    player.y = 2;
-    
+    player.x = x;
+    player.y = y;
+}
+
+
+void setTargetPosition(int x, int y)
+{
     // target's position
-    target.x = 4;
-    target.y = 4;
+    target.x = x;
+    target.y = y;
+}
+
+
+bool isPossibleToMovePlayerToPosition(int x, int y)
+{
+    return true;
 }
 
 
