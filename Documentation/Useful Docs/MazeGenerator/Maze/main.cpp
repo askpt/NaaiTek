@@ -109,6 +109,10 @@ void setTargetPosition(int x, int y);
 void drawPlayerAtScreenPosition(float x, float y);
 void drawTargetAtScreenPosition(float x, float y);
 bool isPossibleToMovePlayerToPosition(int x, int y);
+int getFirstPossibleX();
+int getFirstPossibleY();
+int getLastPossibleX();
+int getLastPossibleY();
 
 
 /**
@@ -133,8 +137,8 @@ int main(int argc, char *argv[])
     mazeSizeVertical = 20;
     
     // defining player's and target's positions
-    setPlayerPosition(0, 0);
-    setTargetPosition(1, 1);
+    setPlayerPosition(getFirstPossibleX(), getFirstPossibleY());
+    setTargetPosition(getLastPossibleX(), getLastPossibleY());
     
 	// setting handler functions
 	glutDisplayFunc(drawScene);
@@ -335,7 +339,85 @@ void setTargetPosition(int x, int y)
 
 bool isPossibleToMovePlayerToPosition(int x, int y)
 {
+    // player can't move if there's a wall
+    if(maze[x][y] == 0)
+    {
+        return false;
+    }
+    
+    // player can't move if it's maze's limits
+    /*
+    if(x < 1 || y < 1)
+    {
+        return false;
+    }
+     */
+    
     return true;
+}
+
+
+int getFirstPossibleX()
+{
+    for(int i = 0; i < mazeSizeHorizontal; i++)
+    {
+        for(int j = 0; j < mazeSizeVertical; j++)
+        {
+            if(maze[i][j] == 1)
+            {
+                return i;
+            }
+        }
+    }
+    exit(0);
+}
+
+
+int getFirstPossibleY()
+{
+    for(int i = 0; i < mazeSizeHorizontal - 1; i++)
+    {
+        for(int j = 0; j < mazeSizeVertical - 1; j++)
+        {
+            if(maze[i][j] == 1)
+            {
+                return j;
+            }
+        }
+    }
+    exit(0);
+}
+
+
+int getLastPossibleX()
+{
+    for(int i = mazeSizeHorizontal - 1; i > 0; i--)
+    {
+        for(int j = mazeSizeVertical - 1; j > 0; j--)
+        {
+            if(maze[i][j] == 1)
+            {
+                return i;
+            }
+        }
+    }
+    exit(0);
+}
+
+
+int getLastPossibleY()
+{
+    for(int i = mazeSizeHorizontal - 1; i > 0; i--)
+    {
+        for(int j = mazeSizeVertical - 1; j > 0; j--)
+        {
+            if(maze[i][j] == 1)
+            {
+                return j;
+            }
+        }
+    }
+    exit(0);
 }
 
 
