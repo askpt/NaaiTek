@@ -12,7 +12,7 @@ namespace WebSocial.Helpers
 {
     public class Services
     {
-        private const string _baseUrl = "http://localhost:5000";
+        private const string _baseUrl = "http://uvm061.dei.isep.ipp.pt:5000";
 
         public static async Task<UserDimension> GetAllUsers()
         {
