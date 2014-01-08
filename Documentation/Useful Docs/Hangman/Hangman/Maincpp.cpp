@@ -26,6 +26,9 @@ void display();
 void resizeWindow(int x, int y);
 void mouse(int btn, int mouseState, int x, int y);
 void keyboard(int key, int x, int y);
+void drawCircle(float centerX, float centerY, float radius, int num, GLfloat lineWidth);
+void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth);
+void drawChar(int x, int y, char c);
 
 
 /*function when the window is resixed*/
@@ -55,10 +58,9 @@ void myInit()
 }
 
 /*function to draw circles with center (x,y) and radius (radius)*/
-
-void drawCircle(float centerX, float centerY, float radius, int num)
+void drawCircle(float centerX, float centerY, float radius, int num,GLfloat lineWidth)
 {
-	glLineWidth(4.0);
+	glLineWidth(lineWidth);
 	glBegin(GL_LINE_LOOP);
 
 	for (int i = 0; i < num; i++)
@@ -73,10 +75,9 @@ void drawCircle(float centerX, float centerY, float radius, int num)
 	glEnd();
 }
 /*function to draw line starting on some point and finishing on other point*/
-
-void drawLine(GLfloat x1,GLfloat y1, GLfloat x2, GLfloat y2)
+void drawLine(GLfloat x1,GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
 {
-	glLineWidth(4.0);
+	glLineWidth(lineWidth);
 	glBegin(GL_LINES);
 
 	glVertex2f(x1, y1);
@@ -84,13 +85,20 @@ void drawLine(GLfloat x1,GLfloat y1, GLfloat x2, GLfloat y2)
 	glEnd();
 }
 
-/*function to draw the main scene*/
+/*function to draw a character c into a specific position (x,y)*/
+void drawChar(int x, int y, char c)
+{
+	glRasterPos2d(x, y);
+	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+}
 
+/*function to draw the main scene*/
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-	drawCircle(200, 200, 100, 500);
-	drawLine(400, 500, 450, 400);
+	drawCircle(200, 200, 100, 1000,6.0);
+	drawLine(400, 500, 450, 400,6.0);
+	drawChar(100, 100,'B');
 }
 
 int main(int argc, char**argv)
