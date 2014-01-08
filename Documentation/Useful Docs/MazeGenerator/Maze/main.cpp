@@ -50,6 +50,7 @@ float g_translationFactorOnVerticalAxis;
 // textures
 GLuint g_textureId;
 GLuint g_pathTexture;
+bool useTexture = false;
 
 // scale for drawing text
 float g_scale;
@@ -102,6 +103,7 @@ void cleanUp();
 vector<vector<int>> mazeBuilder();
 void drawWallAtScreenPosition(float x, float y);
 void drawPathAtScreenPosition(float x, float y);
+void drawSquareAtScreenPositionWithColor(float x, float y, float color[]);
 void resetHorizontalTranslationFactor();
 void updateHorizontalTranslationFactor();
 void resetVerticalTranlationFactor();
@@ -187,13 +189,16 @@ void initRendering()
 	glShadeModel(GL_SMOOTH);
     
     // loading the image as texture
-    Image* image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/wall.bmp");
-	g_textureId = loadTexture(image);
-	delete image;
-    
-    image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/path.bmp");
-    g_pathTexture = loadTexture(image);
-    delete image;
+    if(useTexture == true)
+    {
+        Image* image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/wall.bmp");
+        g_textureId = loadTexture(image);
+        delete image;
+        
+        image = loadBMP("/Users/joaocarreira/Desktop/Maze/Maze/path.bmp");
+        g_pathTexture = loadTexture(image);
+        delete image;
+    }
     
     t3dInit();
 }
@@ -269,10 +274,12 @@ void drawMaze()
 
 void drawPlayerAtPosition(int x, int y)
 {
+    /*
     glLoadIdentity();
     glTranslatef(0.0f, 0.0f, -1.0f);
     glColor3f( 0.0f, 1.0f, 0.0f );
     drawTriangle(float2(0.0f, 0.02f), float2(-0.02f, -0.02f), float2(0.02f, -0.02f ));
+     */
 }
 
 
@@ -320,26 +327,9 @@ void drawMazeBootStrap()
  */
 void drawWallAtScreenPosition(float x, float y)
 {
-    glLoadIdentity();
-    glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
-    
-    glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, g_textureId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_QUADS);
-        //glNormal3f(0.0, 1.0f, 0.0f);
-        glVertex3f(-g_wallSize, -g_wallSize, 0.0f);
-        glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(g_wallSize, -g_wallSize, 0.0f);
-        glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(g_wallSize, g_wallSize, 0.0f);
-        glTexCoord2f(1.0f, 1.0f);
-        glVertex3f(-g_wallSize, g_wallSize, 0.0f);
-        glTexCoord2f(0.0f, 1.0f);
-    glEnd();
+    // red color
+    float color[] = {1.0f, 0.0f, 0.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
 }
 
 
@@ -348,23 +338,22 @@ void drawWallAtScreenPosition(float x, float y)
  */
 void drawPathAtScreenPosition(float x, float y)
 {
+    // white color
+    float color[] = {1.0f, 1.0f, 1.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
+}
+
+
+void drawSquareAtScreenPositionWithColor(float x, float y, float color[])
+{
     glLoadIdentity();
     glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
     
-    glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, g_pathTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glColor3f(1.0f, 1.50f, 0.0f);
+    glColor3f(color[0], color[1], color[2]);
     glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f);
         glVertex3f(-g_wallSize, -g_wallSize, 0.0f);
-        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(g_wallSize, -g_wallSize, 0.0f);
-        glTexCoord2f(1.0f, 1.0f);
         glVertex3f(g_wallSize, g_wallSize, 0.0f);
-        glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-g_wallSize, g_wallSize, 0.0f);
     glEnd();
 }
