@@ -14,7 +14,7 @@ Connection connections[_MAX_PATHS_GRAPH];
 
 using namespace std;
 
-//Nodes
+//Node
 
 void addNode(Node node){
 	if (numNodes<_MAX_NODES_GRAPH){
@@ -161,14 +161,19 @@ void readGraphUser(std::string user)
 		{
 			if (iterDim->second[L"user"] == iter->second)
 			{
-				wcout << iter->first;
-				wcout << iter->second;
-				wcout << iterDim->second[L"dimension"]<< endl;
+				wcout << iter->first; //Pos
+				wcout << iter->second; // Nome
+				wcout << iterDim->second[L"dimension"]<< endl; //dimensao
 			}  
 		}
+	}
 
-
-		
+	for (auto iter = graph[L"paths"].begin(); iter != graph[L"paths"].end(); ++iter)
+	{
+		wcout << iter->second[L"user1"];
+		wcout << iter->second[L"user2"];
+		wcout << iter->second[L"connection"];
+		wcout << iter->second[L"tags"] << endl;
 	}
 
 	numPaths = graph[L"paths"].size();

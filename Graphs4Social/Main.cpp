@@ -57,7 +57,7 @@ typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
 typedef struct Keys_t{
-	GLboolean   up, down, left, right, q, a;
+	GLboolean   w, a, s, d, up, down;
 }Keys_t;
 
 typedef struct Camera{
@@ -89,6 +89,9 @@ typedef struct Model {
 
 	GLfloat scale;
 	GLUquadric *quad;
+
+	// insert username here after login
+	string regUser;
 }Model;
 
 State state;
@@ -96,7 +99,7 @@ Model model;
 
 /* initial values of the state*/
 void initState(){
-	state.camera.dir_lat = M_PI / 4;
+	state.camera.dir_lat = 0.0;
 	state.camera.dir_long = -M_PI / 4;
 	state.camera.fov = 60;
 	state.camera.dist = 5;
@@ -127,6 +130,8 @@ void initModel(){
 	model.g_pos_light2[1] = -15.0;
 	model.g_pos_light2[2] = 5.0;
 	model.g_pos_light2[3] = 0.0;
+
+	model.regUser = "Andre";
 }
 
 /* Call both initiators, and enable necessary methods. */
@@ -152,7 +157,7 @@ void myInit()
 	initState();
 
 	readGraph();
-	//readGraphUser("Andre");
+	//readGraphUser(model.regUser);
 }
 
 /* Print the Help Menu to help us debugging mainly */
@@ -170,8 +175,8 @@ void printHelp(void)
 	char* stateLight;
 	(state.light) ? stateLight = "CAMERA" : stateLight = "GLOBAL";
 	printf("k,K - Alternate camera light with global light.\nCurrent: %s \n", stateLight);
-	printf("s,S - PolygonMode Fill \n");
-	printf("w,W - PolygonMode Wireframe \n");
+	printf("e,E - PolygonMode Fill \n");
+	printf("q,Q - PolygonMode Wireframe \n");
 	printf("p,P - PolygonMode Point \n");
 	printf("c,C - On/Off Cull Face \n");
 	printf("n,N - On/Off normal presentation \n");
@@ -361,30 +366,31 @@ void Timer(int value)
 
 	glutTimerFunc(state.timer, Timer, 0);
 
-	double vel = 10, k = 0.25;
+	double vel = 10, k = 0.1;
 
 	GLdouble xp = state.camera.center[0];
 	GLdouble yp = state.camera.center[1];
 	GLdouble zp = state.camera.center[2];
-	// get the y pos
-	if (state.keys.up)
+
+	if (state.keys.w)
 	{
-		state.camera.dir_lat = -state.camera.dir_long;
-		xp = state.camera.center[0] + k * vel * cos(state.camera.dir_lat);
-		yp = state.camera.center[1] - k * vel * sin(state.camera.dir_lat);
+		xp = state.camera.center[0] + k * state.camera.velh * cos(state.camera.dir_long);
+		yp = state.camera.center[1] + k * state.camera.velh * sin(state.camera.dir_long);
+		zp = state.camera.center[2] + k * state.camera.velv * state.camera.dir_lat;
+
 	}
-	else if (state.keys.down)
+	else if (state.keys.s)
 	{
-		state.camera.dir_lat = -state.camera.dir_long;
-		xp = state.camera.center[0] - k * vel * cos(state.camera.dir_lat);
-		yp = state.camera.center[1] + k * vel * sin(state.camera.dir_lat);
+		xp = state.camera.center[0] - k * state.camera.velh * cos(state.camera.dir_long);
+		yp = state.camera.center[1] - k * state.camera.velh * sin(state.camera.dir_long);
+		zp = state.camera.center[2] - k * state.camera.velv * state.camera.dir_lat;
 	}
 
-	if (state.keys.a)
+	if (state.keys.down)
 	{
 		zp = state.camera.center[2] - k * vel / 4.0;
 	}
-	else if (state.keys.q)
+	else if (state.keys.up)
 	{
 		zp = state.camera.center[2] + k * vel / 4.0;
 	}
@@ -400,11 +406,11 @@ void Timer(int value)
 		state.camera.center[2] = state.camera.center[2] + 1;
 	}
 
-	if (state.keys.left)
+	if (state.keys.a)
 	{
 		state.camera.dir_long += rad(5);
 	}
-	if (state.keys.right)
+	if (state.keys.d)
 	{
 		state.camera.dir_long -= rad(5);
 
@@ -413,29 +419,17 @@ void Timer(int value)
 }
 
 /* Sets the light either to camera or eye*/
-void setLight(){
-	Vertex eye;
-
-	eye[0] = state.camera.center[0] + state.camera.dist*cos(state.camera.dir_long)*cos(state.camera.dir_lat);
-	eye[1] = state.camera.center[1] + state.camera.dist*sin(state.camera.dir_long)*cos(state.camera.dir_lat);
-	eye[2] = state.camera.center[2] + state.camera.dist*sin(state.camera.dir_lat);
-
-	if (state.light){
-		gluLookAt(eye[0], eye[1], eye[2], state.camera.center[0], state.camera.center[1], state.camera.center[2], 0, 0, 1);
-		putLights((GLfloat*)white_light);
-	}
-	else{
-		putLights((GLfloat*)white_light);
-		gluLookAt(eye[0], eye[1], eye[2], state.camera.center[0], state.camera.center[1], state.camera.center[2], 0, 0, 1);
-	}
-}
-
 /* Sets the camera positioning */
 void setCamera(){
+	if (!state.light)
+		putLights((GLfloat*)white_light);
 	glLoadIdentity();
-	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
+	glTranslated(0.0, 0.0, -state.camera.dist);
+	glRotated(degrees(-M_PI / 2.0 - state.camera.dir_lat), 1.0, 0.0, 0.0);
 	glRotated(degrees(M_PI / 2.0 - state.camera.dir_long), 0.0, 0.0, 1.0);
 	glTranslated(-state.camera.center[0], -state.camera.center[1], -state.camera.center[2]);
+	if (state.light)
+		putLights((GLfloat*)white_light);
 }
 
 /* Ran in a loop to update the screen picture */
@@ -444,7 +438,6 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	setLight();
 	setCamera();
 
 	drawGraph();
@@ -480,8 +473,8 @@ void keyboard(unsigned char key, int x, int y)
 		state.light = !state.light;
 		glutPostRedisplay();
 		break;
-	case 'w':
-	case 'W':
+	case 'q':
+	case 'Q':
 		glDisable(GL_LIGHTING);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glutPostRedisplay();
@@ -492,8 +485,8 @@ void keyboard(unsigned char key, int x, int y)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 		glutPostRedisplay();
 		break;
-	case 's':
-	case 'S':
+	case 'e':
+	case 'E':
 		glEnable(GL_LIGHTING);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glutPostRedisplay();
@@ -517,15 +510,22 @@ void keyboard(unsigned char key, int x, int y)
 		initModel();
 		glutPostRedisplay();
 		break;
-	case 'q':
-	case'Q':
-		state.keys.q = GL_TRUE;
+	case 'w':
+	case 'W':
+		state.keys.w = GL_TRUE;
 		break;
 	case 'a':
 	case 'A':
 		state.keys.a = GL_TRUE;
 		break;
-
+	case 's':
+	case 'S':
+		state.keys.s = GL_TRUE;
+		break;
+	case 'd':
+	case 'D':
+		state.keys.d = GL_TRUE;
+		break;
 	}
 }
 
@@ -535,15 +535,22 @@ void keyboardUp(unsigned char key, int x, int y)
 
 	switch (key)
 	{
-	case 'q':
-	case'Q':
-		state.keys.q = GL_FALSE;
+	case 'w':
+	case 'W':
+		state.keys.w = GL_FALSE;
 		break;
 	case 'a':
 	case 'A':
 		state.keys.a = GL_FALSE;
 		break;
-
+	case 's':
+	case 'S':
+		state.keys.s = GL_FALSE;
+		break;
+	case 'd':
+	case 'D':
+		state.keys.d = GL_FALSE;
+		break;
 	}
 }
 
@@ -557,12 +564,6 @@ void SpecialUp(int key, int x, int y)
 		break;
 	case GLUT_KEY_DOWN:
 		state.keys.down = GL_FALSE;
-		break;
-	case GLUT_KEY_LEFT:
-		state.keys.left = GL_FALSE;
-		break;
-	case GLUT_KEY_RIGHT:
-		state.keys.right = GL_FALSE;
 		break;
 	}
 
@@ -584,12 +585,6 @@ void Special(int key, int x, int y){
 		break;
 	case GLUT_KEY_DOWN:
 		state.keys.down = GL_TRUE;
-		break;
-	case GLUT_KEY_LEFT:
-		state.keys.left = GL_TRUE;
-		break;
-	case GLUT_KEY_RIGHT:
-		state.keys.right = GL_TRUE;
 		break;
 	}
 }
@@ -618,9 +613,9 @@ void myReshape(int w, int h){
 /* Used to rotate the camera */
 void motionRotate(int x, int y){
 #define DRAG_SCALE	0.01
-	double lim = M_PI / 2 - 0.1;
+	double lim = M_PI / 4 - 0.1;
 	state.camera.dir_long += (state.xMouse - x)*DRAG_SCALE;
-	state.camera.dir_lat -= (state.yMouse - y)*DRAG_SCALE*0.5;
+	state.camera.dir_lat += (state.yMouse - y)*DRAG_SCALE*0.5;
 	if (state.camera.dir_lat > lim)
 		state.camera.dir_lat = lim;
 	else
@@ -636,11 +631,11 @@ void motionRotate(int x, int y){
 void motionZoom(int x, int y){
 #define ZOOM_SCALE	0.5
 	state.camera.dist -= (state.yMouse - y)*ZOOM_SCALE;
-	if (state.camera.dist<5)
-		state.camera.dist = 5;
-	else
-	if (state.camera.dist>200)
-		state.camera.dist = 200;
+	//if (state.camera.dist<5)
+	//	state.camera.dist = 5;
+	//else
+	//if (state.camera.dist>200)
+	//	state.camera.dist = 200;
 	state.yMouse = y;
 	glutPostRedisplay();
 }
@@ -663,6 +658,8 @@ int picking(int x, int y){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	setCamera();
+
+	drawGraph();
 
 	n = glRenderMode(GL_RENDER);
 	if (n > 0)
