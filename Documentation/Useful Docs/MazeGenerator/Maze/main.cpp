@@ -75,10 +75,7 @@ struct position
 {
     int x;
     int y;
-};
-
-position player;
-position target;
+}player, target;
 
 
 //************************************************************************
@@ -169,7 +166,7 @@ void handleKeypress(unsigned char key, int x, int y)
             break;
         
         // UP
-        case 'a':
+        case 'p':
             if(isPossibleToMovePlayerToPosition(player.x - 1, player.y))
             {
                 setPlayerPosition(player.x - 1, player.y);
@@ -179,7 +176,7 @@ void handleKeypress(unsigned char key, int x, int y)
             break;
             
         // DOWN
-        case 'z':
+        case 'l':
             if(isPossibleToMovePlayerToPosition(player.x + 1, player.y))
             {
                 setPlayerPosition(player.x + 1, player.y);
@@ -189,7 +186,7 @@ void handleKeypress(unsigned char key, int x, int y)
             break;
             
         // LEFT
-        case 'q':
+        case 'z':
             if(isPossibleToMovePlayerToPosition(player.x, player.y - 1))
             {
                 setPlayerPosition(player.x, player.y - 1);
@@ -199,14 +196,15 @@ void handleKeypress(unsigned char key, int x, int y)
             break;
             
         // RIGHT
-        case 'w':
+        case 'x':
             if(isPossibleToMovePlayerToPosition(player.x, player.y + 1))
             {
                 setPlayerPosition(player.x, player.y + 1);
                 drawScene();
             }
             cout << key << endl;
-        break;    }
+        break;
+    }
 }
 
 
@@ -293,7 +291,7 @@ void drawMaze()
             // checking if the player is in this position
             if(player.x == i && player.y == j)
             {
-                cout << "Player: " << player.x << " -- " << player.y << endl;
+                //cout << "Player: " << player.x << " -- " << player.y << endl;
                 drawPlayerAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
             }
             
@@ -419,24 +417,6 @@ int getLastPossibleY()
     }
     exit(0);
 }
-
-
-/*
-void drawPlayerAtPosition(int x, int y)
-{
-    // green
-    float color[] = {0.0f, 1.0f, 0.0f};
-    drawSquareAtScreenPositionWithColor(x, y, color);
-}
-
-
-void drawTargetAtPosition(int x, int y)
-{
-    // blue
-    float color[] = {0.0f, 0.0f, 1.0f};
-    drawSquareAtScreenPositionWithColor(x, y, color);
-}
-*/
 
 
 void drawMazeBootStrap()
