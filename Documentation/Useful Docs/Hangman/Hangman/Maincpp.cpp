@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+#include <SWI-cpp.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string>
@@ -22,6 +23,7 @@ typedef struct
 	bool endGame;
 	bool userWin;
 	int numErrors;
+	string categories[20];
 }Game;
 
 /*global variables*/
@@ -63,6 +65,10 @@ void initGameData()
 	game.endGame = false;
 	game.userWin = false;
 	game.numErrors = 0;
+	for (int i = 0; i < 20; i++)
+	{
+		game.categories[i]="";
+	}
 }
 
 /*function when the window is resixed*/
@@ -146,10 +152,12 @@ void drawErrorChar()
 				drawChar(100, 100, game.wrongChar[i]);
 			}
 			else
+			if (i<8)
 				drawChar(100 + (50 * i), 100, game.wrongChar[i]);
 		}
 		else
 		for (int j = 0; j < 5; j++){
+			if (j<4)
 			drawChar(100 + (50 * j), 130, game.wrongChar[i]);
 		}
 	}
@@ -210,20 +218,15 @@ void drawHangman()
 	{
 		drawLine(WindowWidth - 200, 280, WindowWidth - 165, 320, 4.0);
 	}
+	glFlush();
 
 }
 /*function to draw the main scene*/
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-	//drawLine(400, 500, 450, 400,6.0);
-	for (int i = 0; i < 8; i++)
-	{
-		game.wrongChar[i] = 'A';
-	}
-	drawErrorChar();
-	drawWord("arroz");
-	//drawHangman();
+	drawHangman();
+
 }
 
 /*callback special key of keyobard*/
@@ -237,14 +240,71 @@ void keyBoard(int key, int x, int y)
 	case GLUT_KEY_F10:
 		game.numErrors++;
 		drawHangman();
-		glFlush();
 		break;
 	}
 
 }
 
+void IAGetCategories()
+{
+	int i = 0;
+	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
+	PlEngine e(3, plargv);
+	PlTermv av(1);
+	PlQuery q("category", av);
+	try{
+		while (q.next_solution()){
+			game.categories[i] = (string)av[0];
+			i++;
+		}
+	}
+	catch (PlException &ex){
+		cout << (char *)ex << endl;
+	}
+	cin.get();
+}
+void IAGetPhrases(char *category)
+{
+	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
+	PlEngine e(3, plargv);
+	PlTermv av(2);
+	av[0] = PlTerm(category);
+	PlQuery q("getPhrase", av);
+	try{
+		while (q.next_solution()){
+			cout << (string)av[1] << endl;
+		}
+	}
+	catch (PlException &ex){
+		cout << (char *)ex << endl;
+	}
+	cin.get();
+}
+void IACheckIfBelongs(char *c, char *word)
+{
+	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
+	PlEngine e(3, plargv);
+	PlTermv av(3);
+	char *a= {"a"};
+	char *b = { "arroz" };
+	av[0] = PlTerm(a);
+	av[1] = PlTerm(b);
+
+	PlQuery q("getPhrase", av);
+	try{
+		while (q.next_solution()){
+			cout << (string)av[2] << endl;
+		}
+	}
+	catch (PlException &ex){
+		cout << (char *)ex << endl;
+	}
+	cin.get();
+}
+
 int main(int argc, char**argv)
 {
+	IACheckIfBelongs("a", "arroz");
 	initGameData();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -253,8 +313,7 @@ int main(int argc, char**argv)
 	glutDisplayFunc(display);
 	glutSpecialFunc(keyBoard);
 	myInit();
-	
-	glutMainLoop();
+	glutMainLoop();	
 	return 0;
 }
 
