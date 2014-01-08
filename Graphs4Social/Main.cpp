@@ -150,7 +150,7 @@ void myInit()
 	initState();
 
 	readGraph();
-	//readGraphUser(model.regUser);
+	readGraphUser(model.regUser);
 }
 
 /* Print the Help Menu to help us debugging mainly */
@@ -278,8 +278,8 @@ void drawGraph(){
 	material(red_plastic);
 	for (int i = 0; i < numPaths; i++){
 		glPushName(pathID);
-		Node* noi = &nodes[paths[i].nodei];
-		Node* nof = &nodes[paths[i].nodef];
+		Node* noi = &nodes[paths[i].connection.nodei];
+		Node* nof = &nodes[paths[i].connection.nodef];
 		drawPath(*noi, *nof, paths[i]);
 		drawPath(*nof, *noi, paths[i]);
 		glPopName();

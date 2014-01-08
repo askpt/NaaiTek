@@ -76,18 +76,17 @@ void deletePath(int indPath){
 }
 
 void printPath(Path path){
-	cout << "Start node:" << path.nodei << "End node:" << path.nodef << "Weight:" << path.weight << "Width:" << path.width << endl;
+	cout << "Start node:" << path.connection.nodei << "End node:" << path.connection.nodef 
+		<< "Strength:" << path.connection.strength << "Width:" << path.width << endl;
 }
 
 void listPaths(){
 	for (int i = 0; i<numPaths; printPath(paths[i++]));
 }
 
-Path createPath(int nodei, int nodef, float weight, float width){
+Path createPath(float width, Connection connection){
 	Path path;
-	path.nodei = nodei;
-	path.nodef = nodef;
-	path.weight = weight;
+	path.connection = connection;
 	path.width = width;
 	return path;
 }
@@ -107,7 +106,7 @@ void saveGraph(){
 		myfile << nodes[i].x << " " << nodes[i].y << " " << nodes[i].z << endl;
 	myfile << numPaths << endl;
 	for (int i = 0; i<numPaths; i++)
-		myfile << paths[i].nodei << " " << paths[i].nodef << " " << paths[i].weight << " " << paths[i].width << endl;
+		myfile << paths[i].connection.nodei << " " << paths[i].connection.nodef << " " << paths[i].width << endl;
 	myfile.close();
 }
 
@@ -128,13 +127,13 @@ void readGraph(){
 		myfile >> nodes[i].x >> nodes[i].y >> nodes[i].z;
 	myfile >> numPaths;
 	for (int i = 0; i<numPaths; i++)
-		myfile >> paths[i].nodei >> paths[i].nodef >> paths[i].weight >> paths[i].width;
+		myfile >> paths[i].connection.nodei >> paths[i].connection.nodef >> paths[i].width;
 	myfile.close();
 	// calculates the width of each node = bigger width of the paths that diverge/converge from/to that node	
 	for (int i = 0; i<numNodes; i++){
 		nodes[i].width = 0;
 		for (int j = 0; j<numPaths; j++)
-		if ((paths[j].nodei == i || paths[j].nodef == i) && nodes[i].width < paths[j].width)
+		if ((paths[j].connection.nodei == i || paths[j].connection.nodef == i) && nodes[i].width < paths[j].width)
 			nodes[i].width = paths[j].width;
 	}
 }

@@ -13,8 +13,7 @@ typedef struct Node{
 }Node;
 
 typedef struct Path{
-	int nodei, nodef;
-	float weight, width;
+	float width;
 	Connection connection;                                                    
 }Path;
 
