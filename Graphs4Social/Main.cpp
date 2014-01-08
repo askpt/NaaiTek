@@ -159,8 +159,14 @@ void printHelp(void)
 	printf("h,H - Help \n");
 	printf("i,I - Reset Values \n");
 	printf("******* Diverse ******* \n");
-	printf("l,L - Alternate light calculus between Z and eye (GL_LIGHT_MODEL_LOCAL_VIEWER)\n");
-	printf("k,K - Alternate camera light with global light \n");
+
+	char* stateLightViewer;
+	(state.lightViewer != 1) ? stateLightViewer = "EYE" : stateLightViewer = "Z";
+	printf("l,L - Alternate light calculus between Z and eye.\nCurrent: %s \n", stateLightViewer);
+
+	char* stateLight;
+	(state.light) ? stateLight = "CAMERA" : stateLight = "GLOBAL";
+	printf("k,K - Alternate camera light with global light.\nCurrent: %s \n", stateLight);
 	printf("s,S - PolygonMode Fill \n");
 	printf("w,W - PolygonMode Wireframe \n");
 	printf("p,P - PolygonMode Point \n");
@@ -320,20 +326,20 @@ int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 
-	switch (objid){
+	/*switch (objid){
 	case 43:
-		cout << "NODE" << endl;
-		break;
+	cout << "NODE" << endl;
+	break;
 	case 59:
-		cout << "PATH" << endl;
-		break;
+	cout << "PATH" << endl;
+	break;
 	case 0:
-		cout << "FREE ROAM" << endl;
-		break;
+	cout << "FREE ROAM" << endl;
+	break;
 	default:
-		cout << "FIX ME" << endl;
-		break;
-	}
+	cout << "FIX ME" << endl;
+	break;
+	}*/
 	return objid;
 }
 
