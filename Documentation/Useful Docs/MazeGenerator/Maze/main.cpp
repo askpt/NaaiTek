@@ -70,20 +70,15 @@ struct float2
 };
 
 
-// struct representing player
-struct player
-{
-    int x;
-    int y;
-}player;
-
-
-// struct represeting the goal
-struct goal
+// struct the coordinates of both the player and goal in the maze
+struct position
 {
     int x;
     int y;
 };
+
+position player;
+position target;
 
 
 //************************************************************************
@@ -109,7 +104,9 @@ void resetVerticalTranlationFactor();
 void updateVerticalTranslationFactor();
 void setPositionToLeftScreen();
 void drawPlayerAtPosition(int x, int y);
-void drawTriangle(float2 p1, float2 p2, float2 p3);
+void setPlayerAndTargetPositions();
+void drawPlayerAtScreenPosition(float x, float y);
+void drawTargetAtScreenPosition(float x, float y);
 
 
 /**
@@ -132,6 +129,9 @@ int main(int argc, char *argv[])
     maze = mazeBuilder();
     mazeSizeHorizontal = 20;
     mazeSizeVertical = 20;
+    
+    // defining player's and target's positions
+    setPlayerAndTargetPositions();
     
 	// setting handler functions
 	glutDisplayFunc(drawScene);
@@ -224,9 +224,6 @@ void drawScene()
     //drawMazeBootStrap();
     drawMaze();
     
-    // draws player
-    drawPlayerAtPosition(0.0f, 0.0f);
-
 	glutSwapBuffers();
 }
 
@@ -243,9 +240,28 @@ void drawMaze()
     {
         for(int j = 0; j < mazeSizeVertical; j++)
         {
+            float xPositionOnScreen = g_wallSize * g_translationFactorOnHorizontalAxis;
+            float yPositionOnScreen = g_wallSize * g_translationFactorOnVerticalAxis;
+            
+            // checking if the player is in this position
+            if(player.x == i && player.y == j)
+            {
+                cout << "player" << endl;
+                drawPlayerAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
+            }
+            
+            // checking if the target is in this position
+            if(target.x == i && target.y == j)
+            {
+                cout << "target" << endl;
+                drawTargetAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
+            }
+            
+            // draw normal path if none of the above is in this position
             if(maze[i][j] == 1)
             {
-                drawPathAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
+                drawPathAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
+                
             }
             else
             {
@@ -259,25 +275,34 @@ void drawMaze()
 }
 
 
+void setPlayerAndTargetPositions()
+{
+    // player's position
+    player.x = 2;
+    player.y = 2;
+    
+    // target's position
+    target.x = 4;
+    target.y = 4;
+}
+
+
+/*
 void drawPlayerAtPosition(int x, int y)
 {
-    /*
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -1.0f);
-    glColor3f( 0.0f, 1.0f, 0.0f );
-    drawTriangle(float2(0.0f, 0.02f), float2(-0.02f, -0.02f), float2(0.02f, -0.02f ));
-     */
+    // green
+    float color[] = {0.0f, 1.0f, 0.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
 }
 
 
-void drawTriangle(float2 p1, float2 p2, float2 p3)
+void drawTargetAtPosition(int x, int y)
 {
-    glBegin( GL_TRIANGLES );
-        glVertex2f( p1.x, p1.y );
-        glVertex2f( p2.x, p2.y );
-        glVertex2f( p3.x, p3.y );
-    glEnd();
+    // blue
+    float color[] = {0.0f, 0.0f, 1.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
 }
+*/
 
 
 void drawMazeBootStrap()
@@ -327,6 +352,22 @@ void drawPathAtScreenPosition(float x, float y)
 {
     // white color
     float color[] = {1.0f, 1.0f, 1.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
+}
+
+
+void drawPlayerAtScreenPosition(float x, float y)
+{
+    // yellow
+    float color[] = {0.0f, 1.0f, 1.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
+}
+
+
+void drawTargetAtScreenPosition(float x, float y)
+{
+    // blue
+    float color[] = {0.0f, 0.0f, 1.0f};
     drawSquareAtScreenPositionWithColor(x, y, color);
 }
 
