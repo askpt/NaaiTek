@@ -11,10 +11,10 @@ using namespace std;
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_SPHERE 2.1
 
-// luzes e materiais
+// lights and materials
 
 const GLfloat mat_ambient[][4] = { { 0.33, 0.22, 0.03, 1.0 },	// brass
-{ 0.0, 0.0, 0.0 },			// red plastic
+{ 0.1, 0.0, 0.0 },			// red plastic
 { 0.0215, 0.1745, 0.0215 },	// emerald
 { 0.02, 0.02, 0.02 },		// slate
 { 0.0, 0.0, 0.1745 },		// blue
@@ -94,6 +94,7 @@ typedef struct Model {
 State state;
 Model model;
 
+/* initial values of the state*/
 void initState(){
 	state.camera.dir_lat = M_PI / 4;
 	state.camera.dir_long = -M_PI / 4;
@@ -114,10 +115,10 @@ void initState(){
 	state.timer = 100;
 }
 
+/* initial values of the model*/
 void initModel(){
 	model.scale = 0.2;
 
-	//model.cor_cubo = brass;
 	model.g_pos_light1[0] = -5.0;
 	model.g_pos_light1[1] = 5.0;
 	model.g_pos_light1[2] = 5.0;
@@ -128,10 +129,11 @@ void initModel(){
 	model.g_pos_light2[3] = 0.0;
 }
 
+/* Call both initiators, and enable necessary methods. */
 void myInit()
 {
 
-	GLfloat LuzAmbiente[] = { 0.5, 0.5, 0.5, 0.0 };
+	GLfloat AmbientLight[] = { 0.5, 0.5, 0.5, 0.0 };
 
 	glClearColor(0.55, 0.75, 1.0, 0.0);
 
@@ -142,7 +144,7 @@ void myInit()
 
 	glDepthFunc(GL_LESS);
 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LuzAmbiente);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, AmbientLight);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, state.lightViewer);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
@@ -153,6 +155,7 @@ void myInit()
 	//readGraphUser("Andre");
 }
 
+/* Print the Help Menu to help us debugging mainly */
 void printHelp(void)
 {
 	printf("\n\nDraw the graph\n");
@@ -184,6 +187,8 @@ void printHelp(void)
 }
 
 
+/* Attributes the color to the material,
+   deppending on the material and the light that is shining in it */
 void material(enum material_type mat)
 {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient[mat]);
@@ -194,6 +199,7 @@ void material(enum material_type mat)
 
 const GLfloat white_light[] = { 1.0, 1.0, 1.0, 1.0 };
 
+/* Puts the light in-scene. */
 void putLights(GLfloat* diffuse)
 {
 	const GLfloat white_amb[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -212,6 +218,7 @@ void putLights(GLfloat* diffuse)
 	glEnable(GL_LIGHT1);
 }
 
+/* Draws the node in the form of a sphere */
 #define nodeID 43
 void drawNode(Node node)
 {
@@ -236,6 +243,7 @@ void drawNode(Node node)
 	glPopName();
 }
 
+/* Draws the path in the form of a cylinder */
 #define pathID 59
 void drawPath(Node noi, Node nof, Path p)
 {
@@ -261,7 +269,6 @@ void drawPath(Node noi, Node nof, Path p)
 	glRotatef(aij, 0, 0, 1.0);
 	glRotatef(90 - bij, 0.0, 1.0, 0.0);
 
-	material(red_plastic);
 	GLUquadricObj* pQuadric = gluNewQuadric();
 	gluCylinder(pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
 	gluDeleteQuadric(pQuadric);
@@ -269,8 +276,10 @@ void drawPath(Node noi, Node nof, Path p)
 	glPopName();
 }
 
+/* Calls the drawNode and the drawPath method
+ * One time for each existant node and path*/
 void drawGraph(){
-	material(blue);
+	material(slate);
 	for (int i = 0; i < numNodes; i++){
 		drawNode(nodes[i]);
 	}
@@ -282,7 +291,7 @@ void drawGraph(){
 	}
 }
 
-
+/* Detects if the camera is going to colide with any part of the graph */
 int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
 	int i, n, objid = 0;
 	double zmin = 10.0;
@@ -343,6 +352,7 @@ int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
 	return objid;
 }
 
+/* Used to see if the camera colides with some part of the graph */
 void Timer(int value)
 {
 	static int time;
@@ -385,7 +395,7 @@ void Timer(int value)
 		state.camera.center[1] = yp;
 		state.camera.center[2] = zp;
 	}
-	else 
+	else
 	{
 		state.camera.center[2] = state.camera.center[2] + 1;
 	}
@@ -402,6 +412,7 @@ void Timer(int value)
 	glutPostRedisplay();
 }
 
+/* Sets the light either to camera or eye*/
 void setLight(){
 	Vertex eye;
 
@@ -419,6 +430,7 @@ void setLight(){
 	}
 }
 
+/* Sets the camera positioning */
 void setCamera(){
 	glLoadIdentity();
 	glRotated(degrees(-M_PI / 2.0), 1.0, 0.0, 0.0);
@@ -426,6 +438,7 @@ void setCamera(){
 	glTranslated(-state.camera.center[0], -state.camera.center[1], -state.camera.center[2]);
 }
 
+/* Ran in a loop to update the screen picture */
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -440,7 +453,7 @@ void display(void)
 	glutSwapBuffers();
 }
 
-
+/* Where the keyboard keys use is defined */
 void keyboard(unsigned char key, int x, int y)
 {
 
@@ -516,6 +529,7 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
+/* Checks if this keys stopped being continously pressed */
 void keyboardUp(unsigned char key, int x, int y)
 {
 
@@ -533,6 +547,7 @@ void keyboardUp(unsigned char key, int x, int y)
 	}
 }
 
+/* Checks if this special keys stopped being continously pressed */
 void SpecialUp(int key, int x, int y)
 {
 	switch (key)
@@ -553,6 +568,7 @@ void SpecialUp(int key, int x, int y)
 
 }
 
+/* Where the keyboard special keys use is defined */
 void Special(int key, int x, int y){
 
 	switch (key){
@@ -578,6 +594,7 @@ void Special(int key, int x, int y){
 	}
 }
 
+/* Checks if it's a valid picking place and sets the projection */
 void setProjection(int x, int y, GLboolean picking){
 	glLoadIdentity();
 	if (picking) { // if its in "picking mode", reads the viewport and defines picking zone
@@ -590,6 +607,7 @@ void setProjection(int x, int y, GLboolean picking){
 
 }
 
+/* Reshapes the drawing depending on the projection, viewport... */
 void myReshape(int w, int h){
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
@@ -597,6 +615,7 @@ void myReshape(int w, int h){
 	glMatrixMode(GL_MODELVIEW);
 }
 
+/* Used to rotate the camera */
 void motionRotate(int x, int y){
 #define DRAG_SCALE	0.01
 	double lim = M_PI / 2 - 0.1;
@@ -613,6 +632,7 @@ void motionRotate(int x, int y){
 }
 
 // NOT WORKING
+/* Used to zoom in and out of the graph */
 void motionZoom(int x, int y){
 #define ZOOM_SCALE	0.5
 	state.camera.dist -= (state.yMouse - y)*ZOOM_SCALE;
@@ -625,6 +645,7 @@ void motionZoom(int x, int y){
 	glutPostRedisplay();
 }
 
+/* Used to know what object was picked by the user */
 int picking(int x, int y){
 	int i, n, objid = 0;
 	double zmin = 10.0;
@@ -642,7 +663,6 @@ int picking(int x, int y){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	setCamera();
-	//drawManyAxis();
 
 	n = glRenderMode(GL_RENDER);
 	if (n > 0)
@@ -666,6 +686,7 @@ int picking(int x, int y){
 	return objid;
 }
 
+/* Used to see what mouse action will be executed */
 void mouse(int btn, int mouseState, int x, int y){
 	switch (btn) {
 	case GLUT_RIGHT_BUTTON:
@@ -695,6 +716,7 @@ void mouse(int btn, int mouseState, int x, int y){
 	}
 }
 
+/* Main, runs in a loop. */
 void main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
