@@ -218,23 +218,21 @@ void drawNode(Node node)
 {
 	GLfloat x0 = node.x;
 	GLfloat y0 = node.y;
-	GLfloat z0 = node.z + INFINITESIMAL;
+	GLfloat z0 = node.z;
 
 	GLfloat r = K_SPHERE * node.width / 2.0;
 
-	glPushName(nodeID);
 	glPushMatrix();
 	glTranslatef(x0, y0, z0);
 
 	glBegin(GL_POLYGON);
 	GLUquadricObj* pQuadric = gluNewQuadric();
 
-	gluSphere(pQuadric, r, 32.0, 32.0 * 4.0);
+	gluSphere(pQuadric, r, 32.0, 128.0);
 
 	gluDeleteQuadric(pQuadric);
 	glEnd();
 	glPopMatrix();
-	glPopName();
 }
 
 /* Draws the path in the form of a cylinder */
@@ -257,7 +255,6 @@ void drawPath(Node noi, Node nof, Path p)
 	GLfloat aij = degrees(atan2((yf - yi), (xf - xi)));
 	GLfloat bij = degrees(atan2(hij, pij));
 
-	glPushName(pathID);
 	glPushMatrix();
 	glTranslatef(xi, yi, zi);
 	glRotatef(aij, 0, 0, 1.0);
@@ -267,7 +264,6 @@ void drawPath(Node noi, Node nof, Path p)
 	gluCylinder(pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
 	gluDeleteQuadric(pQuadric);
 	glPopMatrix();
-	glPopName();
 }
 
 /* Calls the drawNode and the drawPath method
@@ -275,13 +271,18 @@ void drawPath(Node noi, Node nof, Path p)
 void drawGraph(){
 	material(slate);
 	for (int i = 0; i < numNodes; i++){
+		glPushName(nodeID);
 		drawNode(nodes[i]);
+		glPopName();
 	}
 	material(red_plastic);
 	for (int i = 0; i < numPaths; i++){
+		glPushName(pathID);
 		Node* noi = &nodes[paths[i].nodei];
 		Node* nof = &nodes[paths[i].nodef];
 		drawPath(*noi, *nof, paths[i]);
+		drawPath(*nof, *noi, paths[i]);
+		glPopName();
 	}
 }
 
