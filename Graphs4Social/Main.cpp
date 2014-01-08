@@ -75,10 +75,8 @@ typedef struct State{
 	Camera		camera;
 	int			xMouse, yMouse;
 	GLboolean	light;
-	GLboolean	showNormals;
 	GLint		lightViewer;
-	GLint		translateAxis;
-	GLdouble	axis[3];
+	GLint		pickedObjID;
 	Keys_t		keys;
 	GLint		timer;
 }State;
@@ -88,7 +86,6 @@ typedef struct Model {
 	GLfloat g_pos_light2[4];
 
 	GLfloat scale;
-	GLUquadric *quad;
 
 	// insert username here after login
 	string regUser;
@@ -103,9 +100,6 @@ void initState(){
 	state.camera.dir_long = -M_PI / 4;
 	state.camera.fov = 60;
 	state.camera.dist = 5;
-	state.axis[0] = 0;
-	state.axis[1] = 0;
-	state.axis[2] = 0;
 	state.camera.center[0] = 0;
 	state.camera.center[1] = 0;
 	state.camera.center[2] = 0;
@@ -113,7 +107,6 @@ void initState(){
 	state.camera.velv = 10;
 	state.camera.velh = 10;
 	state.light = GL_FALSE;
-	state.showNormals = GL_FALSE;
 	state.lightViewer = 1;
 	state.timer = 100;
 }
@@ -177,17 +170,13 @@ void printHelp(void)
 	printf("k,K - Alternate camera light with global light.\nCurrent: %s \n", stateLight);
 	printf("e,E - PolygonMode Fill \n");
 	printf("q,Q - PolygonMode Wireframe \n");
-	printf("p,P - PolygonMode Point \n");
-	printf("c,C - On/Off Cull Face \n");
-	printf("n,N - On/Off normal presentation \n");
+	printf("r,R - PolygonMode Point \n");
 	printf("******* Graphs ******* \n");
 	printf("F1  - Save graph to file \n");
 	printf("F2  - Read graph from file \n");
 	printf("******* Camera ******* \n");
-	printf("Left Buttton - Drag Axis (centro da camera)\n");
+	printf("WASD - Control free flight\n");
 	printf("Right Buttton  - Rotate camera\n");
-	printf("Right Buttton with CTRL - Zoom-in/out\n");
-	printf("PAGE_UP, PAGE_DOWN - Alternate distance from camera \n");
 	printf("ESC - Leave\n");
 }
 
@@ -479,8 +468,8 @@ void keyboard(unsigned char key, int x, int y)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glutPostRedisplay();
 		break;
-	case 'p':
-	case 'P':
+	case 'r':
+	case 'R':
 		glDisable(GL_LIGHTING);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 		glutPostRedisplay();
@@ -489,19 +478,6 @@ void keyboard(unsigned char key, int x, int y)
 	case 'E':
 		glEnable(GL_LIGHTING);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glutPostRedisplay();
-		break;
-	case 'c':
-	case 'C':
-		if (glIsEnabled(GL_CULL_FACE))
-			glDisable(GL_CULL_FACE);
-		else
-			glEnable(GL_CULL_FACE);
-		glutPostRedisplay();
-		break;
-	case 'n':
-	case 'N':
-		state.showNormals = !state.showNormals;
 		glutPostRedisplay();
 		break;
 	case 'i':
@@ -626,20 +602,6 @@ void motionRotate(int x, int y){
 	glutPostRedisplay();
 }
 
-// NOT WORKING
-/* Used to zoom in and out of the graph */
-void motionZoom(int x, int y){
-#define ZOOM_SCALE	0.5
-	state.camera.dist -= (state.yMouse - y)*ZOOM_SCALE;
-	//if (state.camera.dist<5)
-	//	state.camera.dist = 5;
-	//else
-	//if (state.camera.dist>200)
-	//	state.camera.dist = 200;
-	state.yMouse = y;
-	glutPostRedisplay();
-}
-
 /* Used to know what object was picked by the user */
 int picking(int x, int y){
 	int i, n, objid = 0;
@@ -690,10 +652,7 @@ void mouse(int btn, int mouseState, int x, int y){
 		if (mouseState == GLUT_DOWN){
 			state.xMouse = x;
 			state.yMouse = y;
-			if (glutGetModifiers() & GLUT_ACTIVE_CTRL)
-				glutMotionFunc(motionZoom);
-			else
-				glutMotionFunc(motionRotate);
+			glutMotionFunc(motionRotate);
 			cout << "Right down\n";
 		}
 		else{
@@ -703,8 +662,8 @@ void mouse(int btn, int mouseState, int x, int y){
 		break;
 	case GLUT_LEFT_BUTTON:
 		if (mouseState == GLUT_DOWN){
-			state.translateAxis = picking(x, y);
-			cout << "Left down - object:" << state.translateAxis << endl;
+			state.pickedObjID = picking(x, y);
+			cout << "Left down - object:" << state.pickedObjID << endl;
 		}
 		else{
 			cout << "Left up\n";
