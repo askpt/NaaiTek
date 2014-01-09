@@ -129,6 +129,8 @@ int menuBuilder();
 void handleMenuKeypress(unsigned char key, int x, int y);
 void handleMenuResize(int w, int h);
 void drawMenuScene();
+void setupMenuAmbientLight();
+void setupMenuPositionedLight();
 
 
 /**
@@ -614,9 +616,13 @@ void cleanUp()
 }
 
 
+// MENU WINDOW
+
+
 int menuBuilder()
 {
     menuWindow = glutCreateWindow("Maze Menu");
+    glutPositionWindow(920,20);
     glutDisplayFunc(drawMenuScene);
 	glutKeyboardFunc(handleMenuKeypress);
 	glutReshapeFunc(handleMenuResize);
@@ -633,12 +639,15 @@ void handleMenuKeypress(unsigned char key, int x, int y)
 }
 
 
-
 void drawMenuScene()
 {
     // standard stuff
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
+    
+    // enabling lighting
+    setupMenuAmbientLight();
+    setupMenuPositionedLight();
     
     // draws menu
     
@@ -659,6 +668,30 @@ void handleMenuResize(int w, int h)
 	glLoadIdentity();
 	// camera angle, width-to-heigth ration, near z clipping coordinate, far z clipping coordinate
 	gluPerspective(45.0, (double) w / (double) h, 1.0, 200.0);
+}
+
+
+void setupMenuAmbientLight()
+{
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -8.0f);
+	
+    // ambient light
+	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+}
+
+
+void setupMenuPositionedLight()
+{
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -8.0f);
+    
+    // positioned light
+	GLfloat lightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat lightPos0[] = {0.5f, 0.5f, 1.0f, 0.0f};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 }
 
 
