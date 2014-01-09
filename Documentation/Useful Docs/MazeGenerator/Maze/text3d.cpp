@@ -509,7 +509,7 @@ BreakOuter2:
 void t3dInit() {
 	if (font == NULL) {
 		ifstream input;
-		input.open("/Users/joaocarreira/Desktop/OpenGL/Text/Text/charset", istream::binary);
+		input.open("charset", istream::binary);
 		font = new T3DFont(input);
 		input.close();
 	}

@@ -20,7 +20,6 @@
 #include "text3d.h"
 #include "Maze.h"
 
-#warning fix this include to .h
 #include <vector>
 
 
@@ -84,11 +83,17 @@ struct position
 }player, target;
 
 
+// variables to follow game outcome
+bool playerDidWin;
+bool playerDidQuit;
+int totalHelpRequest;
+
 // global variables for subwindow
 int menuWindow;
 char *title = "Maze Menu";
 int numberOfOptions = 3;
 char * optionsVector[3] = { "Maze Menu", "Start Game", "Quit"};
+const char *stringVectorForRotatingCube[4] = { "NaaiTek", "presents", "NaaiTek", "presents" };
 
 
 //************************************************************************
@@ -123,6 +128,8 @@ int getFirstPossibleX();
 int getFirstPossibleY();
 int getLastPossibleX();
 int getLastPossibleY();
+void resetGameSettings();
+void checkForChangesInGameSettings();
 
 // fwd declarations of menu window
 int menuBuilder();
@@ -131,6 +138,9 @@ void handleMenuResize(int w, int h);
 void drawMenuScene();
 void setupMenuAmbientLight();
 void setupMenuPositionedLight();
+void drawTextAtScreenPosition(char *str, float x, float y, float z);
+float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
+
 
 
 /**
@@ -145,8 +155,7 @@ int main(int argc, char *argv[])
 	// Window 1 - Game
     glutInitWindowSize(800, 800);
 	mainWindow = glutCreateWindow("Maze");
-    //glutInitWindowSize(800, 800);
-	initRendering();
+    initRendering();
     
     //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
     
@@ -159,6 +168,9 @@ int main(int argc, char *argv[])
     setPlayerPosition(getFirstPossibleX(), getFirstPossibleY());
     setTargetPosition(getLastPossibleX(), getLastPossibleY());
     
+    // reseting game settings
+    resetGameSettings();
+    
 	// setting handler functions
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
@@ -168,7 +180,8 @@ int main(int argc, char *argv[])
 	//glutTimerFunc(25, update, 0);
     
     // Window 2 - Menu
-    glutInitWindowSize(200, 800);
+    //glutInitWindowSize(800, 800);
+    glutInitWindowSize(300, 800);
     menuWindow = menuBuilder();
     
 	glutMainLoop();
@@ -282,6 +295,14 @@ void handleResize(int w, int h)
 }
 
 
+void resetGameSettings()
+{
+    playerDidWin = false;
+    playerDidQuit = false;
+    totalHelpRequest = 0;
+}
+
+
 /**
  * draws a scene
  */
@@ -317,7 +338,6 @@ void drawMaze()
             // checking if the player is in this position
             if(player.x == i && player.y == j)
             {
-                //cout << "Player: " << player.x << " -- " << player.y << endl;
                 drawPlayerAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
             }
             
@@ -342,6 +362,8 @@ void drawMaze()
         resetHorizontalTranslationFactor();
         updateVerticalTranslationFactor();
     }
+    checkForChangesInGameSettings();
+    
 }
 
 
@@ -442,6 +464,17 @@ int getLastPossibleY()
         }
     }
     exit(0);
+}
+
+
+
+void checkForChangesInGameSettings()
+{
+    if(player.x == target.x && player.y == target.y)
+    {
+        playerDidWin = true;
+        exit(1);
+    }
 }
 
 
@@ -616,6 +649,7 @@ void cleanUp()
 }
 
 
+
 // MENU WINDOW
 
 
@@ -623,12 +657,12 @@ int menuBuilder()
 {
     menuWindow = glutCreateWindow("Maze Menu");
     glutPositionWindow(920,20);
+    
+    g_scale = computeScaleForSquareSize(stringVectorForRotatingCube, 3, 3.0);
+    
     glutDisplayFunc(drawMenuScene);
 	glutKeyboardFunc(handleMenuKeypress);
 	glutReshapeFunc(handleMenuResize);
-    
-    cout << "building menu" << endl;
-    
     return 0;
 }
 
@@ -641,7 +675,6 @@ void handleMenuKeypress(unsigned char key, int x, int y)
 
 void drawMenuScene()
 {
-    // standard stuff
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
     
@@ -649,9 +682,12 @@ void drawMenuScene()
     setupMenuAmbientLight();
     setupMenuPositionedLight();
     
-    // draws menu
+    // text with game modes
+    drawTextAtScreenPosition("Online Mode", 0.0, 0.0, -15.0);
+    //drawTextAtScreenPosition("Offline Mode", 0.0, -1.0, -15.0);
+    //drawTextAtScreenPosition("Exit", 0.0, -2.0, -15.0);
     
-	glutSwapBuffers();
+    glutSwapBuffers();
 }
 
 
@@ -693,6 +729,49 @@ void setupMenuPositionedLight()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 }
+
+
+void drawTextAtScreenPosition(char *str, float x, float y, float z)
+{
+    glLoadIdentity();
+	glTranslatef(x, y, z);
+    
+    // "inclining" the camera to see from above
+	glRotatef(20.0f, 1.5f, 1.0f, 0.0f);
+    
+    //setting up the correct scale for the text
+	glScalef(g_scale * 0.7, g_scale * 0.7, g_scale * 0.7);
+	
+    // text color
+    glColor3f(1.0f, 1.0f, 1.0f);
+    
+    glPushMatrix();
+        glTranslatef(0, 0, -1.5f / g_scale);
+        t3dDraw3D(str, 0, 0, 0.2f);
+    cout << "String" << str << endl;
+    cout << "x=" << x << endl;
+    cout << "Y=" << y << endl;
+    cout << "z=" << z << endl;
+    glPopMatrix();
+}
+
+
+float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize)
+{
+	float maxWidth = 0;
+	for(int i = 0; i < squareSize; i++)
+    {
+		float width = t3dDrawWidth(strs[i]);
+		if (width > maxWidth)
+        {
+			maxWidth = width;
+		}
+	}
+	return (0.8 * squareSize) / maxWidth;
+}
+
+
+
 
 
 
