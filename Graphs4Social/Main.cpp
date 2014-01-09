@@ -130,7 +130,7 @@ void initModel(){
 }
 
 /* Call both initiators, and enable necessary methods. */
-void myInit()
+void myInit(string user)
 {
 
 	GLfloat AmbientLight[] = { 0.5, 0.5, 0.5, 0.0 };
@@ -148,6 +148,11 @@ void myInit()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, AmbientLight);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, state.lightViewer);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
+	model.regUser = user;
+
+	//readGraph();
+	readGraphUser(model.regUser);
 
 	initModel();
 	initState();
@@ -712,12 +717,9 @@ void main(int argc, char **argv)
 
 		glutTimerFunc(state.timer, Timer, 0);
 
-		myInit();
+		myInit(username);
 
-		model.regUser = username;
-
-		readGraph();
-		readGraphUser(model.regUser);
+		
 
 		printHelp();
 
