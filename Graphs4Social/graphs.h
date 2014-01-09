@@ -9,7 +9,7 @@
 
 typedef struct Node{
 	float x, y, z, width;
-	User user;
+	User *user;
 }Node;
 
 typedef struct Path{

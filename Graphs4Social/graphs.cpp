@@ -46,7 +46,7 @@ void printNodes(){
 	for (int i = 0; i < numNodes; printNode(nodes[i++]));
 }
 
-Node createNode(float x, float y, float z, User user){
+Node createNode(float x, float y, float z, User *user){
 	Node node;
 	node.x = x;
 	node.y = y;
@@ -152,10 +152,12 @@ void readGraphUser(std::string user)
 	json::value graph = RequestJSONValueAsync(url).get();
 	json::value usersDim = RequestJSONValueAsync(urlDim).get();
 
-	//numNodes = graph[L"nodes"].size();
-	numNodes = 2;
+	numNodes = graph[L"nodes"].size();
+	//numNodes = 2;
+	wstring usersNodes[100];
 
 	userWs = L'\"' + userWs + L'\"';
+	int nodePos = 1;
 
 	for (auto iter = graph[L"nodes"].begin(); iter != graph[L"nodes"].end(); ++iter)
 	{
@@ -167,29 +169,40 @@ void readGraphUser(std::string user)
 				utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
 				json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
 
+				wstring userName = userInfo[L"Username"].as_string();
+				wstring email = userInfo[L"Email"].as_string();
+				wstring country = userInfo[L"Country"].as_string();
+				wstring city = userInfo[L"City"].as_string();
+				int day = userInfo[L"Day"].as_integer();
+				int month = userInfo[L"Month"].as_integer();
+				int year = userInfo[L"Year"].as_integer();
+				int number = userInfo[L"Number"].as_integer();
+
 				if (iterDim->second[L"user"].to_string().compare(userWs) == 0)
 				{
-					wcout << iterDim->second[L"user"] << endl;
-
 					//pos i = 0 is authenticated user
 
 					nodes[0].x = 0;
 					nodes[0].y = 0;
 					nodes[0].z = iterDim->second[L"dimension"].as_integer() * 2;
-					nodes[0].width = userInfo[L"numTags"].as_integer();
+					nodes[0].width = userInfo[L"numTags"].as_integer() + 1;
 
-					nodes[1].x = 15;
-					nodes[1].y = -20;
-					nodes[1].z = 20;
-					nodes[1].width = 2;
+					nodes[0].user = new User(userName, email, country, city, number, day, month, year);
 
-					paths[0].width = 1;
-					paths[0].connection.nodei = 0;
-					paths[0].connection.nodef = 1;
-					//nodes[0].width = 2000.0;
+					usersNodes[0] = userName;
 				}
 				else
 				{
+					//TODO radial function
+					nodes[nodePos].x = 20;
+					nodes[nodePos].y = 30;
+					nodes[nodePos].z = iterDim->second[L"dimension"].as_integer() * 2;
+					nodes[nodePos].width = userInfo[L"numTags"].as_integer() + 1;
+
+					nodes[nodePos].user = new User(userName, email, country, city, number, day, month, year);
+					usersNodes[nodePos] = userName;
+
+					nodePos++;
 					//wcout << iter->first; //Pos
 					//wcout << iter->second; // Nome
 					//wcout << iterDim->second[L"dimension"]; //dimensao
@@ -207,17 +220,41 @@ void readGraphUser(std::string user)
 			}
 		}
 	}
-
+	int p = 0;
 	for (auto iter = graph[L"paths"].begin(); iter != graph[L"paths"].end(); ++iter)
 	{
+		int user1Pos = 0;
+		int user2Pos = 0;
+		wstring user1Name = iter->second[L"user1"].as_string();
+		wstring user2Name = iter->second[L"user2"].as_string();
+
+
+		for (size_t i = 0; i < numNodes; i++)
+		{
+			if (user1Name.compare(usersNodes[i]) == 0)
+			{
+				user1Pos = i;
+			}
+			if (user2Name.compare(usersNodes[i]) == 0)
+			{
+				user2Pos = i;
+			}
+		}
+
+		paths[p].width = iter->second[L"connection"].as_integer();
+		paths[p].connection.nodei = user1Pos;
+		paths[p].connection.nodef = user2Pos;
+
+
 		/*wcout << iter->second[L"user1"];
 		wcout << iter->second[L"user2"];
 		wcout << iter->second[L"connection"];
 		wcout << iter->second[L"tags"] << endl;*/
+
+		p++;
 	}
 
-	//numPaths = graph[L"paths"].size();
-	numPaths = 1;
+	numPaths = graph[L"paths"].size();
 }
 
 bool TryAuth(string username, string password)

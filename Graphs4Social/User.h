@@ -1,14 +1,20 @@
 #ifndef User_
 #define User_
 
+#include <string>
+
+using namespace std;
+
 class User
 {
 public:
 	User();
-	User(char* name, char* email, char* country, char* city, int number, int day, int month, int year);
+	User(wstring name, wstring email, wstring country, wstring city, int number, int day, int month, int year);
+	User(const User &u);
 	~User();
+	User* clone() const;
 
-	char* name, *email, *country, *city;
+	wstring name, email, country, city;
 	int number, day, month, year;
 
 private:
