@@ -129,7 +129,7 @@ int getFirstPossibleY();
 int getLastPossibleX();
 int getLastPossibleY();
 void resetGameSettings();
-void checkForChangesInGameSettings();
+void checkIfPlayerWon();
 
 // fwd declarations of menu window
 int menuBuilder();
@@ -145,6 +145,8 @@ float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, flo
 
 /**
  * main
+ *
+ * @return: 0 (player quit), 1 (player won), 2 (error building maze)
  */
 int main(int argc, char *argv[])
 {
@@ -201,6 +203,7 @@ void handleKeypress(unsigned char key, int x, int y)
 	{
         // ESC key
 		case 27:
+            playerDidQuit = true;
 			exit(0);
             break;
         
@@ -368,7 +371,7 @@ void drawMaze()
         resetHorizontalTranslationFactor();
         updateVerticalTranslationFactor();
     }
-    checkForChangesInGameSettings();
+    checkIfPlayerWon();
     
 }
 
@@ -421,7 +424,7 @@ int getFirstPossibleX()
             }
         }
     }
-    exit(0);
+    exit(2);
 }
 
 
@@ -437,7 +440,7 @@ int getFirstPossibleY()
             }
         }
     }
-    exit(0);
+    exit(2);
 }
 
 
@@ -453,7 +456,7 @@ int getLastPossibleX()
             }
         }
     }
-    exit(0);
+    exit(2);
 }
 
 
@@ -469,11 +472,11 @@ int getLastPossibleY()
             }
         }
     }
-    exit(0);
+    exit(2);
 }
 
 
-void checkForChangesInGameSettings()
+void checkIfPlayerWon()
 {
     if(player.x == target.x && player.y == target.y)
     {
