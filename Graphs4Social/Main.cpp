@@ -97,13 +97,13 @@ Model model;
 
 /* initial values of the state*/
 void initState(){
-	state.camera.dir_lat = 0.0;
+	state.camera.dir_lat = -0.2;
 	state.camera.dir_long = -M_PI / 4;
 	state.camera.fov = 60;
 	state.camera.dist = 5;
 	state.camera.center[0] = 0;
 	state.camera.center[1] = 0;
-	state.camera.center[2] = 0;
+	state.camera.center[2] = nodes[0].z + state.camera.dimension + 2;
 	state.camera.dimension = 2;
 	state.camera.velv = 10;
 	state.camera.velh = 10;
