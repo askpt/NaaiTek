@@ -143,9 +143,9 @@ void readGraphUser(std::string user)
 	wstring wsTmp(user.begin(), user.end());
 
 	utility::string_t userWs = wsTmp;
-	utility::string_t url = L"http://localhost:5000/get_graph?user=" + userWs;
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/get_graph?user=" + userWs;
 	
-	utility::string_t urlDim = L"http://localhost:5000/get_users_dimension";
+	utility::string_t urlDim = L"http://uvm061.dei.isep.ipp.pt:5000/get_users_dimension";
 
 
 	json::value graph = RequestJSONValueAsync(url).get();
