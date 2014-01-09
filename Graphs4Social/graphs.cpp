@@ -163,7 +163,17 @@ void readGraphUser(std::string user)
 			{
 				wcout << iter->first; //Pos
 				wcout << iter->second; // Nome
-				wcout << iterDim->second[L"dimension"]<< endl; //dimensao
+				wcout << iterDim->second[L"dimension"]; //dimensao
+
+				utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
+
+				json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
+				wcout << userInfo[L"Username"];
+				wcout << userInfo[L"City"];
+				wcout << userInfo[L"Country"];
+				wcout << userInfo[L"Day"];
+				wcout << userInfo[L"Email"];
+				cin.get();
 			}  
 		}
 	}
