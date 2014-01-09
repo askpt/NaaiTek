@@ -27,7 +27,7 @@ typedef struct
 
 float g_scale;
 
-const char * stringVetor[2] = { "You won!", "You Lost!" };
+const char * stringVetor[2] = { "You won!", "You Loose!" };
 const char * stringHelp[2] = { "F1->New Game", "F10->Exit" };
 
 const float DEG2RAD = 3.14159 / 180;
