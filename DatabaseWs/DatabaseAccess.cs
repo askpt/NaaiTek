@@ -37,7 +37,13 @@ namespace DatabaseWs
         public User GetUser(string username)
         {
             User user = new User();
-            string queryString = "select UserName, Email, Number, Country, City, BirthDate from dbo.AspNetUsers where UserName='" + username + "'";
+
+            string queryString = "SELECT u.UserName, u.Email, u.Number, u.Country, u.City, u.BirthDate, "+
+                                 "(SELECT Count(ut.TagId) " +
+                                 "FROM dbo.AspNetUsers u, dbo.UserTags ut " +
+                                 "WHERE u.UserName='" + username + "' AND u.Id = ut.UserID) AS countUserTags " +
+                                 "FROM dbo.AspNetUsers u " +
+                                 "WHERE u.UserName='" + username + "'";
 
             SqlCommand cmd = new SqlCommand(queryString, con);
 
@@ -54,6 +60,8 @@ namespace DatabaseWs
                 user.Day = date.Day;
                 user.Month = date.Month;
                 user.Year = date.Year;
+
+                user.numTags = (int)reader[6];
             }
 
             return user;
