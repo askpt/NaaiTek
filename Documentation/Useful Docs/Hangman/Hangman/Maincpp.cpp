@@ -27,7 +27,7 @@ typedef struct
 }Game;
 
 /*global variables*/
-int WindowWidth = 800;
+int WindowWidth = 1000;
 int WindowHeight = 600;
 const float DEG2RAD = 314159 / 180;
 int GLUTWindowHandle = 0;
@@ -49,6 +49,12 @@ void initGameData();
 void drawErrorChar();
 void drawWord(string word);
 void drawHangman();
+void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string text);
+void IAGetCategories();
+void IAGetPhrases(char *category);
+void IACheckIfBelongs(char *c, char *word);
+
+
 
 /*function to init game data*/
 
@@ -86,6 +92,7 @@ void display()
 	drawScene();
 	glFlush();
 }
+
 /*function to initialize OpenGL*/
 void myInit()
 {
@@ -221,18 +228,44 @@ void drawHangman()
 	glFlush();
 
 }
+/*function to draw rectangle with text (button)*/
+void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word)
+{
+	int len;
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glRectf(x, y, width, height);
+	glColor3b(1.0, 0.0, 0.0);
+	glRasterPos2f(x+70, y + 40);
+	len = word.length();
+	cout << word << endl;
+	for (int i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word.at(i));
+
+	}
+
+	glFlush();
+
+	
+}
 /*function to draw the main scene*/
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-	drawHangman();
+
+	drawRectangleWithText(300,50,500,120,game.categories[0]);
+	drawRectangleWithText(300, 150, 500, 220, game.categories[1]);
+	drawRectangleWithText(300, 250, 500, 320, game.categories[2]);
+	drawRectangleWithText(300, 350, 500, 420, game.categories[3]);
+	drawRectangleWithText(300, 450, 500, 520, game.categories[4]);
+	glFlush();
 
 }
 
 /*callback special key of keyobard*/
 void keyBoard(int key, int x, int y)
 {
-	switch (key) {
+	switch (key) {\
 	case GLUT_KEY_F1:
 		glutPostRedisplay();
 		initGameData();
@@ -261,7 +294,7 @@ void IAGetCategories()
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
-	cin.get();
+	//cin.get();
 }
 void IAGetPhrases(char *category)
 {
@@ -304,12 +337,14 @@ void IACheckIfBelongs(char *c, char *word)
 
 int main(int argc, char**argv)
 {
-	IACheckIfBelongs("a", "arroz");
+
 	initGameData();
+	IAGetCategories();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("HANGMAN");
+
 	glutDisplayFunc(display);
 	glutSpecialFunc(keyBoard);
 	myInit();
