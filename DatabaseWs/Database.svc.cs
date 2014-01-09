@@ -24,25 +24,9 @@ namespace DatabaseWs
         {
             User ret = null;
 
-            using (var db = new UserContext())
+            using (var db = new DatabaseAccess())
             {
-                foreach (AspNetUsers item in db.AspNetUsers)
-                {
-                    if (item.UserName == user)
-                    {
-                        ret = new User()
-                        {
-                            Day = item.BirthDate.Value.Day,
-                            Month = item.BirthDate.Value.Month,
-                            Year = item.BirthDate.Value.Year,
-                            Username = item.UserName,
-                            City = item.City,
-                            Country = item.Country,
-                            Email = item.Email,
-                            Number = item.Number
-                        };
-                    }
-                }
+                ret = db.GetUser(user);
             }
 
 
@@ -54,15 +38,11 @@ namespace DatabaseWs
             Message ret = null;
             bool isAuthenticated = false;
 
-            using (var db = new UserContext())
+            using (var db = new DatabaseAccess())
             {
-                foreach (AspNetUsers item in db.AspNetUsers)
-                {
-                    if (item.UserName == username)
-                    {
-                        isAuthenticated = ValidateCredentials(pass, item.PasswordHash);
-                    }
-                }
+                string hashPwd = db.GetPasswordHash(username);
+
+                isAuthenticated = ValidateCredentials(pass, hashPwd);
             }
 
             if (isAuthenticated)

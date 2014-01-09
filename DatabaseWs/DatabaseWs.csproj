@@ -82,6 +82,7 @@
     <Compile Include="Database.svc.cs">
       <DependentUpon>Database.svc</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseAccess.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserModel.Context.cs">
