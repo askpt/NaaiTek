@@ -1,4 +1,6 @@
-%%Hangman Game in SWI Prolog
+:-consult('wordbase.pl').
+
+%Hangman Game in SWI Prolog
 % This top-level predicate runs the game.  It prints a
 % welcome message, picks a phrase, and calls getGuess.
 
@@ -30,7 +32,7 @@ getPhrase(Category,Ans):-
 	length(L, X),
 	R is random(X),
 	N is R+1,
-	getNth(L, N, Ans),!.
+	getNth(L, N, Ans), !.
 
 % Asks the user for a letter guess.  Starts by writing the
 % current "display phrase" with blanks, then asks for a guess and
@@ -143,26 +145,3 @@ belongs(AnsList, BlankList, GuessName, BlankName):-
 
 belongs(_, BlankList, _, BlankName):-
 	name(BlankName, BlankList).
-
-phrases(nature,dog).
-phrases(nature,tree).
-phrases(nature,flower).
-phrases(nature,bush).
-
-phrases(physics,strings_theory).
-phrases(physics,newton).
-phrases(physics,universe).
-phrases(physics,black_hole).
-
-phrases(web_sites,google).
-phrases(web_sites,facebook).
-phrases(web_sites,youtube).
-phrases(web_sites,bing).
-
-phrases(programming_language,java).
-phrases(programming_language,c_sharp).
-phrases(programming_language,perl).
-phrases(programming_language,g_portugol).
-
-phrases(user_added,word).
-

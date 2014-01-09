@@ -24,6 +24,8 @@ typedef struct
 	bool userWin;
 	int numErrors;
 	string categories[20];
+	string word;
+	string halfWord;
 }Game;
 
 /*global variables*/
@@ -47,12 +49,13 @@ void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
 void drawChar(int x, int y, char c);
 void initGameData();
 void drawErrorChar();
-void drawWord(string word);
+void drawWord(string word, int check);
 void drawHangman();
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string text);
 void IAGetCategories();
-void IAGetPhrases(char *category);
-void IACheckIfBelongs(char *c, char *word);
+void IAGetPhrases();
+void IACheckIfBelongs(char c, string word);
+void checkWord(string word);
 
 
 
@@ -73,8 +76,10 @@ void initGameData()
 	game.numErrors = 0;
 	for (int i = 0; i < 20; i++)
 	{
-		game.categories[i]="";
+		game.categories[i] = "";
 	}
+	game.word = "";
+	game.halfWord = "";
 }
 
 /*function when the window is resixed*/
@@ -113,10 +118,8 @@ void drawCircle(float centerX, float centerY, float radius, int num, GLfloat lin
 	for (int i = 0; i < num; i++)
 	{
 		float angle = 2.0f * 3.1415926f * float(i) / float(num);
-
 		float x = radius * cosf(angle);
 		float y = radius * sinf(angle);
-
 		glVertex2f(x + centerX, y + centerY);
 	}
 	glEnd();
@@ -126,7 +129,6 @@ void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
 {
 	glLineWidth(lineWidth);
 	glBegin(GL_LINES);
-
 	glVertex2f(x1, y1);
 	glVertex2f(x2, y2);
 	glEnd();
@@ -136,7 +138,7 @@ void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
 void drawChar(int x, int y, char c)
 {
 	glRasterPos2d(x, y);
-	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c);
 }
 
 /*function to draw char that does not belong in the word*/
@@ -159,25 +161,36 @@ void drawErrorChar()
 				drawChar(100, 100, game.wrongChar[i]);
 			}
 			else
-			if (i<8)
+			if (i < 8)
 				drawChar(100 + (50 * i), 100, game.wrongChar[i]);
 		}
 		else
 		for (int j = 0; j < 5; j++){
-			if (j<4)
-			drawChar(100 + (50 * j), 130, game.wrongChar[i]);
+			if (j < 4)
+				drawChar(100 + (50 * j), 130, game.wrongChar[i]);
 		}
 	}
 
 }
 /*function to draw char lines of a word*/
-void drawWord(string word)
+void drawWord(string word, int check)
 {
 	int wordSize = word.length();
-	for (int i = 0; i < wordSize; i++)
-	{
-		drawLine(20 + (i * 60), 550, 60 + (i * 60), 550, 3.0);
+	if (check == 1){
+		for (int i = 0; i < wordSize; i++)
+		{
+			if (word.at(i) == '*')
+				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+			else
+				drawChar(20 + (i * 40), 550, word.at(i));
+		}
 	}
+	else
+	if (check == 0){
+		for (int i = 0; i < wordSize; i++)
+			drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+	}
+	glFlush();
 }
 /*function to draw hangman parts*/
 void drawHangman()
@@ -189,40 +202,87 @@ void drawHangman()
 	}
 	else
 	if (game.numErrors == 2){
-
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
 		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
 	}
 	else
 	if (game.numErrors == 3){
-
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
 		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
 		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
 	}
 	else
 	if (game.numErrors == 4){
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
 		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
 	}
 	else
 	if (game.numErrors == 5){
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
+		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
 		drawLine(WindowWidth - 200, 210, WindowWidth - 200, 280, 4.0);
 	}
 	else
 	if (game.numErrors == 6)
 	{
-
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
+		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
+		drawLine(WindowWidth - 200, 210, WindowWidth - 200, 280, 4.0);
 		drawLine(WindowWidth - 200, 230, WindowWidth - 235, 260, 4.0);
 	}
 	else
 	if (game.numErrors == 7){
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
+		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
+		drawLine(WindowWidth - 200, 210, WindowWidth - 200, 280, 4.0);
+		drawLine(WindowWidth - 200, 230, WindowWidth - 235, 260, 4.0);
 		drawLine(WindowWidth - 200, 230, WindowWidth - 165, 260, 4.0);
 	}
 	else
 	if (game.numErrors == 8){
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
+		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
+		drawLine(WindowWidth - 200, 210, WindowWidth - 200, 280, 4.0);
+		drawLine(WindowWidth - 200, 230, WindowWidth - 235, 260, 4.0);
+		drawLine(WindowWidth - 200, 230, WindowWidth - 165, 260, 4.0);
 		drawLine(WindowWidth - 200, 280, WindowWidth - 235, 320, 4.0);
 	}
 	else
 	if (game.numErrors == 9)
 	{
+		drawLine(WindowWidth / 2.0 - 100, WindowHeight - 100, WindowWidth / 2.0 - 50, WindowHeight - 200, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0, WindowHeight - 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, WindowHeight - 200, WindowWidth / 2.0 - 50, 100, 4.0);
+		drawLine(WindowWidth / 2.0 - 50, 100, WindowWidth - 200, 100, 4.0);
+		drawLine(WindowWidth - 200, 100, WindowWidth - 200, 150, 4.0);
+		drawCircle(WindowWidth - 200, 180, 30, 1000, 4.0);
+		drawLine(WindowWidth - 200, 210, WindowWidth - 200, 280, 4.0);
+		drawLine(WindowWidth - 200, 230, WindowWidth - 235, 260, 4.0);
+		drawLine(WindowWidth - 200, 230, WindowWidth - 165, 260, 4.0);
+		drawLine(WindowWidth - 200, 280, WindowWidth - 235, 320, 4.0);
 		drawLine(WindowWidth - 200, 280, WindowWidth - 165, 320, 4.0);
 	}
 	glFlush();
@@ -235,7 +295,7 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glRectf(x, y, width, height);
 	glColor3b(1.0, 0.0, 0.0);
-	glRasterPos2f(x+70, y + 40);
+	glRasterPos2f(x + 70, y + 40);
 	len = word.length();
 	cout << word << endl;
 	for (int i = 0; i < len; i++)
@@ -246,36 +306,43 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 
 	glFlush();
 
-	
+
 }
 /*function to draw the main scene*/
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-
-	drawRectangleWithText(300,50,500,120,game.categories[0]);
-	drawRectangleWithText(300, 150, 500, 220, game.categories[1]);
-	drawRectangleWithText(300, 250, 500, 320, game.categories[2]);
-	drawRectangleWithText(300, 350, 500, 420, game.categories[3]);
-	drawRectangleWithText(300, 450, 500, 520, game.categories[4]);
+	IAGetPhrases();
+	
 	glFlush();
 
 }
-
-/*callback special key of keyobard*/
-void keyBoard(int key, int x, int y)
+/*special keyboard function*/
+void keyboardSpecial(int key, int x, int y)
 {
-	switch (key) {\
+	switch (key){
+
 	case GLUT_KEY_F1:
+
 		glutPostRedisplay();
-		initGameData();
+
 		break;
 	case GLUT_KEY_F10:
 		game.numErrors++;
 		drawHangman();
 		break;
+	case GLUT_KEY_F2:
+		IAGetPhrases();
+		break;
 	}
-
+}
+/*callback keyboard*/
+void keyBoard(unsigned char key, int x, int y)
+{
+	if (((int)key > 64 && (int)key < 91) || ((int)key>96 && (int)key < 123) && game.word != ""){
+		IACheckIfBelongs(key, game.word);
+		cout << key << endl;
+	}
 }
 
 void IAGetCategories()
@@ -294,61 +361,75 @@ void IAGetCategories()
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
-	//cin.get();
+
 }
-void IAGetPhrases(char *category)
+void IAGetPhrases()
 {
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(2);
-	av[0] = PlTerm(category);
+	char *cat[] = { "nature" };
+	av[0] = PlTerm("nature");
 	PlQuery q("getPhrase", av);
 	try{
 		while (q.next_solution()){
 			cout << (string)av[1] << endl;
+			game.word = (string)av[1];
 		}
 	}
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
-	cin.get();
+	drawWord(game.word, 0);
+
 }
-void IACheckIfBelongs(char *c, char *word)
+void IACheckIfBelongs(char c, string word)
 {
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(3);
-	char *a= {"a"};
-	char *b = { "arroz" };
-	av[0] = PlTerm(a);
-	av[1] = PlTerm(b);
 
-	PlQuery q("getPhrase", av);
+	char *ct = &c;
+
+	char* cs = new char[word.size() + 1];
+	strcpy_s(cs, word.size() + 1, word.c_str());
+
+	av[0] = PlTerm(ct);
+	av[1] = PlTerm(cs);
+
+	PlQuery q("checkIfBelongs", av);
 	try{
 		while (q.next_solution()){
+			game.halfWord = (string)av[2];
 			cout << (string)av[2] << endl;
 		}
 	}
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
-	cin.get();
-}
+	checkWord((string)av[2]);
+	
 
+}
+void checkWord(string word)
+{
+	for (int i = 0; i < word.length(); i++)
+	{
+
+	}
+}
 int main(int argc, char**argv)
 {
-
 	initGameData();
-	IAGetCategories();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("HANGMAN");
-
 	glutDisplayFunc(display);
-	glutSpecialFunc(keyBoard);
+	glutKeyboardFunc(keyBoard);
+	glutSpecialFunc(keyboardSpecial);
 	myInit();
-	glutMainLoop();	
+	glutMainLoop();
 	return 0;
 }
 
