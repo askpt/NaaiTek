@@ -206,43 +206,49 @@ void handleKeypress(unsigned char key, int x, int y)
         
         // UP
         case 'p':
+        case'P':
             if(isPossibleToMovePlayerToPosition(player.x - 1, player.y))
             {
                 setPlayerPosition(player.x - 1, player.y);
                 drawScene();
             }
-            cout << key << endl;
             break;
             
         // DOWN
         case 'l':
+        case 'L':
             if(isPossibleToMovePlayerToPosition(player.x + 1, player.y))
             {
                 setPlayerPosition(player.x + 1, player.y);
                 drawScene();
             }
-            cout << key << endl;
             break;
             
         // LEFT
         case 'z':
+        case 'Z':
             if(isPossibleToMovePlayerToPosition(player.x, player.y - 1))
             {
                 setPlayerPosition(player.x, player.y - 1);
                 drawScene();
             }
-            cout << key << endl;
             break;
             
         // RIGHT
         case 'x':
+        case 'X':
             if(isPossibleToMovePlayerToPosition(player.x, player.y + 1))
             {
                 setPlayerPosition(player.x, player.y + 1);
                 drawScene();
             }
-            cout << key << endl;
         break;
+            
+        // requesting help
+        case 'h':
+        case 'H':
+            totalHelpRequest++;
+            cout << totalHelpRequest << endl;
     }
 }
 
@@ -465,7 +471,6 @@ int getLastPossibleY()
     }
     exit(0);
 }
-
 
 
 void checkForChangesInGameSettings()
