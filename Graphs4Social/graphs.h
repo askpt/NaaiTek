@@ -37,4 +37,6 @@ void saveGraph();
 void readGraph();
 void readGraphUser(std::string);
 
+bool TryAuth(std::string, std::string);
+
 #endif

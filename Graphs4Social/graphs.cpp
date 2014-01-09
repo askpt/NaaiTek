@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "graphs.h"
 #include <iostream>
 #include <fstream>
@@ -140,9 +142,8 @@ void readGraph(){
 
 void readGraphUser(std::string user)
 {
-	wstring wsTmp(user.begin(), user.end());
+	wstring userWs(user.begin(), user.end());
 
-	utility::string_t userWs = wsTmp;
 	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/get_graph?user=" + userWs;
 	
 	utility::string_t urlDim = L"http://uvm061.dei.isep.ipp.pt:5000/get_users_dimension";
@@ -176,4 +177,37 @@ void readGraphUser(std::string user)
 	}
 
 	numPaths = graph[L"paths"].size();
+}
+
+bool TryAuth(string username, string password)
+{
+	wstring userWs(username.begin(), username.end());
+	wstring passWs(password.begin(), password.end());
+	
+	utility::string_t url = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/auth?user=" + userWs;
+	url += L"&pass=" + passWs;
+
+	json::value obj = RequestJSONValueAsync(url).get();
+
+	wstring status = obj[L"Status"].to_string();
+
+	int retBool = true;
+
+	char c_mb_str[80];
+	wcstombs(c_mb_str, &status[0], 80);
+	string s(c_mb_str);
+	s[4] = 0;
+
+	char test[] = { '"', 'o', 'k', '"' };
+
+	for (size_t i = 0; i < 4; i++)
+	{
+		if (s[i] != test[i])
+		{
+			retBool = false;
+		}
+	}
+
+	return (retBool);
+	
 }

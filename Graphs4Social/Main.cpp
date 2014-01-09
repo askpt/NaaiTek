@@ -124,7 +124,7 @@ void initModel(){
 	model.g_pos_light2[2] = 5.0;
 	model.g_pos_light2[3] = 0.0;
 
-	model.regUser = "Andre";
+	model.regUser;
 }
 
 /* Call both initiators, and enable necessary methods. */
@@ -149,8 +149,7 @@ void myInit()
 	initModel();
 	initState();
 
-	readGraph();
-	readGraphUser(model.regUser);
+
 }
 
 /* Print the Help Menu to help us debugging mainly */
@@ -676,26 +675,43 @@ void mouse(int btn, int mouseState, int x, int y){
 /* Main, runs in a loop. */
 void main(int argc, char **argv)
 {
-	glutInit(&argc, argv);
+	string username, pass;
 
-	/* need both double buffering and z buffer */
+	cout << "username" << endl;
+	cin >> username;
+	cout << "password" << endl;
+	cin >> pass;
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 450);
-	glutCreateWindow("OpenGL");
-	glutReshapeFunc(myReshape);
-	glutDisplayFunc(display);
-	glutKeyboardFunc(keyboard);
-	glutKeyboardUpFunc(keyboardUp);
-	glutSpecialFunc(Special);
-	glutSpecialUpFunc(SpecialUp);
-	glutMouseFunc(mouse);
 
-	glutTimerFunc(state.timer, Timer, 0);
+	if (TryAuth(username, pass))
+	{
+		glutInit(&argc, argv);
 
-	myInit();
+		/* need both double buffering and z buffer */
 
-	printHelp();
+		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+		glutInitWindowSize(800, 450);
+		glutCreateWindow("OpenGL");
+		glutReshapeFunc(myReshape);
+		glutDisplayFunc(display);
+		glutKeyboardFunc(keyboard);
+		glutKeyboardUpFunc(keyboardUp);
+		glutSpecialFunc(Special);
+		glutSpecialUpFunc(SpecialUp);
+		glutMouseFunc(mouse);
 
-	glutMainLoop();
+		glutTimerFunc(state.timer, Timer, 0);
+
+		myInit();
+
+		model.regUser = username;
+
+		readGraph();
+		readGraphUser(model.regUser);
+
+		printHelp();
+
+		glutMainLoop();
+	}
+
 }
