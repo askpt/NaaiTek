@@ -220,7 +220,6 @@ void putLights(GLfloat* diffuse)
 }
 
 /* Draws the node in the form of a sphere */
-#define nodeID 43
 void drawNode(Node node)
 {
 	GLfloat x0 = node.x;
@@ -238,7 +237,7 @@ void drawNode(Node node)
 }
 
 /* Draws the path in the form of a cylinder */
-#define pathID 59
+#define pathID 20
 void drawPath(Node noi, Node nof, Path p)
 {
 	GLfloat xf = nof.x;
@@ -271,10 +270,10 @@ void drawPath(Node noi, Node nof, Path p)
 /* Calls the drawNode and the drawPath method
  * One time for each existant node and path*/
 void drawGraph(){
-	
+	int nodeID = _MAX_NODES_GRAPH;
 	for (int i = 0; i < numNodes; i++){
 		(i == 0) ? material(blue) : material(slate);
-		glPushName(nodeID);
+		glPushName(nodeID + i);
 		drawNode(nodes[i]);
 		glPopName();
 	}
@@ -655,7 +654,14 @@ int picking(int x, int y){
 
 void motionPicking(int x, int y){
 	state.pickedObjID = picking(x, y);
-	cout << "Left down - object:" << state.pickedObjID << endl;
+	if (state.pickedObjID >= _MAX_NODES_GRAPH)
+	{
+		wcout << L"Node: " + nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name << endl;
+	}
+	else
+	{
+		cout << "Left down - object:" << state.pickedObjID << endl;
+	}
 }
 
 /* Used to see what mouse action will be executed */
@@ -675,9 +681,16 @@ void mouse(int btn, int mouseState, int x, int y){
 		break;
 	case GLUT_LEFT_BUTTON:
 		if (mouseState == GLUT_DOWN){
-			glutMotionFunc(motionPicking);
-			//state.pickedObjID = picking(x, y);
-			//cout << "Left down - object:" << state.pickedObjID << endl;
+			//glutMotionFunc(motionPicking);
+			state.pickedObjID = picking(x, y);
+			if (state.pickedObjID >= _MAX_NODES_GRAPH)
+			{
+				wcout << L"Node: " + nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name << endl;
+			}
+			else
+			{
+				cout << "Left down - object:" << state.pickedObjID << endl;
+			}
 		}
 		else{
 			glutMotionFunc(NULL);

@@ -167,7 +167,7 @@ void readGraphUser(std::string user)
 
 	numNodes = graph[L"nodes"].size();
 	//numNodes = 2;
-	wstring usersNodes[100];
+	wstring usersNodes[_MAX_NODES_GRAPH];
 
 	userWs = L'\"' + userWs + L'\"';
 	int nodePos = 1;
@@ -198,7 +198,7 @@ void readGraphUser(std::string user)
 
 					nodes[0].x = 0;
 					nodes[0].y = 0;
-					nodes[0].z = iterDim->second[L"dimension"].as_integer() * 2;
+					nodes[0].z = iterDim->second[L"dimension"].as_integer() * 4;
 					nodes[0].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
 
 					nodes[0].user = new User(userName, email, country, city, number, day, month, year);
@@ -207,13 +207,11 @@ void readGraphUser(std::string user)
 				}
 				else
 				{
-					//TODO radial function
-
-					float r = numNodes * 2.0;
+					float r = numNodes * 3.0;
 
 					nodes[nodePos].x = r * cos(t);
 					nodes[nodePos].y = r * sin(t);
-					nodes[nodePos].z = iterDim->second[L"dimension"].as_integer() * 2;
+					nodes[nodePos].z = iterDim->second[L"dimension"].as_integer() * 4;
 					nodes[nodePos].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
 
 					nodes[nodePos].user = new User(userName, email, country, city, number, day, month, year);
