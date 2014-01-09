@@ -41,7 +41,7 @@ float g_cameraAngle = 0.0f;
 float g_zDistance = -5.0f;
 
 // square size (used in maze's wall drawing)
-const float g_wallSize = 0.075;
+float g_wallSize;
 int mazeSizeHorizontal;
 int mazeSizeVertical;
 
@@ -109,7 +109,7 @@ void update(int value);
 GLuint loadTexture(Image* image);
 float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
 void cleanUp();
-vector<vector<int>> mazeBuilder();
+vector<vector<int>> mazeBuilder(int sizeX, int sizeY);
 void drawWallAtScreenPosition(float x, float y);
 void drawPathAtScreenPosition(float x, float y);
 void drawSquareAtScreenPositionWithColor(float x, float y, float color[]);
@@ -161,10 +161,43 @@ int main(int argc, char *argv[])
     
     //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
     
+    // no arguments or "1": maze assumes "easy" mode
+    if(argc == 1)
+    {
+        g_wallSize = 0.075;
+        mazeSizeHorizontal = 20;
+        mazeSizeVertical = 20;
+    }
+    else
+    {
+        // defining dificulty level
+        std::string dificultyLevel = argv[1];
+        
+        // "2": maze assumes "moderate" mode
+        if(dificultyLevel.compare("2") == 0)
+        {
+            g_wallSize = 0.045;
+            mazeSizeHorizontal = 40;
+            mazeSizeVertical = 40;
+        }
+        
+        // "3": maze assumes "hard" mode
+        else if(dificultyLevel.compare("3") == 0)
+        {
+            g_wallSize = 0.020;
+            mazeSizeHorizontal = 80;
+            mazeSizeVertical = 80;
+        }
+        
+        // other will exit application
+        else
+        {
+            exit(2);
+        }
+    }
+    
     // building a random maze
-    maze = mazeBuilder();
-    mazeSizeHorizontal = 20;
-    mazeSizeVertical = 20;
+    maze = mazeBuilder(mazeSizeHorizontal, mazeSizeVertical);
     
     // defining player's and target's positions
     setPlayerPosition(getFirstPossibleX(), getFirstPossibleY());

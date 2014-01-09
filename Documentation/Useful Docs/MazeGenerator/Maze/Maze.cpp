@@ -8,24 +8,24 @@
 using namespace std;
 
 
-vector<vector<int>> mazeBuilder()
+vector<vector<int>> mazeBuilder(int mazeSizeX, int mazeSizeY)
 {
 	srand(time(0));
     
-	const int maze_size_x = 20;
-	const int maze_size_y = 20;
+	//const int maze_size_x = 20;
+	//const int maze_size_y = 20;
 	vector < vector < int > > maze;
 	list < pair < int, int> > drillers;
     
-	maze.resize(maze_size_y);
-	for (size_t y = 0; y < maze_size_y; y++)
-		maze[y].resize(maze_size_x);
+	maze.resize(mazeSizeY);
+	for (size_t y = 0; y < mazeSizeY; y++)
+		maze[y].resize(mazeSizeX);
     
-	for (size_t x = 0; x < maze_size_x; x++)
-        for (size_t y = 0; y<maze_size_y; y++)
+	for (size_t x = 0; x < mazeSizeX; x++)
+        for (size_t y = 0; y<mazeSizeY; y++)
             maze[y][x] = 0;
     
-	drillers.push_back(make_pair(maze_size_x / 2, maze_size_y / 2));
+	drillers.push_back(make_pair(mazeSizeX / 2, mazeSizeY / 2));
 	while (drillers.size()>0)
 	{
 		list < pair < int, int> >::iterator m, _m, temp;
@@ -47,7 +47,7 @@ vector<vector<int>> mazeBuilder()
                     break;
                 case 1:
                     (*m).second += 2;
-                    if ((*m).second >= maze_size_y || maze[(*m).second][(*m).first])
+                    if ((*m).second >= mazeSizeY || maze[(*m).second][(*m).first])
                     {
                         remove_driller = true;
                         break;
@@ -65,7 +65,7 @@ vector<vector<int>> mazeBuilder()
                     break;
                 case 3:
                     (*m).first += 2;
-                    if ((*m).first >= maze_size_x || maze[(*m).second][(*m).first])
+                    if ((*m).first >= mazeSizeX || maze[(*m).second][(*m).first])
                     {
                         remove_driller = true;
                         break;
@@ -89,9 +89,9 @@ vector<vector<int>> mazeBuilder()
 	}
     
 	// Done
-	for (size_t y = 0; y < maze_size_y; y++)
+	for (size_t y = 0; y < mazeSizeY; y++)
 	{
-		for (size_t x = 0; x < maze_size_x; x++)
+		for (size_t x = 0; x < mazeSizeX; x++)
 		{
 			if (maze[y][x] == 1)
 				printf(" ");
