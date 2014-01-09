@@ -126,6 +126,9 @@ int getLastPossibleY();
 
 // fwd declarations of menu window
 int menuBuilder();
+void handleMenuKeypress(unsigned char key, int x, int y);
+void handleMenuResize(int w, int h);
+void drawMenuScene();
 
 
 /**
@@ -613,12 +616,50 @@ void cleanUp()
 
 int menuBuilder()
 {
-    int menuWindow = glutCreateWindow("Maze Menu");
-    glutDisplayFunc(drawScene);
-	glutKeyboardFunc(handleKeypress);
-	glutReshapeFunc(handleResize);
+    menuWindow = glutCreateWindow("Maze Menu");
+    glutDisplayFunc(drawMenuScene);
+	glutKeyboardFunc(handleMenuKeypress);
+	glutReshapeFunc(handleMenuResize);
     
     cout << "building menu" << endl;
     
     return 0;
 }
+
+
+void handleMenuKeypress(unsigned char key, int x, int y)
+{
+	
+}
+
+
+
+void drawMenuScene()
+{
+    // standard stuff
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+    
+    // draws menu
+    
+	glutSwapBuffers();
+}
+
+
+void handleMenuResize(int w, int h)
+{
+	// converting coordinates to pixel values
+	glViewport(0, 0, w, h);
+    
+	// switch to and setting camera perspective
+	glMatrixMode(GL_PROJECTION);
+    
+	// setting the camera perspective
+	// reseting the camera
+	glLoadIdentity();
+	// camera angle, width-to-heigth ration, near z clipping coordinate, far z clipping coordinate
+	gluPerspective(45.0, (double) w / (double) h, 1.0, 200.0);
+}
+
+
+
