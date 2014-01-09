@@ -19,7 +19,10 @@
 #include "ImageLoader.h"
 #include "text3d.h"
 #include "Maze.h"
+
+#warning fix this include to .h
 #include <vector>
+
 
 using namespace std;
 
@@ -27,6 +30,9 @@ using namespace std;
 //************************************************************************
 // global variables
 //************************************************************************
+
+// windows
+int mainWindow;
 
 // rotation angle
 float g_angle = -30.0f;
@@ -78,6 +84,13 @@ struct position
 }player, target;
 
 
+// global variables for subwindow
+int menuWindow;
+char *title = "Maze Menu";
+int numberOfOptions = 3;
+char * optionsVector[3] = { "Maze Menu", "Start Game", "Quit"};
+
+
 //************************************************************************
 // forward declarations of OpenGL callback functions
 //************************************************************************
@@ -111,6 +124,9 @@ int getFirstPossibleY();
 int getLastPossibleX();
 int getLastPossibleY();
 
+// fwd declarations of menu window
+int menuBuilder();
+
 
 /**
  * main
@@ -120,10 +136,11 @@ int main(int argc, char *argv[])
 	// initializing GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 800);
     
-	// creating the window
-	glutCreateWindow("Maze");
+	// Window 1 - Game
+    glutInitWindowSize(800, 800);
+	mainWindow = glutCreateWindow("Maze");
+    //glutInitWindowSize(800, 800);
 	initRendering();
     
     //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
@@ -144,6 +161,10 @@ int main(int argc, char *argv[])
     
 	// adding a timer
 	//glutTimerFunc(25, update, 0);
+    
+    // Window 2 - Menu
+    glutInitWindowSize(200, 800);
+    menuWindow = menuBuilder();
     
 	glutMainLoop();
     
@@ -589,3 +610,15 @@ void cleanUp()
     t3dCleanup();
 }
 
+
+int menuBuilder()
+{
+    int menuWindow = glutCreateWindow("Maze Menu");
+    glutDisplayFunc(drawScene);
+	glutKeyboardFunc(handleKeypress);
+	glutReshapeFunc(handleResize);
+    
+    cout << "building menu" << endl;
+    
+    return 0;
+}
