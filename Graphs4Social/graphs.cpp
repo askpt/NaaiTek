@@ -163,6 +163,10 @@ void readGraphUser(std::string user)
 		{
 			if (iterDim->second[L"user"] == iter->second)
 			{
+
+				utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
+				json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
+
 				if (iterDim->second[L"user"].to_string().compare(userWs) == 0)
 				{
 					wcout << iterDim->second[L"user"] << endl;
@@ -172,14 +176,14 @@ void readGraphUser(std::string user)
 					nodes[0].x = 0;
 					nodes[0].y = 0;
 					nodes[0].z = iterDim->second[L"dimension"].as_integer() * 2;
-					nodes[0].width = 2;
+					nodes[0].width = userInfo[L"numTags"].as_integer();
 
 					nodes[1].x = 15;
 					nodes[1].y = -20;
 					nodes[1].z = 20;
 					nodes[1].width = 2;
 
-					paths[0].width = 2;
+					paths[0].width = 1;
 					paths[0].connection.nodei = 0;
 					paths[0].connection.nodef = 1;
 					//nodes[0].width = 2000.0;
