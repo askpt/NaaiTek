@@ -1,4 +1,6 @@
-%%Hangman Game in SWI Prolog
+:-consult('../wordbase.pl').
+
+%Hangman Game in SWI Prolog
 % This top-level predicate runs the game.  It prints a
 % welcome message, picks a phrase, and calls getGuess.
 
