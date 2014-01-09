@@ -232,7 +232,6 @@ void drawNode(Node node)
 	glPushMatrix();
 	glTranslatef(x0, y0, z0);
 
-
 	gluSphere(model.pQuadric, r, 32, 20);
 
 	glPopMatrix();
@@ -263,7 +262,7 @@ void drawPath(Node noi, Node nof, Path p)
 	glRotatef(aij, 0, 0, 1.0);
 	glRotatef(90 - bij, 0.0, 1.0, 0.0);
 
-	
+
 	gluCylinder(model.pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
 
 	glPopMatrix();
@@ -272,8 +271,9 @@ void drawPath(Node noi, Node nof, Path p)
 /* Calls the drawNode and the drawPath method
  * One time for each existant node and path*/
 void drawGraph(){
-	material(slate);
+	
 	for (int i = 0; i < numNodes; i++){
+		(i == 0) ? material(blue) : material(slate);
 		glPushName(nodeID);
 		drawNode(nodes[i]);
 		glPopName();
@@ -719,7 +719,7 @@ void main(int argc, char **argv)
 
 		myInit(username);
 
-		
+
 
 		printHelp();
 

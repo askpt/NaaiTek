@@ -1,10 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define _USE_MATH_DEFINES
 
 #include "graphs.h"
 #include <iostream>
 #include <fstream>
 #include "User.h"
 #include "Json.h"
+#include <math.h>
 
 #define __GRAFO__FILE__ "example.graph"
 
@@ -140,6 +142,17 @@ void readGraph(){
 	}
 }
 
+
+float calcNodeWidth(int param)
+{
+	return (param + 2.5) * 0.3;
+}
+
+float calcPathWidth(int param)
+{
+	return (param + 1) * 0.25;
+}
+
 void readGraphUser(std::string user)
 {
 	wstring userWs(user.begin(), user.end());
@@ -158,6 +171,7 @@ void readGraphUser(std::string user)
 
 	userWs = L'\"' + userWs + L'\"';
 	int nodePos = 1;
+	float t = 2.0 * M_PI / numNodes;
 
 	for (auto iter = graph[L"nodes"].begin(); iter != graph[L"nodes"].end(); ++iter)
 	{
@@ -185,7 +199,7 @@ void readGraphUser(std::string user)
 					nodes[0].x = 0;
 					nodes[0].y = 0;
 					nodes[0].z = iterDim->second[L"dimension"].as_integer() * 2;
-					nodes[0].width = userInfo[L"numTags"].as_integer() + 1;
+					nodes[0].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
 
 					nodes[0].user = new User(userName, email, country, city, number, day, month, year);
 
@@ -194,15 +208,19 @@ void readGraphUser(std::string user)
 				else
 				{
 					//TODO radial function
-					nodes[nodePos].x = 20;
-					nodes[nodePos].y = 30;
+
+					float r = numNodes * 2.0;
+
+					nodes[nodePos].x = r * cos(t);
+					nodes[nodePos].y = r * sin(t);
 					nodes[nodePos].z = iterDim->second[L"dimension"].as_integer() * 2;
-					nodes[nodePos].width = userInfo[L"numTags"].as_integer() + 1;
+					nodes[nodePos].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
 
 					nodes[nodePos].user = new User(userName, email, country, city, number, day, month, year);
 					usersNodes[nodePos] = userName;
 
 					nodePos++;
+					t += 2.0*M_PI / numNodes;
 					//wcout << iter->first; //Pos
 					//wcout << iter->second; // Nome
 					//wcout << iterDim->second[L"dimension"]; //dimensao
@@ -241,7 +259,7 @@ void readGraphUser(std::string user)
 			}
 		}
 
-		paths[p].width = iter->second[L"connection"].as_integer();
+		paths[p].width = calcPathWidth(iter->second[L"connection"].as_integer());
 		paths[p].connection.nodei = user1Pos;
 		paths[p].connection.nodef = user2Pos;
 
