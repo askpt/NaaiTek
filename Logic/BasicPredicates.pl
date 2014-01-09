@@ -241,8 +241,10 @@ checkGameResponseRequest(User, L):-findall(U, pending(User, U, 'game'), L).
 checkFriendRequestNot(User, L):-findall(U, pending(User, U, 'accept'), L).
 
 %remove friend request
-removeRequest(User1, User2):-retractall(pending(User1, User2, _));
-	retractall(pending(User2, User1, _)).
+removeRequest(User1, User2):-(pending(User1, User2, _), 
+	retractall(pending(User1, User2, _)));
+	(pending(User2, User1, _),
+	retractall(pending(User2, User1, _))).
 
 %check pending user request
 checkPendingRequest(User, L):-findall(U, (pending(User, U, _);
