@@ -89,6 +89,7 @@ typedef struct Model {
 
 	// insert username here after login
 	string regUser;
+	GLUquadricObj* pQuadric;
 }Model;
 
 State state;
@@ -125,6 +126,7 @@ void initModel(){
 	model.g_pos_light2[3] = 0.0;
 
 	model.regUser;
+	model.pQuadric = gluNewQuadric();
 }
 
 /* Call both initiators, and enable necessary methods. */
@@ -141,6 +143,7 @@ void myInit()
 	glEnable(GL_NORMALIZE);
 
 	glDepthFunc(GL_LESS);
+
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, AmbientLight);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, state.lightViewer);
@@ -224,13 +227,9 @@ void drawNode(Node node)
 	glPushMatrix();
 	glTranslatef(x0, y0, z0);
 
-	glBegin(GL_POLYGON);
-	GLUquadricObj* pQuadric = gluNewQuadric();
 
-	gluSphere(pQuadric, r, 32.0, 128.0);
+	gluSphere(model.pQuadric, r, 32, 20);
 
-	gluDeleteQuadric(pQuadric);
-	glEnd();
 	glPopMatrix();
 }
 
@@ -259,9 +258,9 @@ void drawPath(Node noi, Node nof, Path p)
 	glRotatef(aij, 0, 0, 1.0);
 	glRotatef(90 - bij, 0.0, 1.0, 0.0);
 
-	GLUquadricObj* pQuadric = gluNewQuadric();
-	gluCylinder(pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
-	gluDeleteQuadric(pQuadric);
+	
+	gluCylinder(model.pQuadric, wij / 2.0, wij / 2.0, sij, 32, 4);
+
 	glPopMatrix();
 }
 
@@ -279,7 +278,7 @@ void drawGraph(){
 		glPushName(pathID);
 		Node* noi = &nodes[paths[i].connection.nodei];
 		Node* nof = &nodes[paths[i].connection.nodef];
-		drawPath(*noi, *nof, paths[i]);
+		//drawPath(*noi, *nof, paths[i]);
 		drawPath(*nof, *noi, paths[i]);
 		glPopName();
 	}
@@ -345,6 +344,8 @@ int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
 	}*/
 	return objid;
 }
+
+
 
 /* Used to see if the camera colides with some part of the graph */
 void Timer(int value)
@@ -624,6 +625,8 @@ int picking(int x, int y){
 	drawGraph();
 
 	n = glRenderMode(GL_RENDER);
+	cout << "Hits:" << n << endl;
+
 	if (n > 0)
 	{
 		ptr = buffer;
@@ -645,6 +648,11 @@ int picking(int x, int y){
 	return objid;
 }
 
+void motionPicking(int x, int y){
+	state.pickedObjID = picking(x, y);
+	cout << "Left down - object:" << state.pickedObjID << endl;
+}
+
 /* Used to see what mouse action will be executed */
 void mouse(int btn, int mouseState, int x, int y){
 	switch (btn) {
@@ -662,10 +670,12 @@ void mouse(int btn, int mouseState, int x, int y){
 		break;
 	case GLUT_LEFT_BUTTON:
 		if (mouseState == GLUT_DOWN){
-			state.pickedObjID = picking(x, y);
-			cout << "Left down - object:" << state.pickedObjID << endl;
+			glutMotionFunc(motionPicking);
+			//state.pickedObjID = picking(x, y);
+			//cout << "Left down - object:" << state.pickedObjID << endl;
 		}
 		else{
+			glutMotionFunc(NULL);
 			cout << "Left up\n";
 		}
 		break;
