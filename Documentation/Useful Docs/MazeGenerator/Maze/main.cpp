@@ -145,6 +145,7 @@ void setupMenuAmbientLight();
 void setupMenuPositionedLight();
 void drawTextAtScreenPosition(char *str, float x, float y, float z);
 float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
+void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue);
 
 
 
@@ -310,7 +311,7 @@ void clearHelp()
         {
             if(maze[i][j] == 2)
             {
-                maze[i][j] = 0;
+                maze[i][j] = 1;
             }
         }
     }
@@ -774,19 +775,46 @@ void handleMenuKeypress(unsigned char key, int x, int y)
 
 void drawMenuScene()
 {
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
+    
     
     // enabling lighting
     setupMenuAmbientLight();
     setupMenuPositionedLight();
     
+    /*
     // text with game modes
     drawTextAtScreenPosition("Online Mode", 0.0, 0.0, -15.0);
     //drawTextAtScreenPosition("Offline Mode", 0.0, -1.0, -15.0);
     //drawTextAtScreenPosition("Exit", 0.0, -2.0, -15.0);
+    */
+    
+    drawRectangleWithText(-10, -10, 10, 10, "sdgsd", 1.0, 0.0, 0.0);
+   
+    
     
     glutSwapBuffers();
+     
+}
+
+
+void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue)
+{
+    int len;
+    glColor3f(red, green, blue);
+    glRectf(x, y, width, height);
+    glColor3b(0.0, 0.0, 0.0);
+    glRasterPos2f(x + 70, y + 40);
+    len = word.length();
+    cout << word << endl;
+    for (int i = 0; i < len; i++)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word.at(i));
+        
+    }
+    glFlush();
 }
 
 
