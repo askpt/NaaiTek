@@ -89,7 +89,10 @@ void initHalfWord(int size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		game.halfWord[i] = '*';
+		if (game.word.at(i) == '_')
+			game.halfWord[i] = '-';
+		else
+			game.halfWord[i] = '*';
 	}
 }
 /*function when the window is resixed*/
@@ -195,6 +198,8 @@ void drawWord()
 		if (game.halfWord[i] != NULL){
 			if (game.halfWord[i] == '*')
 				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+			/*else if(game.halfWord[i]=='_')
+				drawChar(20 + (i * 40), 550, ' ');*/
 			else{
 				glColor3d(1.0, 1.0, 1.0);
 				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
@@ -304,20 +309,25 @@ void drawHangman()
 /*function to draw rectangle with text (button)*/
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue)
 {
+
 	int len;
-	glColor3f(red, green, blue);
-	glRectf(x, y, width, height);
-	glColor3b(0.0, 0.0, 0.0);
-	glRasterPos2f(x + 70, y + 40);
+	glColor3d(red, green, blue);	
+	glBegin(GL_QUADS);
+	glVertex2d(x, y);
+	glVertex2d(x+width, y);
+	
+	glVertex2d(x + width, y + width);
+	glVertex2d(x, y + height);
+	glEnd();
+
+	glColor3b(0.0, 0.0, 0.0); 
+	glRasterPos2f(x + 70, y + 60);
 	len = word.length();
-	cout << word << endl;
 	for (int i = 0; i < len; i++)
 	{
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word.at(i));
-
 	}
-
-	glFlush();
+	glutSwapBuffers();
 
 
 }
@@ -325,8 +335,6 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-
-
 	glFlush();
 
 }
@@ -336,9 +344,7 @@ void keyboardSpecial(int key, int x, int y)
 	switch (key){
 
 	case GLUT_KEY_F1:
-
 		glutPostRedisplay();
-
 		break;
 	case GLUT_KEY_F10:
 
@@ -408,8 +414,8 @@ void IAGetPhrases()
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(2);
-	char *cat[] = { "nature" };
-	av[0] = PlTerm("nature");
+	char *cat[] = { "web_sites" };
+	av[0] = PlTerm("programming_language");
 	PlQuery q("getPhrase", av);
 	try{
 		while (q.next_solution()){
@@ -446,7 +452,7 @@ void IACheckIfBelongs(char c, string word)
 
 			checkWord((string)av[2], c);
 			checkError(c, (string)av[2]);
-			//	cout << (string)av[2] << endl;
+			
 		}
 	}
 	catch (PlException &ex){
@@ -476,8 +482,10 @@ void checkError(char c, string word)
 			drawHangman();
 			drawErrorChar();
 			glFlush();
-			if (game.numErrors == 9)
+			if (game.numErrors == 9){
 				game.endGame = true;
+				drawRectangleWithText(WindowWidth - 200, WindowHeight - 100, 200, 100, "Lost!", 1.0, 0.0, 0.0);
+			}
 		}
 
 	}
@@ -509,7 +517,7 @@ void checkWord(string word, char c)
 	{
 		game.userWin = true;
 		game.endGame = true;
-		cout << "ganhou" << endl;
+		drawRectangleWithText(WindowWidth-200, WindowHeight-100, 200, 100, "Win!",0.0,1.0,0.0);
 	}
 
 	drawWord();
