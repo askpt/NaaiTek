@@ -88,6 +88,8 @@ bool playerDidWin;
 bool playerDidQuit;
 int totalHelpRequest;
 
+bool didRequestHelp;
+
 // global variables for subwindow
 int menuWindow;
 char *title = "Maze Menu";
@@ -112,6 +114,7 @@ void cleanUp();
 vector<vector<int>> mazeBuilder(int sizeX, int sizeY);
 void drawWallAtScreenPosition(float x, float y);
 void drawPathAtScreenPosition(float x, float y);
+void drawHelpAtScreenPosition(float x, float y);
 void drawSquareAtScreenPositionWithColor(float x, float y, float color[]);
 void resetHorizontalTranslationFactor();
 void updateHorizontalTranslationFactor();
@@ -131,6 +134,7 @@ int getLastPossibleY();
 void resetGameSettings();
 void checkIfPlayerWon();
 void requestHelp();
+void clearHelp();
 
 // fwd declarations of menu window
 int menuBuilder();
@@ -235,6 +239,10 @@ void handleKeypress(unsigned char key, int x, int y)
         // UP
         case 'p':
         case'P':
+            if(didRequestHelp)
+            {
+                clearHelp();
+            }
             if(isPossibleToMovePlayerToPosition(player.x - 1, player.y))
             {
                 setPlayerPosition(player.x - 1, player.y);
@@ -245,6 +253,10 @@ void handleKeypress(unsigned char key, int x, int y)
         // DOWN
         case 'l':
         case 'L':
+            if(didRequestHelp)
+            {
+                clearHelp();
+            }
             if(isPossibleToMovePlayerToPosition(player.x + 1, player.y))
             {
                 setPlayerPosition(player.x + 1, player.y);
@@ -255,6 +267,10 @@ void handleKeypress(unsigned char key, int x, int y)
         // LEFT
         case 'z':
         case 'Z':
+            if(didRequestHelp)
+            {
+                clearHelp();
+            }
             if(isPossibleToMovePlayerToPosition(player.x, player.y - 1))
             {
                 setPlayerPosition(player.x, player.y - 1);
@@ -265,6 +281,10 @@ void handleKeypress(unsigned char key, int x, int y)
         // RIGHT
         case 'x':
         case 'X':
+            if(didRequestHelp)
+            {
+                clearHelp();
+            }
             if(isPossibleToMovePlayerToPosition(player.x, player.y + 1))
             {
                 setPlayerPosition(player.x, player.y + 1);
@@ -275,10 +295,28 @@ void handleKeypress(unsigned char key, int x, int y)
         // requesting help
         case 'h':
         case 'H':
-            totalHelpRequest++;
-            cout << totalHelpRequest << endl;
+            requestHelp();
+            drawScene();
+            break;
     }
 }
+
+
+void clearHelp()
+{
+    for(int i = 0; i < mazeSizeHorizontal; i++)
+    {
+        for(int j = 0; j < mazeSizeVertical; j++)
+        {
+            if(maze[i][j] == 2)
+            {
+                maze[i][j] = 0;
+            }
+        }
+    }
+    didRequestHelp = false;
+}
+
 
 
 /**
@@ -334,6 +372,7 @@ void resetGameSettings()
     playerDidWin = false;
     playerDidQuit = false;
     totalHelpRequest = 0;
+    didRequestHelp = false;
 }
 
 
@@ -387,6 +426,13 @@ void drawMaze()
                 drawPathAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
                 
             }
+            
+            // draw help
+            if(maze[i][j] == 2)
+            {
+                drawHelpAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
+                           }
+            
             else
             {
                 drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
@@ -403,14 +449,15 @@ void drawMaze()
 
 void requestHelp()
 {
-    totalHelpRequest++;
-    
     // bootstrap help
     maze[1][1] = 2;
     maze[2][2] = 2;
     maze[3][3] = 2;
     maze[4][4] = 2;
-}
+    
+    didRequestHelp = true;
+    totalHelpRequest++;
+   }
 
 void setPlayerPosition(int x, int y)
 {
@@ -569,6 +616,14 @@ void drawPathAtScreenPosition(float x, float y)
 {
     // white color
     float color[] = {1.0f, 1.0f, 1.0f};
+    drawSquareAtScreenPositionWithColor(x, y, color);
+}
+
+
+void drawHelpAtScreenPosition(float x, float y)
+{
+    // yellow color
+    float color[] = {1.0f, 1.0f, 0.0f};
     drawSquareAtScreenPositionWithColor(x, y, color);
 }
 
