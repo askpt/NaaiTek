@@ -25,7 +25,7 @@ typedef struct
 	int numErrors;
 	string categories[20];
 	string word;
-	string halfWord;
+	char halfWord[25];
 }Game;
 
 /*global variables*/
@@ -49,13 +49,14 @@ void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat lineWidth)
 void drawChar(int x, int y, char c);
 void initGameData();
 void drawErrorChar();
-void drawWord(string word, int check);
+void drawWord(string word);
 void drawHangman();
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string text);
 void IAGetCategories();
 void IAGetPhrases();
 void IACheckIfBelongs(char c, string word);
-void checkWord(string word);
+void checkWord(string word,char c);
+void addCharError(char c, string word);
 
 
 
@@ -70,6 +71,8 @@ void initGameData()
 	for (int i = 0; i < 25; i++)
 	{
 		game.writeChar[i] = NULL;
+		game.halfWord[i] = NULL;
+	
 	}
 	game.endGame = false;
 	game.userWin = false;
@@ -79,9 +82,15 @@ void initGameData()
 		game.categories[i] = "";
 	}
 	game.word = "";
-	game.halfWord = "";
-}
 
+}
+void initHalfWord(int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		game.halfWord[i] = '*';
+	}
+}
 /*function when the window is resixed*/
 void handleResize(int x, int y)
 {
@@ -161,7 +170,7 @@ void drawErrorChar()
 				drawChar(100, 100, game.wrongChar[i]);
 			}
 			else
-			if (i < 8)
+			if (i < 8 && i!=0)
 				drawChar(100 + (50 * i), 100, game.wrongChar[i]);
 		}
 		else
@@ -173,24 +182,23 @@ void drawErrorChar()
 
 }
 /*function to draw char lines of a word*/
-void drawWord(string word, int check)
-{
-	int wordSize = word.length();
-	if (check == 1){
-		for (int i = 0; i < wordSize; i++)
-		{
-			if (word.at(i) == '*')
+void drawWord()
+{	
+	
+	for (int i = 0; i < 25; i++)
+	{
+		if (game.halfWord[i] != NULL){
+			if (game.halfWord[i] == '*')
 				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
-			else
-				drawChar(20 + (i * 40), 550, word.at(i));
+			else{
+				glColor3d(1.0, 1.0, 1.0);
+				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+				glColor3b(0.0, 0.0, 0.0);
+				drawChar(20 + (i * 40), 550, game.halfWord[i]);
+			}
 		}
 	}
-	else
-	if (check == 0){
-		for (int i = 0; i < wordSize; i++)
-			drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
-	}
-	glFlush();
+		glFlush();
 }
 /*function to draw hangman parts*/
 void drawHangman()
@@ -312,8 +320,8 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
-	IAGetPhrases();
-	
+
+
 	glFlush();
 
 }
@@ -328,19 +336,34 @@ void keyboardSpecial(int key, int x, int y)
 
 		break;
 	case GLUT_KEY_F10:
-		game.numErrors++;
-		drawHangman();
+		
+		initGameData();
+		initHalfWord(game.word.size());
+		//game.numErrors++;
+		//drawHangman();
+		IAGetPhrases();
+		
 		break;
 	case GLUT_KEY_F2:
 		IAGetPhrases();
 		break;
 	}
 }
+bool checkIfWrong(char c)
+{
+	for (int i = 0; i < 9; i++)
+	{
+		if (c == game.wrongChar[i])
+			return true;
+	}
+	return false;
+}
 /*callback keyboard*/
 void keyBoard(unsigned char key, int x, int y)
 {
 	if (((int)key > 64 && (int)key < 91) || ((int)key>96 && (int)key < 123) && game.word != ""){
-		IACheckIfBelongs(key, game.word);
+		if (!checkIfWrong(key))
+			IACheckIfBelongs(key, game.word);
 		cout << key << endl;
 	}
 }
@@ -373,16 +396,19 @@ void IAGetPhrases()
 	PlQuery q("getPhrase", av);
 	try{
 		while (q.next_solution()){
-			cout << (string)av[1] << endl;
 			game.word = (string)av[1];
+			cout << game.word << endl;
+			initHalfWord(game.word.size());
 		}
 	}
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
-	drawWord(game.word, 0);
+	drawWord();
 
 }
+
+
 void IACheckIfBelongs(char c, string word)
 {
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
@@ -400,23 +426,55 @@ void IACheckIfBelongs(char c, string word)
 	PlQuery q("checkIfBelongs", av);
 	try{
 		while (q.next_solution()){
-			game.halfWord = (string)av[2];
-			cout << (string)av[2] << endl;
+
+			checkWord((string)av[2],c);
+			addCharError(c, (string)av[2]);
+		//	cout << (string)av[2] << endl;
 		}
 	}
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
-	checkWord((string)av[2]);
-	
+
+
 
 }
-void checkWord(string word)
+void addCharError(char c,string word)
 {
-	for (int i = 0; i < word.length(); i++)
-	{
-
+	if (!checkIfWrong(c)){
+		int cont = 0;
+		for (int i = 0; i < word.size(); i++)
+		{
+			if (word.at(i) != '*' && word.at(i) != '_')
+			{
+				cont++;
+			}
+		}
+		if (cont == 0)
+		{
+			game.numErrors++;
+			game.wrongChar[game.numErrors - 1]=c;
+			drawHangman();
+			drawErrorChar();
+			glFlush();
+		}
 	}
+}
+void checkWord(string word,char c)
+{
+	for (int i = 0; i < word.size(); i++)
+	{
+		if (game.halfWord[i] == '*' && word.at(i)!='*')
+		{
+			game.halfWord[i] = word.at(i);
+		}
+		
+		
+	}
+	
+	addCharError(c,word);
+
+	drawWord();
 }
 int main(int argc, char**argv)
 {
@@ -425,19 +483,12 @@ int main(int argc, char**argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("HANGMAN");
+
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyBoard);
 	glutSpecialFunc(keyboardSpecial);
+
 	myInit();
 	glutMainLoop();
 	return 0;
 }
-
-
-
-
-
-
-
-
-
