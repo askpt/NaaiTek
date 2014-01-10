@@ -83,6 +83,7 @@ bool didRequestHelp;
 // variables to draw menu
 float topTranslationFactorHorizontal;
 float topTranslationFactorVertical;
+float bottomTranslationFactorVertical;
 char *menuOptions[4] = { "Get Help", "Quit", "", ""};
 
 
@@ -124,6 +125,8 @@ void clearHelp();
 void drawMenu();
 void drawLabelAtScreenPositionWithText(float x, float y, char *str);
 float computeScaleForSquareSize(char* strs[], int numberOfStrings, float squareSize);
+void setupAmbientLight();
+void setupPositionedLight();
 
 
 /**
@@ -354,6 +357,10 @@ void drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
     
+    // enabling lighting
+    setupAmbientLight();
+    setupPositionedLight();
+    
     // draws maze
     drawMaze();
     
@@ -413,11 +420,18 @@ void drawMaze()
                 drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
             }
             updateHorizontalTranslationFactor();
-            // saving menu limit (only once, at the end of drawing the first row)
+            
+            // saving menu top limit (only once, at the end of drawing the first row)
             if(i == 0 && j == mazeSizeVertical - 1)
             {
                 topTranslationFactorHorizontal = g_translationFactorOnHorizontalAxis + 12;
                 topTranslationFactorVertical = g_translationFactorOnVerticalAxis - 4;
+            }
+            
+            // saving menu bottom limit
+            if(i == mazeSizeVertical - 1)
+            {
+                bottomTranslationFactorVertical = g_translationFactorOnVerticalAxis;
             }
         }
         resetHorizontalTranslationFactor();
@@ -761,24 +775,43 @@ void drawMenu()
     {
         drawLabelAtScreenPositionWithText(g_wallSize * topTranslationFactorHorizontal, g_wallSize * topTranslationFactorVertical * i * 2, menuOptions[i]);
     }
-    
-    
 }
 
 
 void drawLabelAtScreenPositionWithText(float x, float y, char *str)
 {
     glLoadIdentity();
-    glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
+    glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance );
     
     glScalef(g_scale / 4, g_scale / 4, g_scale / 4);
     
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 0.0f);
     glPushMatrix();
         glTranslatef(0, 0, 1.5f / g_scale);
-        t3dDraw3D(str, 0, 0, 0.2f);
+        t3dDraw3D(str, 0, 0, 0.5f);
     glPopMatrix();
 }
 
 
+void setupAmbientLight()
+{
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -8.0f);
+	
+    // ambient light
+	GLfloat ambientColor[] = {0.5f, 0.5f, 0.5f, 1.0f};
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+}
 
+
+void setupPositionedLight()
+{
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -8.0f);
+    
+    // positioned light
+	GLfloat lightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat lightPos0[] = {0.5f, 0.5f, 1.0f, 0.0f};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+}
