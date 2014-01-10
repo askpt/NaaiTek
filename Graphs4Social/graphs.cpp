@@ -260,7 +260,7 @@ void readGraphUser(std::string user)
 		paths[p].width = calcPathWidth(iter->second[L"connection"].as_integer());
 		paths[p].connection.nodei = user1Pos;
 		paths[p].connection.nodef = user2Pos;
-
+		paths[p].connection.strength = iter->second[L"connection"].as_integer();
 
 		/*wcout << iter->second[L"user1"];
 		wcout << iter->second[L"user2"];

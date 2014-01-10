@@ -237,7 +237,6 @@ void drawNode(Node node)
 }
 
 /* Draws the path in the form of a cylinder */
-#define pathID 20
 void drawPath(Node noi, Node nof, Path p)
 {
 	GLfloat xf = nof.x;
@@ -278,8 +277,9 @@ void drawGraph(){
 		glPopName();
 	}
 	material(red_plastic);
+	int pathID = _MAX_PATHS_GRAPH;
 	for (int i = 0; i < numPaths; i++){
-		glPushName(pathID);
+		glPushName(pathID + i);
 		Node* noi = &nodes[paths[i].connection.nodei];
 		Node* nof = &nodes[paths[i].connection.nodef];
 		//drawPath(*noi, *nof, paths[i]);
@@ -683,7 +683,15 @@ void mouse(int btn, int mouseState, int x, int y){
 		if (mouseState == GLUT_DOWN){
 			//glutMotionFunc(motionPicking);
 			state.pickedObjID = picking(x, y);
-			if (state.pickedObjID >= _MAX_NODES_GRAPH)
+			if (state.pickedObjID >= _MAX_PATHS_GRAPH)
+			{
+				cout << "Path Strenght ";
+				cout << paths[state.pickedObjID - _MAX_PATHS_GRAPH].connection.strength << endl;
+				wcout << L"User1: " + nodes[paths[state.pickedObjID - _MAX_PATHS_GRAPH].connection.nodei].user->name << endl;
+				wcout << L"User2: " + nodes[paths[state.pickedObjID - _MAX_PATHS_GRAPH].connection.nodef].user->name << endl;
+
+			}
+			else if (state.pickedObjID >= _MAX_NODES_GRAPH)
 			{
 				wcout << L"Node: " + nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name << endl;
 			}
