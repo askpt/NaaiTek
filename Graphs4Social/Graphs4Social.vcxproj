@@ -14,14 +14,18 @@
   <ItemGroup>
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="graphs.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Json.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="text3d.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Connection.h" />
     <ClInclude Include="graphs.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="Json.h" />
+    <ClInclude Include="text3d.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
