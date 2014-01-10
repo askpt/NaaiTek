@@ -55,8 +55,8 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 void IAGetCategories();
 void IAGetPhrases();
 void IACheckIfBelongs(char c, string word);
-void checkWord(string word,char c);
-void addCharError(char c, string word);
+void checkWord(string word, char c);
+void checkError(char c, string word);
 
 
 
@@ -72,7 +72,7 @@ void initGameData()
 	{
 		game.writeChar[i] = NULL;
 		game.halfWord[i] = NULL;
-	
+
 	}
 	game.endGame = false;
 	game.userWin = false;
@@ -84,6 +84,7 @@ void initGameData()
 	game.word = "";
 
 }
+/*function to initialize char array*/
 void initHalfWord(int size)
 {
 	for (int i = 0; i < size; i++)
@@ -154,7 +155,8 @@ void drawChar(int x, int y, char c)
 void drawErrorChar()
 {
 	int cont = 0;
-	for (int i = 0; i < 8; i++)
+	int j = 0;
+	for (int i = 0; i < 9; i++)
 	{
 		if (game.wrongChar[i] != NULL)
 		{
@@ -170,21 +172,24 @@ void drawErrorChar()
 				drawChar(100, 100, game.wrongChar[i]);
 			}
 			else
-			if (i < 8 && i!=0)
+			if (i < 8 && i != 0)
 				drawChar(100 + (50 * i), 100, game.wrongChar[i]);
 		}
 		else
-		for (int j = 0; j < 5; j++){
-			if (j < 4)
-				drawChar(100 + (50 * j), 130, game.wrongChar[i]);
+		if (i >= 4 && i < 8){
+			drawChar(100 + (50 * j), 130, game.wrongChar[i]);
+			j++;
 		}
+		else
+			drawChar(100, 160, game.wrongChar[i]);
+
 	}
 
 }
 /*function to draw char lines of a word*/
 void drawWord()
-{	
-	
+{
+
 	for (int i = 0; i < 25; i++)
 	{
 		if (game.halfWord[i] != NULL){
@@ -198,7 +203,7 @@ void drawWord()
 			}
 		}
 	}
-		glFlush();
+	glFlush();
 }
 /*function to draw hangman parts*/
 void drawHangman()
@@ -297,12 +302,12 @@ void drawHangman()
 
 }
 /*function to draw rectangle with text (button)*/
-void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word)
+void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue)
 {
 	int len;
-	glColor3f(1.0f, 0.0f, 0.0f);
+	glColor3f(red, green, blue);
 	glRectf(x, y, width, height);
-	glColor3b(1.0, 0.0, 0.0);
+	glColor3b(0.0, 0.0, 0.0);
 	glRasterPos2f(x + 70, y + 40);
 	len = word.length();
 	cout << word << endl;
@@ -336,19 +341,20 @@ void keyboardSpecial(int key, int x, int y)
 
 		break;
 	case GLUT_KEY_F10:
-		
+
 		initGameData();
 		initHalfWord(game.word.size());
 		//game.numErrors++;
 		//drawHangman();
 		IAGetPhrases();
-		
+
 		break;
 	case GLUT_KEY_F2:
 		IAGetPhrases();
 		break;
 	}
 }
+/*function to check if that char c are already on the list*/
 bool checkIfWrong(char c)
 {
 	for (int i = 0; i < 9; i++)
@@ -361,13 +367,22 @@ bool checkIfWrong(char c)
 /*callback keyboard*/
 void keyBoard(unsigned char key, int x, int y)
 {
-	if (((int)key > 64 && (int)key < 91) || ((int)key>96 && (int)key < 123) && game.word != ""){
+	if (((int)key>96 && (int)key < 123) && game.word != "" && game.numErrors <9 && game.endGame == false){
 		if (!checkIfWrong(key))
 			IACheckIfBelongs(key, game.word);
 		cout << key << endl;
 	}
+	else
+	if ((int)key > 64 && (int)key < 91 && game.word != "" && game.numErrors < 9 && game.endGame == false)
+	{
+
+		if (!checkIfWrong((int)key + 32))
+			IACheckIfBelongs((int)key + 32, game.word);
+		cout << key << endl;
+	}
 }
 
+/*function to connect with prolog file and get alll categories on knowledge basis*/
 void IAGetCategories()
 {
 	int i = 0;
@@ -386,6 +401,8 @@ void IAGetCategories()
 	}
 
 }
+
+/*function to connect with prolog and get all phrases of that category*/
 void IAGetPhrases()
 {
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
@@ -408,7 +425,7 @@ void IAGetPhrases()
 
 }
 
-
+/*function to connect with prolog that will test if that char c belongs to the word*/
 void IACheckIfBelongs(char c, string word)
 {
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
@@ -427,9 +444,9 @@ void IACheckIfBelongs(char c, string word)
 	try{
 		while (q.next_solution()){
 
-			checkWord((string)av[2],c);
-			addCharError(c, (string)av[2]);
-		//	cout << (string)av[2] << endl;
+			checkWord((string)av[2], c);
+			checkError(c, (string)av[2]);
+			//	cout << (string)av[2] << endl;
 		}
 	}
 	catch (PlException &ex){
@@ -439,7 +456,9 @@ void IACheckIfBelongs(char c, string word)
 
 
 }
-void addCharError(char c,string word)
+
+/*function to read the word returned by the prolog and compare with the last return*/
+void checkError(char c, string word)
 {
 	if (!checkIfWrong(c)){
 		int cont = 0;
@@ -453,26 +472,45 @@ void addCharError(char c,string word)
 		if (cont == 0)
 		{
 			game.numErrors++;
-			game.wrongChar[game.numErrors - 1]=c;
+			game.wrongChar[game.numErrors - 1] = c;
 			drawHangman();
 			drawErrorChar();
 			glFlush();
+			if (game.numErrors == 9)
+				game.endGame = true;
 		}
+
 	}
 }
-void checkWord(string word,char c)
+/*function to check when the user win*/
+bool checkWin()
+{
+	bool check = true;
+	for (int i = 0; i < game.word.size(); i++)
+	{
+		if (game.halfWord[i] == '*')
+			check = false;
+
+	}
+	return check;
+}
+/*function to read the word returned by the prolog*/
+void checkWord(string word, char c)
 {
 	for (int i = 0; i < word.size(); i++)
 	{
-		if (game.halfWord[i] == '*' && word.at(i)!='*')
+		if (game.halfWord[i] == '*' && word.at(i) != '*')
 		{
 			game.halfWord[i] = word.at(i);
 		}
-		
-		
 	}
-	
-	addCharError(c,word);
+	checkError(c, word);
+	if (checkWin())
+	{
+		game.userWin = true;
+		game.endGame = true;
+		cout << "ganhou" << endl;
+	}
 
 	drawWord();
 }
