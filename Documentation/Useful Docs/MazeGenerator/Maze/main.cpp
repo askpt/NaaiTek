@@ -43,7 +43,12 @@ int mazeSizeHorizontal;
 int mazeSizeVertical;
 
 float g_positionXToTopScreen = -2.0;
-float g_positionYToTopScreen = 1.5;
+float g_positionYToTopScreen = 1.7;
+
+/*
+float g_positionXToTopScreenRight = 1.7;
+float g_positionYToTopScreenRight = 1.5;
+*/
 
 // translation factor (used in maze's wall and path drawing)
 float g_translationFactorOnHorizontalAxis;
@@ -73,6 +78,12 @@ bool playerDidWin;
 bool playerDidQuit;
 int totalHelpRequest;
 bool didRequestHelp;
+
+
+// variables to draw menu
+float topTranslationFactorHorizontal;
+float topTranslationFactorVertical;
+char *menuOptions[4] = { "Get Help", "Quit", "", ""};
 
 
 //************************************************************************
@@ -110,6 +121,9 @@ void resetGameSettings();
 void checkIfPlayerWon();
 void requestHelp();
 void clearHelp();
+void drawMenu();
+void drawLabelAtScreenPositionWithText(float x, float y, char *str);
+float computeScaleForSquareSize(char* strs[], int numberOfStrings, float squareSize);
 
 
 /**
@@ -149,9 +163,11 @@ int main(int argc, char *argv[])
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     
 	// window settings
-    glutInitWindowSize(800, 800);
+    glutInitWindowSize(1200, 800);
 	mainWindow = glutCreateWindow("Maze");
     initRendering();
+    
+    g_scale = computeScaleForSquareSize(menuOptions, 3, 3.0);
     
     // building a random maze
     maze = mazeBuilder(mazeSizeHorizontal, mazeSizeVertical);
@@ -341,6 +357,9 @@ void drawScene()
     // draws maze
     drawMaze();
     
+    // draws menu
+    drawMenu();
+    
 	glutSwapBuffers();
 }
 
@@ -394,6 +413,12 @@ void drawMaze()
                 drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
             }
             updateHorizontalTranslationFactor();
+            // saving menu limit (only once, at the end of drawing the first row)
+            if(i == 0 && j == mazeSizeVertical - 1)
+            {
+                topTranslationFactorHorizontal = g_translationFactorOnHorizontalAxis + 12;
+                topTranslationFactorVertical = g_translationFactorOnVerticalAxis - 4;
+            }
         }
         resetHorizontalTranslationFactor();
         updateVerticalTranslationFactor();
@@ -567,7 +592,6 @@ void drawMazeBootStrap()
     updateHorizontalTranslationFactor();
     drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
     
-    
     // 5h wall block (next line)
     updateVerticalTranslationFactor();
     resetHorizontalTranslationFactor();
@@ -691,7 +715,7 @@ void updateVerticalTranslationFactor()
 /**
  * scale calculation to adjust text to fit a given square size
  */
-float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize)
+float computeScaleForSquareSize(char* strs[], int numberOfStrings, float squareSize)
 {
 	float maxWidth = 0;
 	for(int i = 0; i < squareSize; i++)
@@ -715,84 +739,6 @@ void cleanUp()
 }
 
 
-
-void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue)
-{
-    int len;
-    glColor3f(red, green, blue);
-    glRectf(x, y, width, height);
-    glColor3b(0.0, 0.0, 0.0);
-    glRasterPos2f(x + 70, y + 40);
-    len = word.length();
-    cout << word << endl;
-    
-    
-    glBegin(GL_QUADS); //Begin quadrilateral coordinates
-        //Trapezoid
-        glVertex3f(-0.7f, -1.5f, -5.0f);
-        glVertex3f(0.7f, -1.5f, -5.0f);
-        glVertex3f(0.4f, -0.5f, -5.0f);
-        glVertex3f(-0.4f, -0.5f, -5.0f);
-    glEnd();
-    
-    glColor3b(0.0, 0.0, 0.0);
-    for (int i = 0; i < len; i++)
-    {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word.at(i));
-    }
-    glFlush();
-}
-
-
-void setupMenuAmbientLight()
-{
-    glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -8.0f);
-	
-    // ambient light
-	GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-}
-
-
-void setupMenuPositionedLight()
-{
-    glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -8.0f);
-    
-    // positioned light
-	GLfloat lightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	GLfloat lightPos0[] = {0.5f, 0.5f, 1.0f, 0.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-}
-
-
-void drawTextAtScreenPosition(char *str, float x, float y, float z)
-{
-    glLoadIdentity();
-	glTranslatef(x, y, z);
-    
-    // "inclining" the camera to see from above
-	glRotatef(20.0f, 1.5f, 1.0f, 0.0f);
-    
-    //setting up the correct scale for the text
-	glScalef(g_scale * 0.7, g_scale * 0.7, g_scale * 0.7);
-	
-    // text color
-    glColor3f(1.0f, 1.0f, 1.0f);
-    
-    glPushMatrix();
-        glTranslatef(0, 0, -1.5f / g_scale);
-        t3dDraw3D(str, 0, 0, 0.2f);
-    cout << "String=" << str << endl;
-    cout << "x=" << x << endl;
-    cout << "Y=" << y << endl;
-    cout << "z=" << z << endl;
-    glPopMatrix();
-}
-
-
 float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize)
 {
 	float maxWidth = 0;
@@ -808,7 +754,31 @@ float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, flo
 }
 
 
+void drawMenu()
+{
+    int i = 0;
+    for(; i < 4; i++)
+    {
+        drawLabelAtScreenPositionWithText(g_wallSize * topTranslationFactorHorizontal, g_wallSize * topTranslationFactorVertical * i * 2, menuOptions[i]);
+    }
+    
+    
+}
 
+
+void drawLabelAtScreenPositionWithText(float x, float y, char *str)
+{
+    glLoadIdentity();
+    glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance);
+    
+    glScalef(g_scale / 4, g_scale / 4, g_scale / 4);
+    
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glPushMatrix();
+        glTranslatef(0, 0, 1.5f / g_scale);
+        t3dDraw3D(str, 0, 0, 0.2f);
+    glPopMatrix();
+}
 
 
 
