@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -16,12 +17,8 @@
 #include <GL/glut.h>
 #endif
 
-#include "ImageLoader.h"
 #include "text3d.h"
 #include "Maze.h"
-
-#include <vector>
-
 
 using namespace std;
 
@@ -59,43 +56,23 @@ GLuint g_pathTexture;
 // scale for drawing text
 float g_scale;
 
-// text to be written on screen
-//const char * stringVector[4] = { "Naai Tek", "presents", "LAPR5", "2013" };
-
 // data structure for maze
 vector < vector < int > > maze;
-
-
-// struct for 2D points
-struct float2
-{
-    float2( float _x = 0.0f, float _y = 0.0f ) : x(_x), y(_y) {}
-    float x;
-    float y;
-};
-
 
 // struct the coordinates of both the player and goal in the maze
 struct position
 {
     int x;
     int y;
-}player, target;
+}
+player, target;
 
 
 // variables to follow game outcome
 bool playerDidWin;
 bool playerDidQuit;
 int totalHelpRequest;
-
 bool didRequestHelp;
-
-// global variables for subwindow
-int menuWindow;
-char *title = "Maze Menu";
-int numberOfOptions = 3;
-char * optionsVector[3] = { "Maze Menu", "Start Game", "Quit"};
-const char *stringVectorForRotatingCube[4] = { "NaaiTek", "presents", "NaaiTek", "presents" };
 
 
 //************************************************************************
@@ -107,8 +84,6 @@ void handleResize(int w, int h);
 void drawScene();
 void drawMaze();
 void drawMazeBootStrap();
-void update(int value);
-GLuint loadTexture(Image* image);
 float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
 void cleanUp();
 vector<vector<int>> mazeBuilder(int sizeX, int sizeY);
@@ -136,18 +111,6 @@ void checkIfPlayerWon();
 void requestHelp();
 void clearHelp();
 
-// fwd declarations of menu window
-int menuBuilder();
-void handleMenuKeypress(unsigned char key, int x, int y);
-void handleMenuResize(int w, int h);
-void drawMenuScene();
-void setupMenuAmbientLight();
-void setupMenuPositionedLight();
-void drawTextAtScreenPosition(char *str, float x, float y, float z);
-float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize);
-void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue);
-
-
 
 /**
  * main
@@ -156,10 +119,9 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
  */
 int main(int argc, char *argv[])
 {
-    // dificulty level
+    // dificulty level (assigned randomly)
     srand(time(0));
     int dificultyLevel = rand() % 3 + 1;
-    
     // "easy" mode
     if(dificultyLevel == 1)
     {
@@ -186,12 +148,10 @@ int main(int argc, char *argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     
-	// Window 1 - Game
+	// window settings
     glutInitWindowSize(800, 800);
 	mainWindow = glutCreateWindow("Maze");
     initRendering();
-    
-    //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
     
     // building a random maze
     maze = mazeBuilder(mazeSizeHorizontal, mazeSizeVertical);
@@ -207,14 +167,6 @@ int main(int argc, char *argv[])
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
 	glutReshapeFunc(handleResize);
-    
-	// adding a timer
-	//glutTimerFunc(25, update, 0);
-    
-    // Window 2 - Menu
-    //glutInitWindowSize(800, 800);
-    glutInitWindowSize(300, 800);
-    menuWindow = menuBuilder();
     
 	glutMainLoop();
     
@@ -303,6 +255,7 @@ void handleKeypress(unsigned char key, int x, int y)
 }
 
 
+// clears "help path" on the screen
 void clearHelp()
 {
     for(int i = 0; i < mazeSizeHorizontal; i++)
@@ -317,7 +270,6 @@ void clearHelp()
     }
     didRequestHelp = false;
 }
-
 
 
 /**
@@ -387,21 +339,25 @@ void drawScene()
 	glMatrixMode(GL_MODELVIEW);
     
     // draws maze
-    //drawMazeBootStrap();
     drawMaze();
     
 	glutSwapBuffers();
 }
 
 
+/**
+ * draws the maze based on the matrix where 0 is a wall, 1 is a path and 2 is a help request
+ */
 void drawMaze()
 {
     glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, g_zDistance);
     
+    // this is needed before starting the iteration through
     resetHorizontalTranslationFactor();
     resetVerticalTranlationFactor();
     
+    // iterates through the entire matrix
     for(int i = 0; i < mazeSizeHorizontal; i++)
     {
         for(int j = 0; j < mazeSizeVertical; j++)
@@ -432,8 +388,7 @@ void drawMaze()
             if(maze[i][j] == 2)
             {
                 drawHelpAtScreenPosition(xPositionOnScreen, yPositionOnScreen);
-                           }
-            
+            }
             else
             {
                 drawWallAtScreenPosition(g_wallSize * g_translationFactorOnHorizontalAxis, g_wallSize * g_translationFactorOnVerticalAxis);
@@ -443,14 +398,18 @@ void drawMaze()
         resetHorizontalTranslationFactor();
         updateVerticalTranslationFactor();
     }
-    checkIfPlayerWon();
     
+    // after each draw we need to check if game has ended
+    checkIfPlayerWon();
 }
 
 
+/**
+ * draws a help path
+ */
 void requestHelp()
 {
-    // bootstrap help
+    // bootstrap help (to be removed)
     maze[1][1] = 2;
     maze[2][2] = 2;
     maze[3][3] = 2;
@@ -458,24 +417,32 @@ void requestHelp()
     
     didRequestHelp = true;
     totalHelpRequest++;
-   }
+}
 
+
+/**
+ * sets player's position in the matrix maze
+ */
 void setPlayerPosition(int x, int y)
 {
-    // player's position
     player.x = x;
     player.y = y;
 }
 
 
+/**
+ * sets target's position in the matrix maze
+ */
 void setTargetPosition(int x, int y)
 {
-    // target's position
     target.x = x;
     target.y = y;
 }
 
 
+/**
+ * checks if it's possible to move to a given maze position
+ */
 bool isPossibleToMovePlayerToPosition(int x, int y)
 {
     // player can't move if there's a wall
@@ -483,19 +450,13 @@ bool isPossibleToMovePlayerToPosition(int x, int y)
     {
         return false;
     }
-    
-    // player can't move if it's maze's limits
-    /*
-    if(x < 1 || y < 1)
-    {
-        return false;
-    }
-     */
-    
     return true;
 }
 
 
+/**
+ * sets the X coordinate for the player when the maze is loaded for the first time
+ */
 int getFirstPossibleX()
 {
     for(int i = 0; i < mazeSizeHorizontal; i++)
@@ -512,6 +473,9 @@ int getFirstPossibleX()
 }
 
 
+/**
+ * sets the Y coordinate for the player when the maze is loaded for the first time
+ */
 int getFirstPossibleY()
 {
     for(int i = 0; i < mazeSizeHorizontal - 1; i++)
@@ -528,6 +492,9 @@ int getFirstPossibleY()
 }
 
 
+/**
+ * sets the X coordinate for the target when the maze is loaded for the first time
+ */
 int getLastPossibleX()
 {
     for(int i = mazeSizeHorizontal - 1; i > 0; i--)
@@ -544,6 +511,9 @@ int getLastPossibleX()
 }
 
 
+/**
+ * sets the Y coordinate for the player when the maze is loaded for the first time
+ */
 int getLastPossibleY()
 {
     for(int i = mazeSizeHorizontal - 1; i > 0; i--)
@@ -560,6 +530,9 @@ int getLastPossibleY()
 }
 
 
+/**
+ * player wins the game when he reaches the target
+ */
 void checkIfPlayerWon()
 {
     if(player.x == target.x && player.y == target.y)
@@ -570,6 +543,9 @@ void checkIfPlayerWon()
 }
 
 
+/**
+ * bootstrap maze, for tests only
+ */
 void drawMazeBootStrap()
 {
     // first wall block
@@ -621,6 +597,9 @@ void drawPathAtScreenPosition(float x, float y)
 }
 
 
+/**
+ * draws a "help" square at the given screen position
+ */
 void drawHelpAtScreenPosition(float x, float y)
 {
     // yellow color
@@ -629,6 +608,9 @@ void drawHelpAtScreenPosition(float x, float y)
 }
 
 
+/**
+ * draws the player square at the given screen position
+ */
 void drawPlayerAtScreenPosition(float x, float y)
 {
     // yellow
@@ -637,6 +619,9 @@ void drawPlayerAtScreenPosition(float x, float y)
 }
 
 
+/**
+ * draws the target square at the given screen position
+ */
 void drawTargetAtScreenPosition(float x, float y)
 {
     // blue
@@ -645,6 +630,9 @@ void drawTargetAtScreenPosition(float x, float y)
 }
 
 
+/**
+ * draws any square at the given screen position
+ */
 void drawSquareAtScreenPositionWithColor(float x, float y, float color[])
 {
     glLoadIdentity();
@@ -660,74 +648,49 @@ void drawSquareAtScreenPositionWithColor(float x, float y, float color[])
 }
 
 
+/**
+ * resets horizontal translation factor 
+ * (helper function need to draw squares adjacent to each other)
+ */
 void resetHorizontalTranslationFactor()
 {
     g_translationFactorOnHorizontalAxis = 1;
 }
 
 
+/**
+ * updates horizontal translation factor
+ * (helper function need to draw squares adjacent to each other)
+ */
 void updateHorizontalTranslationFactor()
 {
     g_translationFactorOnHorizontalAxis += 2;
 }
 
 
+/**
+ * resets vertical translation factor
+ * (helper function need to draw squares adjacent to each other)
+ */
 void resetVerticalTranlationFactor()
 {
     g_translationFactorOnVerticalAxis = 1;
 }
 
 
+/**
+ * updates vertical translation factor
+ * (helper function need to draw squares adjacent to each other)
+ */
 void updateVerticalTranslationFactor()
 {
     g_translationFactorOnVerticalAxis -= 2;
 }
 
 
-void update(int value)
-{
-	// rotates the shapes 1.5 degrees in every 25 miliseconds
-	g_angle += 1.5f;
-	if (g_angle > 360)
-	{
-		g_angle -= 360;
-	}
-    
-	// informing GLUT that the scene has changed
-	glutPostRedisplay();
-    
-	// calling this method in every 25 ms
-	glutTimerFunc(25, update, 0);
-}
-
-
 /**
- * takes an image and returns the id that OpenGL gives to it
+ * scale calculation to adjust text to fit a given square size
  */
-GLuint loadTexture(Image* image)
-{
-	GLuint textureId;
-    
-    // "making room" for the texture (number of textures need and the array that will store the ids)
-	glGenTextures(1, &textureId);
-    
-    // texture to edit
-	glBindTexture(GL_TEXTURE_2D, textureId);
-    
-	// mapping the image to the texture
-	glTexImage2D(GL_TEXTURE_2D,                     // Always GL_TEXTURE_2D
-				 0,                                 // 0 for now
-				 GL_RGB,                            // Format OpenGL uses for image
-				 image->width, image->height,       // Width and height
-				 0,                                 // The border of the image
-				 GL_RGB,                            // GL_RGB, because pixels are stored in RGB format
-				 GL_UNSIGNED_BYTE,                  // GL_UNSIGNED_BYTE, because pixels are stored as unsigned numbers
-				 image->pixels);                    // The actual pixel data
-	
-    return textureId;
-}
-
-
 float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float squareSize)
 {
 	float maxWidth = 0;
@@ -743,61 +706,14 @@ float computeScaleForSquareSize(const char* strs[], int numberOfStrings, float s
 }
 
 
+/**
+ * clears text
+ */
 void cleanUp()
 {
     t3dCleanup();
 }
 
-
-
-// MENU WINDOW
-
-
-int menuBuilder()
-{
-    menuWindow = glutCreateWindow("Maze Menu");
-    glutPositionWindow(920,20);
-    
-    g_scale = computeScaleForSquareSize(stringVectorForRotatingCube, 3, 3.0);
-    
-    glutDisplayFunc(drawMenuScene);
-	glutKeyboardFunc(handleMenuKeypress);
-	glutReshapeFunc(handleMenuResize);
-    return 0;
-}
-
-
-void handleMenuKeypress(unsigned char key, int x, int y)
-{
-	
-}
-
-
-void drawMenuScene()
-{
-    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-    
-    
-    // enabling lighting
-    setupMenuAmbientLight();
-    setupMenuPositionedLight();
-    
-    /*
-    // text with game modes
-    drawTextAtScreenPosition("Online Mode", 0.0, 0.0, -15.0);
-    //drawTextAtScreenPosition("Offline Mode", 0.0, -1.0, -15.0);
-    //drawTextAtScreenPosition("Exit", 0.0, -2.0, -15.0);
-    */
-    
-    drawRectangleWithText(-10, -10, 10, 10, "sdgsd", 1.0, 0.0, 0.0);
-   
-    
-    
-    glutSwapBuffers();
-     
-}
 
 
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue)
@@ -809,28 +725,22 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
     glRasterPos2f(x + 70, y + 40);
     len = word.length();
     cout << word << endl;
+    
+    
+    glBegin(GL_QUADS); //Begin quadrilateral coordinates
+        //Trapezoid
+        glVertex3f(-0.7f, -1.5f, -5.0f);
+        glVertex3f(0.7f, -1.5f, -5.0f);
+        glVertex3f(0.4f, -0.5f, -5.0f);
+        glVertex3f(-0.4f, -0.5f, -5.0f);
+    glEnd();
+    
+    glColor3b(0.0, 0.0, 0.0);
     for (int i = 0; i < len; i++)
     {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word.at(i));
-        
     }
     glFlush();
-}
-
-
-void handleMenuResize(int w, int h)
-{
-	// converting coordinates to pixel values
-	glViewport(0, 0, w, h);
-    
-	// switch to and setting camera perspective
-	glMatrixMode(GL_PROJECTION);
-    
-	// setting the camera perspective
-	// reseting the camera
-	glLoadIdentity();
-	// camera angle, width-to-heigth ration, near z clipping coordinate, far z clipping coordinate
-	gluPerspective(45.0, (double) w / (double) h, 1.0, 200.0);
 }
 
 
@@ -875,7 +785,7 @@ void drawTextAtScreenPosition(char *str, float x, float y, float z)
     glPushMatrix();
         glTranslatef(0, 0, -1.5f / g_scale);
         t3dDraw3D(str, 0, 0, 0.2f);
-    cout << "String" << str << endl;
+    cout << "String=" << str << endl;
     cout << "x=" << x << endl;
     cout << "Y=" << y << endl;
     cout << "z=" << z << endl;
