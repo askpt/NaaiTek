@@ -4,6 +4,7 @@
 #include <GL\glut.h>
 #include <iostream>
 #include "graphs.h"
+#include "TicTacToe.h"
 
 using namespace std;
 
@@ -57,7 +58,7 @@ typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
 typedef struct Keys_t{
-	GLboolean   w, a, s, d, up, down;
+	GLboolean   w, a, s, d, up, down, tictactoe;
 }Keys_t;
 
 typedef struct Camera{
@@ -156,7 +157,7 @@ void myInit(string user)
 
 	initModel();
 	initState();
-
+	state.keys.tictactoe = 0;
 
 }
 
@@ -409,6 +410,10 @@ void Timer(int value)
 		state.camera.dir_long -= rad(5);
 
 	}
+
+	if (state.keys.tictactoe)
+	{
+	}
 	glutPostRedisplay();
 }
 
@@ -560,6 +565,10 @@ void Special(int key, int x, int y){
 	case GLUT_KEY_F2:
 		readGraph();
 		glutPostRedisplay();
+		break;
+	case GLUT_KEY_F3:
+		state.keys.tictactoe = GL_TRUE;
+		startTicTacToe();
 		break;
 	case GLUT_KEY_UP:
 		state.keys.up = GL_TRUE;
@@ -723,6 +732,8 @@ void main(int argc, char **argv)
 	{
 		glutInit(&argc, argv);
 
+
+
 		/* need both double buffering and z buffer */
 
 		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -739,12 +750,10 @@ void main(int argc, char **argv)
 		glutTimerFunc(state.timer, Timer, 0);
 
 		myInit(username);
-
-
-
 		printHelp();
 
 		glutMainLoop();
+
 	}
 
 }

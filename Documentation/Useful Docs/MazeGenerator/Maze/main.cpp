@@ -130,6 +130,7 @@ int getLastPossibleX();
 int getLastPossibleY();
 void resetGameSettings();
 void checkIfPlayerWon();
+void requestHelp();
 
 // fwd declarations of menu window
 int menuBuilder();
@@ -150,6 +151,32 @@ float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, flo
  */
 int main(int argc, char *argv[])
 {
+    // dificulty level
+    srand(time(0));
+    int dificultyLevel = rand() % 3 + 1;
+    
+    // "easy" mode
+    if(dificultyLevel == 1)
+    {
+        g_wallSize = 0.075;
+        mazeSizeHorizontal = 20;
+        mazeSizeVertical = 20;
+    }
+    // "moderate" mode
+    else if(dificultyLevel == 2)
+    {
+        g_wallSize = 0.045;
+        mazeSizeHorizontal = 40;
+        mazeSizeVertical = 40;
+    }
+    // "hard" mode
+    else if(dificultyLevel == 3)
+    {
+        g_wallSize = 0.020;
+        mazeSizeHorizontal = 80;
+        mazeSizeVertical = 80;
+    }
+    
 	// initializing GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -160,41 +187,6 @@ int main(int argc, char *argv[])
     initRendering();
     
     //g_scale = computeScaleForSquareSize(stringVector, 4, 3.0);
-    
-    // no arguments or "1": maze assumes "easy" mode
-    if(argc == 1)
-    {
-        g_wallSize = 0.075;
-        mazeSizeHorizontal = 20;
-        mazeSizeVertical = 20;
-    }
-    else
-    {
-        // defining dificulty level
-        std::string dificultyLevel = argv[1];
-        
-        // "2": maze assumes "moderate" mode
-        if(dificultyLevel.compare("2") == 0)
-        {
-            g_wallSize = 0.045;
-            mazeSizeHorizontal = 40;
-            mazeSizeVertical = 40;
-        }
-        
-        // "3": maze assumes "hard" mode
-        else if(dificultyLevel.compare("3") == 0)
-        {
-            g_wallSize = 0.020;
-            mazeSizeHorizontal = 80;
-            mazeSizeVertical = 80;
-        }
-        
-        // other will exit application
-        else
-        {
-            exit(2);
-        }
-    }
     
     // building a random maze
     maze = mazeBuilder(mazeSizeHorizontal, mazeSizeVertical);
@@ -408,6 +400,17 @@ void drawMaze()
     
 }
 
+
+void requestHelp()
+{
+    totalHelpRequest++;
+    
+    // bootstrap help
+    maze[1][1] = 2;
+    maze[2][2] = 2;
+    maze[3][3] = 2;
+    maze[4][4] = 2;
+}
 
 void setPlayerPosition(int x, int y)
 {
