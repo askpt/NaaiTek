@@ -84,13 +84,14 @@ bool didRequestHelp;
 float topTranslationFactorHorizontal;
 float topTranslationFactorVertical;
 float bottomTranslationFactorVertical;
-char *menuOptions[4] = { "Get Help", "Quit", "", "" };
+char *menuOptions[4] = { "Get Help (h)", "Quit (q)", "---", "" };
 
 
 //************************************************************************
 // forward declarations of OpenGL callback functions
 //************************************************************************
 void handleKeypress(unsigned char key, int x, int y);
+void handleMouseButtonClicks(int button, int state, int x, int y);
 void initRendering();
 void handleResize(int w, int h);
 void drawScene();
@@ -185,6 +186,7 @@ int main(int argc, char *argv[])
 	// setting handler functions
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
+    glutMouseFunc(handleMouseButtonClicks);
 	glutReshapeFunc(handleResize);
     
 	glutMainLoop();
@@ -271,6 +273,22 @@ void handleKeypress(unsigned char key, int x, int y)
             drawScene();
             break;
     }
+}
+
+
+/**
+ * This funcion is invoked when the user presses a mouse button on the current window.
+ * Each press and release action will generate an event.
+ * int button will be one of GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, or GLUT_RIGHT_BUTTON.
+ * int state will be either GLUT_DOWN, or GLUT_UP indicating whether the event was a pressed, or released event.
+ * int x, int y store the position of the mouse relative to the current window.
+ */
+void handleMouseButtonClicks(int button, int state, int x, int y)
+{
+    cout << "Button: " << button << endl;
+    cout << "State:" << state << endl;
+    cout << "X = " << x << endl;
+    cout << "Y = " << y << endl;
 }
 
 
@@ -790,7 +808,7 @@ void drawLabelAtScreenPositionWithText(float x, float y, char *str)
     glLoadIdentity();
     glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance );
     
-    glScalef(g_scale / 4, g_scale / 4, g_scale / 4);
+    glScalef(g_scale / 6, g_scale / 6, g_scale / 6);
     
     glColor3f(1.0f, 1.0f, 0.0f);
     glPushMatrix();
