@@ -255,3 +255,7 @@ checkPendingRequest(User, L):-findall(U, (pending(User, U, _);
 saveWord(Word):- not(phrases(_,Word)),
 	assert(phrases('user_added',Word)).
 	
+%list common Nodes
+listCommonNodes(User1, User2, [User1, User2 | L]):-listAllConnections(User1, F1),
+	listAllConnections(User2, F2),
+	intersection(F1, F2, L).
