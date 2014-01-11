@@ -753,8 +753,8 @@ void SendRequest()
 	wstring userWs(user.begin(), user.end());
 	wstring friendWs(friendUser.begin(), friendUser.end());
 
-	wstring url = L"http://uvm061.dei.isep.ipp.pt/accept_response?personA=" + userWs + L"&personB=" + friendWs;
-	wcout << url << endl;
+	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/accept_response?personA=" + userWs + L"&personB=" + friendWs;
+	RequestJSONValueAsync(url).get();
 }
 
 
@@ -905,9 +905,6 @@ void IAConnection(char play)
 
 int main(int argc, char **argv)
 {
-	argv[1] = "aaa";
-	argv[2] = "bbb";
-
 	user = argv[1];
 	friendUser = argv[2];
 
