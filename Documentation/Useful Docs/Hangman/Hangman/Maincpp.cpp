@@ -26,6 +26,7 @@ typedef struct
 	string categories[20];
 	string word;
 	char halfWord[25];
+	bool chooseCategories;
 }Game;
 
 /*global variables*/
@@ -53,10 +54,11 @@ void drawWord(string word);
 void drawHangman();
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string text);
 void IAGetCategories();
-void IAGetPhrases();
+void IAGetPhrases(string category);
 void IACheckIfBelongs(char c, string word);
 void checkWord(string word, char c);
 void checkError(char c, string word);
+void initHalfWord(int size);
 
 
 
@@ -76,6 +78,7 @@ void initGameData()
 	}
 	game.endGame = false;
 	game.userWin = false;
+	game.chooseCategories = false;
 	game.numErrors = 0;
 	for (int i = 0; i < 20; i++)
 	{
@@ -307,20 +310,20 @@ void drawHangman()
 
 }
 /*function to draw rectangle with text (button)*/
-void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word,GLfloat red,GLfloat green, GLfloat blue)
+void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string word, GLfloat red, GLfloat green, GLfloat blue)
 {
 
 	int len;
-	glColor3d(red, green, blue);	
+	glColor3d(red, green, blue);
 	glBegin(GL_QUADS);
 	glVertex2d(x, y);
-	glVertex2d(x+width, y);
-	
+	glVertex2d(x + width, y);
+
 	glVertex2d(x + width, y + width);
 	glVertex2d(x, y + height);
 	glEnd();
 
-	glColor3b(0.0, 0.0, 0.0); 
+	glColor3b(0.0, 0.0, 0.0);
 	glRasterPos2f(x + 70, y + 60);
 	len = word.length();
 	for (int i = 0; i < len; i++)
@@ -331,12 +334,157 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 
 
 }
+/*function to draw main Menu with all categories for the user select one of them to can play*/
+void drawMainMenu()
+{
+	int len = 0;
+	glColor3d(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	glVertex2d(WindowWidth / 2.0 - 200, 50);
+	glVertex2d(WindowWidth / 2.0 + 100, 50);
+	glVertex2d(WindowWidth / 2.0 + 100, 100);
+	glVertex2d(WindowWidth / 2.0 - 200, 100);
+	glEnd();
+
+	glColor3b(0.0, 0.0, 0.0);
+	glRasterPos2f(WindowWidth / 2.0 - 200 + 10, 50 + 30);
+	len = game.categories[0].length();
+	for (int i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game.categories[0].at(i));
+	}
+
+	len = 0;
+	glColor3d(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	glVertex2d(WindowWidth / 2.0 - 200, 120);
+	glVertex2d(WindowWidth / 2.0 + 100, 120);
+	glVertex2d(WindowWidth / 2.0 + 100, 170);
+	glVertex2d(WindowWidth / 2.0 - 200, 170);
+	glEnd();
+
+	glColor3b(0.0, 0.0, 0.0);
+	glRasterPos2f(WindowWidth / 2.0 - 200 + 10, 120 + 30);
+	len = game.categories[1].length();
+	for (int i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game.categories[1].at(i));
+	}
+
+
+	len = 0;
+	glColor3d(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	glVertex2d(WindowWidth / 2.0 - 200, 190);
+	glVertex2d(WindowWidth / 2.0 + 100, 190);
+	glVertex2d(WindowWidth / 2.0 + 100, 240);
+	glVertex2d(WindowWidth / 2.0 - 200, 240);
+	glEnd();
+
+	glColor3b(0.0, 0.0, 0.0);
+	glRasterPos2f(WindowWidth / 2.0 - 200 + 10, 190 + 30);
+	len = game.categories[2].length();
+	for (int i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game.categories[2].at(i));
+	}
+
+	len = 0;
+	glColor3d(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	glVertex2d(WindowWidth / 2.0 - 200, 260);
+	glVertex2d(WindowWidth / 2.0 + 100, 260);
+	glVertex2d(WindowWidth / 2.0 + 100, 310);
+	glVertex2d(WindowWidth / 2.0 - 200, 310);
+	glEnd();
+
+	glColor3b(0.0, 0.0, 0.0);
+	glRasterPos2f(WindowWidth / 2.0 - 200 + 10, 260 + 30);
+	len = game.categories[3].length();
+	for (int i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game.categories[3].at(i));
+	}
+
+
+	len = 0;
+	glColor3d(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	glVertex2d(WindowWidth / 2.0 - 200, 330);
+	glVertex2d(WindowWidth / 2.0 + 100, 330);
+	glVertex2d(WindowWidth / 2.0 + 100, 380);
+	glVertex2d(WindowWidth / 2.0 - 200, 380);
+	glEnd();
+
+	glColor3b(0.0, 0.0, 0.0);
+	glRasterPos2f(WindowWidth / 2.0 - 200 + 10, 330 + 30);
+	len = game.categories[4].length();
+	for (int i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game.categories[4].at(i));
+	}
+	glutSwapBuffers();
+
+
+
+}
 /*function to draw the main scene*/
 void drawScene()
 {
 	glColor3b(1.0, 0.0, 0.0);
+	if (game.chooseCategories == false){
+		IAGetCategories();
+		drawMainMenu();
+	}
 	glFlush();
 
+}
+
+/*callback mouse*/
+void mouse(int btn, int mouseState, int x, int y)
+{
+	switch (btn){
+	case GLUT_LEFT_BUTTON:
+
+		if (mouseState == GLUT_DOWN)
+		{
+			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>50 && y < 100 && game.chooseCategories == false)
+			{
+				glClear(GL_COLOR_BUFFER_BIT);
+				IAGetPhrases(game.categories[0]);
+				game.chooseCategories = true;
+			}
+			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>120 && y < 170 && game.chooseCategories == false)
+			{
+				glClear(GL_COLOR_BUFFER_BIT);
+				IAGetPhrases(game.categories[1]);
+				game.chooseCategories = true;
+				game.chooseCategories = true;
+			}
+			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>190 && y < 240 && game.chooseCategories == false)
+			{
+				glClear(GL_COLOR_BUFFER_BIT);
+				IAGetPhrases(game.categories[2]);
+				game.chooseCategories = true;
+				game.chooseCategories = true;
+			}
+			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>260 && y < 310 && game.chooseCategories == false)
+			{
+				glClear(GL_COLOR_BUFFER_BIT);
+				IAGetPhrases(game.categories[3]);
+				game.chooseCategories = true;
+				game.chooseCategories = true;
+			}
+			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>330 && y < 380 && game.chooseCategories == false)
+			{
+				glClear(GL_COLOR_BUFFER_BIT);
+				IAGetPhrases(game.categories[4]);
+				game.chooseCategories = true;
+				game.chooseCategories = true;
+			}
+
+		}
+	}
 }
 /*special keyboard function*/
 void keyboardSpecial(int key, int x, int y)
@@ -352,11 +500,11 @@ void keyboardSpecial(int key, int x, int y)
 		initHalfWord(game.word.size());
 		//game.numErrors++;
 		//drawHangman();
-		IAGetPhrases();
+		//IAGetPhrases();
 
 		break;
 	case GLUT_KEY_F2:
-		IAGetPhrases();
+		//IAGetPhrases();
 		break;
 	}
 }
@@ -409,13 +557,15 @@ void IAGetCategories()
 }
 
 /*function to connect with prolog and get all phrases of that category*/
-void IAGetPhrases()
+void IAGetPhrases(string category)
 {
+
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(2);
-	char *cat[] = { "web_sites" };
-	av[0] = PlTerm("programming_language");
+	char* cs = new char[category.size() + 1];
+	strcpy_s(cs, category.size() + 1, category.c_str());
+	av[0] = PlTerm(cs);
 	PlQuery q("getPhrase", av);
 	try{
 		while (q.next_solution()){
@@ -452,7 +602,7 @@ void IACheckIfBelongs(char c, string word)
 
 			checkWord((string)av[2], c);
 			checkError(c, (string)av[2]);
-			
+
 		}
 	}
 	catch (PlException &ex){
@@ -517,7 +667,7 @@ void checkWord(string word, char c)
 	{
 		game.userWin = true;
 		game.endGame = true;
-		drawRectangleWithText(WindowWidth-200, WindowHeight-100, 200, 100, "Win!",0.0,1.0,0.0);
+		drawRectangleWithText(WindowWidth - 200, WindowHeight - 100, 200, 100, "Win!", 0.0, 1.0, 0.0);
 	}
 
 	drawWord();
@@ -532,6 +682,7 @@ int main(int argc, char**argv)
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyBoard);
+	glutMouseFunc(mouse);
 	glutSpecialFunc(keyboardSpecial);
 
 	myInit();
