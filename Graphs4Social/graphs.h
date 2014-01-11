@@ -37,6 +37,7 @@ Path createPath(int, int, float, float);
 
 void saveGraph();
 void readGraph();
+void readCommonGraph(wstring, wstring);
 void readGraphUser(std::string);
 
 bool TryAuth(std::string, std::string);

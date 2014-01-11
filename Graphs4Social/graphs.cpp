@@ -168,6 +168,19 @@ void readGraphUser(std::string user)
 	buildGraph(graph, usersDim, userWs);
 }
 
+void readCommonGraph(wstring user, wstring friendUser)
+{
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/get_common_graph?personA=" + user + L"&personB=" + friendUser;
+
+	utility::string_t urlDim = L"http://uvm061.dei.isep.ipp.pt:5000/get_users_dimension";
+
+
+	json::value graph = RequestJSONValueAsync(url).get();
+	json::value usersDim = RequestJSONValueAsync(urlDim).get();
+
+	buildGraph(graph, usersDim, user);
+}
+
 void buildGraph(json::value graph, json::value usersDim, wstring userWs)
 {
 	numNodes = graph[L"nodes"].size();

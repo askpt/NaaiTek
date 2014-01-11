@@ -60,7 +60,7 @@ typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
 typedef struct Keys_t{
-	GLboolean   w, a, s, d, up, down, tictactoe, z;
+	GLboolean   w, a, s, d, up, down, tictactoe, z, f2;
 }Keys_t;
 
 typedef struct Camera{
@@ -184,8 +184,8 @@ void printHelp(void)
 	printf("r,R - PolygonMode Point \n");
 	printf("z,Z - Music ON/OFF \n");
 	printf("******* Graphs ******* \n");
-	printf("F1  - Save graph to file \n");
-	printf("F2  - Read graph from file \n");
+	printf("F1  - Reload registered user graph \n");
+	printf("F2 + Click on Node  - Load graph of common friends \n");
 	printf("******* Camera ******* \n");
 	printf("WASD - Control free flight\n");
 	printf("Right Buttton  - Rotate camera\n");
@@ -415,9 +415,6 @@ void Timer(int value)
 
 	}
 
-	if (state.keys.tictactoe)
-	{
-	}
 	glutPostRedisplay();
 }
 
@@ -560,6 +557,9 @@ void SpecialUp(int key, int x, int y)
 	case GLUT_KEY_DOWN:
 		state.keys.down = GL_FALSE;
 		break;
+	case GLUT_KEY_F2:
+		state.keys.f2 = GL_FALSE;
+		break;
 	}
 
 }
@@ -569,15 +569,13 @@ void Special(int key, int x, int y){
 
 	switch (key){
 	case GLUT_KEY_F1:
-		saveGraph();
+		readGraphUser(model.regUser);
 		break;
 	case GLUT_KEY_F2:
-		readGraph();
-		glutPostRedisplay();
+		state.keys.f2 = GL_TRUE;
 		break;
 	case GLUT_KEY_F3:
 		state.keys.tictactoe = GL_TRUE;
-		
 		break;
 	case GLUT_KEY_UP:
 		state.keys.up = GL_TRUE;
@@ -719,7 +717,14 @@ void mouse(int btn, int mouseState, int x, int y){
 			}
 			else if (state.pickedObjID >= _MAX_NODES_GRAPH)
 			{
-				wcout << L"Node: " + nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name << endl;
+				if (state.keys.f2)
+				{
+					readCommonGraph(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
+				}
+				else
+				{
+					wcout << L"Node: " + nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name << endl;
+				}
 			}
 			else
 			{
