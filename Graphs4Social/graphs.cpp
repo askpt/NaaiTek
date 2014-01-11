@@ -303,6 +303,12 @@ bool TryAuth(string username, string password)
 
 	wstring status = obj[L"Status"].to_string();
 
+	return checkIfStatusOk(status);
+
+}
+
+bool checkIfStatusOk(wstring status)
+{
 	int retBool = true;
 
 	char c_mb_str[80];
@@ -321,5 +327,18 @@ bool TryAuth(string username, string password)
 	}
 
 	return (retBool);
+}
 
+
+bool sendFriendRequest(wstring user, wstring friendUser)
+{
+	wstring userWs(user.begin(), user.end());
+	wstring friendUserWs(friendUser.begin(), friendUser.end());
+
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/request_friend?personA=" + userWs + L"&personB=" + friendUserWs;
+
+	json::value request = RequestJSONValueAsync(url).get();
+	wstring status = request[L"Status"].to_string();
+
+	return checkIfStatusOk(status);
 }

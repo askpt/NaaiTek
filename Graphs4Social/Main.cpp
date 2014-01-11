@@ -717,9 +717,15 @@ void mouse(int btn, int mouseState, int x, int y){
 			}
 			else if (state.pickedObjID >= _MAX_NODES_GRAPH)
 			{
+				int mod = glutGetModifiers();
+
 				if (state.keys.f2)
 				{
 					readCommonGraph(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
+				}
+				else if (mod == GLUT_ACTIVE_CTRL)
+				{
+					sendFriendRequest(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
 				}
 				else
 				{
