@@ -8,6 +8,7 @@
 #include <iostream>
 #include "ImageLoader.h"
 #include "text3d.h"
+#include "Json.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795
@@ -27,8 +28,11 @@ typedef struct
 
 float g_scale;
 
+bool requestSent = false;
 const char * stringVetor[2] = { "You won!", "You Loose!" };
 const char * stringHelp[2] = { "F1->New Game", "F10->Exit" };
+
+string user, friendUser;
 
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
@@ -743,6 +747,17 @@ void checkUserWin()
 		game.winUser = true;
 	}
 }
+
+void SendRequest()
+{
+	wstring userWs(user.begin(), user.end());
+	wstring friendWs(friendUser.begin(), friendUser.end());
+
+	wstring url = L"http://uvm061.dei.isep.ipp.pt/accept_response?personA=" + userWs + L"&personB=" + friendWs;
+	wcout << url << endl;
+}
+
+
 /*function to update the bordergame*/
 
 void updateBorderGame(string border)
@@ -837,6 +852,11 @@ void updateBorderGame(string border)
 	}
 	if (game.winUser)
 	{
+		if (!requestSent)
+		{
+			SendRequest();
+			requestSent = true;
+		}
 		writeTextOnBox(60, 550, stringVetor[0]);
 
 	}
@@ -885,9 +905,11 @@ void IAConnection(char play)
 
 int main(int argc, char **argv)
 {
-	cout << argv[0] << endl;
-	cout << argv[1] << endl;
-	cout << argv[2] << endl;
+	argv[1] = "aaa";
+	argv[2] = "bbb";
+
+	user = argv[1];
+	friendUser = argv[2];
 
 	char fakeParam[] = "fake";
 	char *fakeargv[] = { fakeParam, NULL };

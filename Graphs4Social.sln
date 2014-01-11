@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Reso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseWs", "DatabaseWs\DatabaseWs.csproj", "{C563F1D1-A827-43BA-ABF2-0F6DB99AA5F2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TicTacToe", "Documentation\Useful Docs\TicTacToe\TicTacToe\TicTacToe.vcxproj", "{F55333B5-A33E-4ED2-A645-60300D4A8E2B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TicTacToe", "Minigames\TicTacToe\TicTacToe\TicTacToe.vcxproj", "{F55333B5-A33E-4ED2-A645-60300D4A8E2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

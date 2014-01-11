@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.props" Condition="Exists('..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.props')" />
+  <Import Project="..\..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.props" Condition="Exists('..\..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,13 +15,15 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F55333B5-A33E-4ED2-A645-60300D4A8E2B}</ProjectGuid>
     <RootNamespace>TicTacToe</RootNamespace>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -47,7 +51,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\swipl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\swipl\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,14 +76,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ImageLoader.cpp" />
+    <ClCompile Include="Json.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="text3d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageLoader.h" />
+    <ClInclude Include="Json.h" />
     <ClInclude Include="text3d.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+    <Import Project="..\..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.targets" Condition="Exists('..\..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.targets')" />
+    <Import Project="..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.targets" Condition="Exists('..\..\..\packages\cpprestsdk.1.4.0\build\native\cpprestsdk.targets')" />
   </ImportGroup>
 </Project>
