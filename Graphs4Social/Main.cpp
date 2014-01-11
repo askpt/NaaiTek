@@ -4,7 +4,6 @@
 #include <GL\glut.h>
 #include <iostream>
 #include "graphs.h"
-#include "TicTacToe.h"
 
 using namespace std;
 
@@ -568,7 +567,7 @@ void Special(int key, int x, int y){
 		break;
 	case GLUT_KEY_F3:
 		state.keys.tictactoe = GL_TRUE;
-		startTicTacToe();
+		
 		break;
 	case GLUT_KEY_UP:
 		state.keys.up = GL_TRUE;
@@ -576,6 +575,14 @@ void Special(int key, int x, int y){
 	case GLUT_KEY_DOWN:
 		state.keys.down = GL_TRUE;
 		break;
+	}
+
+	if (state.keys.tictactoe)
+	{
+		state.keys.tictactoe = GL_FALSE;
+		char ret[100];
+		sprintf_s(ret, "TicTacToe %s %s", "T1", "T2");
+		system(ret);
 	}
 }
 

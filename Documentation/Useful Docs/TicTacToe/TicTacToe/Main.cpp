@@ -14,7 +14,7 @@
 #endif
 
 using namespace std;
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+//#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 typedef struct
 {
 	char matrix[3][3];
@@ -885,8 +885,17 @@ void IAConnection(char play)
 
 int main(int argc, char **argv)
 {
+	cout << argv[0] << endl;
+	cout << argv[1] << endl;
+	cout << argv[2] << endl;
+
+	char fakeParam[] = "fake";
+	char *fakeargv[] = { fakeParam, NULL };
+	int fakeargc = 1;
+
+
 	initGameData();
-	glutInit(&argc, argv);
+	glutInit(&fakeargc, fakeargv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("TIC-TAC-TOE");

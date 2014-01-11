@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Reso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseWs", "DatabaseWs\DatabaseWs.csproj", "{C563F1D1-A827-43BA-ABF2-0F6DB99AA5F2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TicTacToe", "Documentation\Useful Docs\TicTacToe\TicTacToe\TicTacToe.vcxproj", "{F55333B5-A33E-4ED2-A645-60300D4A8E2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,16 @@ Global
 		{C563F1D1-A827-43BA-ABF2-0F6DB99AA5F2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C563F1D1-A827-43BA-ABF2-0F6DB99AA5F2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C563F1D1-A827-43BA-ABF2-0F6DB99AA5F2}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Debug|Win32.Build.0 = Debug|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Release|Win32.ActiveCfg = Release|Win32
+		{F55333B5-A33E-4ED2-A645-60300D4A8E2B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
