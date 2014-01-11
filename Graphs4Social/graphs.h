@@ -1,6 +1,8 @@
 #include "User.h"
 #include "Connection.h"
 #include <string>
+#include "Json.h"
+
 #ifndef _GRAPH_INCLUDE
 #define _GRAPH_INCLUDE
 
@@ -38,5 +40,7 @@ void readGraph();
 void readGraphUser(std::string);
 
 bool TryAuth(std::string, std::string);
+
+void buildGraph(json::value, json::value, wstring);
 
 #endif

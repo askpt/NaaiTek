@@ -165,6 +165,11 @@ void readGraphUser(std::string user)
 	json::value graph = RequestJSONValueAsync(url).get();
 	json::value usersDim = RequestJSONValueAsync(urlDim).get();
 
+	buildGraph(graph, usersDim, userWs);
+}
+
+void buildGraph(json::value graph, json::value usersDim, wstring userWs)
+{
 	numNodes = graph[L"nodes"].size();
 	//numNodes = 2;
 	wstring usersNodes[_MAX_NODES_GRAPH];
