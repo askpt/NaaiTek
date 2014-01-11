@@ -99,6 +99,9 @@
 % request for adding a word to the hangman minigame
 :- http_handler(root(add_word_hangman), add_word_hangman, []).
 
+% request for get common friends graph
+:- http_handler(root(get_common_graph), get_common_graph, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -337,4 +340,12 @@ add_word_hangman(_Request) :-
                 ((saveWord(Word),
 				prolog_to_json(message('Word added successfully', 'ok'), JSON_Object));
 				(prolog_to_json(message('Word exists', 'fail'), JSON_Object))),
+                reply_json(JSON_Object).
+
+% get common firends graph
+get_common_graph(_Request) :-  http_parameters(_Request, [personA(PersonA, []), personB(PersonB, [])]),
+                listCommonPaths(PersonA, PersonB, List),
+                create_json_paths(List, ListJsonP),
+                listCommonNodes(PersonA, PersonB, ListN),
+                prolog_to_json(graph(ListN, ListJsonP, 'ok'), JSON_Object),
                 reply_json(JSON_Object).
