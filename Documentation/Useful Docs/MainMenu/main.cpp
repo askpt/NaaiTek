@@ -46,6 +46,22 @@ const char *stringForLabel = "GRAPHS4SOCIAL";
 // windows
 int mainWindow;
 
+// "button" coordinates
+float xMinOnlineMode = 350;
+float xMaxOnlineMode = 480;
+float yMinOnlineMode = 310;
+float yMaxOnlineMode = 325;
+
+float xMinOfflineMode = xMinOnlineMode;
+float xMaxOfflineMode = xMaxOnlineMode;
+float yMinOfflineMode = 361;
+float yMaxOfflineMode = 376;
+
+float xMinExit = 392;
+float xMaxExit = 431;
+float yMinExit = 411;
+float yMaxExit = 430;
+
 
 //************************************************************************
 // forward declarations of OpenGL callback functions
@@ -116,6 +132,9 @@ void handleKeypress(unsigned char key, int x, int y)
         // ESC key
 		case 27:
 			exit(0);
+            
+        //default:
+          //  cout << key << endl;
 	}
 }
 
@@ -129,7 +148,41 @@ void handleKeypress(unsigned char key, int x, int y)
  */
  void handleMouseButtonClicks(int button, int state, int x, int y)
 {
+    cout << "Button: " << button << endl;
+    cout << "State:" << state << endl;
+    cout << "X = " << x << endl;
+    cout << "Y = " << y << endl;
     
+    // online mode "button"
+    if(x > xMinOnlineMode && x < xMaxOnlineMode)
+    {
+        if(y > yMinOnlineMode && y < yMaxOnlineMode)
+        {
+            // add code to go online
+            cout << "online mode" << endl;
+        }
+    }
+    
+    // offline mode "button"
+    if(x > xMinOfflineMode && x < xMaxOfflineMode)
+    {
+        if(y > yMinOfflineMode && y < yMaxOfflineMode)
+        {
+            // add code to go to offline mode
+            cout << "offline mode" << endl;
+        }
+    }
+    
+    // quit "button"
+    if(x > xMinExit && x < xMaxExit)
+    {
+        if(y > yMinExit && y < yMaxExit)
+        {
+            // add code to go to offline mode
+            cout << "quiting" << endl;
+            exit(0);
+        }
+    }
 }
 
 
@@ -138,7 +191,8 @@ void handleKeypress(unsigned char key, int x, int y)
  */
 void handleMouseMovement(int x, int y)
 {
-    
+    cout << "Mouse movement = " << x << endl;
+    cout << "Mouse movement = " << y << endl;
 }
 
 
@@ -167,7 +221,7 @@ void initRendering()
 	glShadeModel(GL_SMOOTH);
     
     // loading the image as texture
-    Image* image = loadBMP("/Users/joaocarreira/Desktop/OpenGL/GameMenu/GameMenu/graph.bmp");
+    Image* image = loadBMP("graph.bmp");
 	g_textureId = loadTexture(image);
 	delete image;
 
