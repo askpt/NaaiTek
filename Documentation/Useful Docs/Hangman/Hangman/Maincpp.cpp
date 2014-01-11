@@ -51,6 +51,7 @@ void drawChar(int x, int y, char c);
 void initGameData();
 void drawErrorChar();
 void drawWord(string word);
+void drawCompleteWord();
 void drawHangman();
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string text);
 void IAGetCategories();
@@ -195,24 +196,39 @@ void drawErrorChar()
 /*function to draw char lines of a word*/
 void drawWord()
 {
+	if (game.endGame == false){
+		for (int i = 0; i < 25; i++)
+		{
 
-	for (int i = 0; i < 25; i++)
-	{
-		if (game.halfWord[i] != NULL){
-			if (game.halfWord[i] == '*')
-				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
-			/*else if(game.halfWord[i]=='_')
-				drawChar(20 + (i * 40), 550, ' ');*/
-			else{
-				glColor3d(1.0, 1.0, 1.0);
-				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
-				glColor3b(0.0, 0.0, 0.0);
-				drawChar(20 + (i * 40), 550, game.halfWord[i]);
+			if (game.halfWord[i] != NULL){
+				if (game.halfWord[i] == '*')
+					drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+
+				else{
+					glColor3d(1.0, 1.0, 1.0);
+					drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+					glColor3b(0.0, 0.0, 0.0);
+					drawChar(20 + (i * 40), 550, game.halfWord[i]);
+				}
 			}
 		}
+		glFlush();
+	}
+}
+
+/*function to draw completed word when user lost*/
+void drawCompleteWord()
+{
+	glColor3d(0.0, 3.0, 0.0);
+	for (int i = 0; i < game.word.size(); i++)
+	{
+		
+		drawChar(20 + (i * 40), 500, game.word.at(i));
 	}
 	glFlush();
+	//glColor3d(0.0, 0.0, 0.0);
 }
+
 /*function to draw hangman parts*/
 void drawHangman()
 {
@@ -493,6 +509,7 @@ void keyboardSpecial(int key, int x, int y)
 
 	case GLUT_KEY_F1:
 		glutPostRedisplay();
+		initGameData();
 		break;
 	case GLUT_KEY_F10:
 
@@ -635,6 +652,7 @@ void checkError(char c, string word)
 			if (game.numErrors == 9){
 				game.endGame = true;
 				drawRectangleWithText(WindowWidth - 200, WindowHeight - 100, 200, 100, "Lost!", 1.0, 0.0, 0.0);
+				drawCompleteWord();
 			}
 		}
 
