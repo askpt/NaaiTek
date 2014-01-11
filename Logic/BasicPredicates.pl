@@ -259,3 +259,7 @@ saveWord(Word):- not(phrases(_,Word)),
 listCommonNodes(User1, User2, [User1, User2 | L]):-listAllConnections(User1, F1),
 	listAllConnections(User2, F2),
 	intersection(F1, F2, L).
+
+%list common connections
+listCommonPaths(User1, User2, L):-listCommonNodes(User1, User2, Nodes),
+	findall((U1, U2, S, Tag), (connects(U1, U2, S, Tag), member(U1, Nodes), member(U2, Nodes)), L).
