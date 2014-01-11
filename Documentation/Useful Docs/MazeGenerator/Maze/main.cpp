@@ -84,8 +84,9 @@ bool didRequestHelp;
 float topTranslationFactorHorizontal;
 float topTranslationFactorVertical;
 float bottomTranslationFactorVertical;
-char *menuOptions[4] = { "Get Help (h)", "Quit (q)", "---", "" };
+char *menuOptions[4] = { "Get Help (h)", "Quit (q)", "", "" };
 char *systemMsg[4] = { "Get to the target!", "Confirm quit? (Y/N)", "You Lost! (press C)", "You Won! (press C)" };
+char *instructionMsg[4] = {"P (up)", "L (down)", "Z (left)", "X (right)" };
 int msgToDisplay = 0;
 
 
@@ -126,11 +127,12 @@ void checkIfPlayerWon();
 void requestHelp();
 void clearHelp();
 void drawMenu();
-void drawLabelAtScreenPositionWithText(float x, float y, char *str);
+void drawLabelAtScreenPositionWithTextAndColor(float x, float y, char *str, float color[]);
 float computeScaleForSquareSize(char* strs[], int numberOfStrings, float squareSize);
 void setupAmbientLight();
 void setupPositionedLight();
 void drawSystemMessage(int i);
+void drawInstructionMessages();
 
 
 /**
@@ -315,7 +317,6 @@ void handleKeypress(unsigned char key, int x, int y)
             {
                 exit(0);
             }
-            
     }
 }
 
@@ -425,6 +426,9 @@ void drawScene()
     
     // draws maze
     drawMaze();
+    
+    // draws instructions msg
+    drawInstructionMessages();
     
     // draws menu
     drawMenu();
@@ -843,27 +847,40 @@ float computeMenuScaleForSquareSize(const char* strs[], int numberOfStrings, flo
 void drawMenu()
 {
     int i = 0;
+    float color[] = {1.0f, 1.0f, 0.0f};
     for(; i < 4; i++)
     {
-        drawLabelAtScreenPositionWithText(g_wallSize * topTranslationFactorHorizontal, g_wallSize * topTranslationFactorVertical * i * 2, menuOptions[i]);
+        drawLabelAtScreenPositionWithTextAndColor(g_wallSize * topTranslationFactorHorizontal, g_wallSize * topTranslationFactorVertical * i * 2, menuOptions[i], color);
     }
 }
 
 
 void drawSystemMessage(int i)
 {
-    drawLabelAtScreenPositionWithText(g_wallSize * topTranslationFactorHorizontal, g_wallSize * bottomTranslationFactorVertical, systemMsg[i]);
+    float color[] = {1.0f, 1.0f, 1.0f};
+    drawLabelAtScreenPositionWithTextAndColor(g_wallSize * topTranslationFactorHorizontal, g_wallSize * bottomTranslationFactorVertical, systemMsg[i], color);
 }
 
 
-void drawLabelAtScreenPositionWithText(float x, float y, char *str)
+void drawInstructionMessages()
+{
+    int i = 0;
+    float color[] = {0.0f, 0.0f, 1.0f};
+    for(; i < 4; i++)
+    {
+        drawLabelAtScreenPositionWithTextAndColor(g_wallSize * topTranslationFactorHorizontal, g_wallSize * topTranslationFactorVertical * i - 0.8, instructionMsg[i], color);
+    }
+}
+
+
+void drawLabelAtScreenPositionWithTextAndColor(float x, float y, char *str, float color[])
 {
     glLoadIdentity();
     glTranslatef(x + g_positionXToTopScreen, y + g_positionYToTopScreen, g_zDistance );
     
     glScalef(g_scale / 6, g_scale / 6, g_scale / 6);
     
-    glColor3f(1.0f, 1.0f, 0.0f);
+    glColor3f(color[0], color[1], color[2]);
     glPushMatrix();
         glTranslatef(0, 0, 1.5f / g_scale);
         t3dDraw3D(str, 0, 0, 0.5f);
@@ -888,8 +905,8 @@ void setupPositionedLight()
 	glTranslatef(0.0f, 0.0f, -8.0f);
     
     // positioned light
-	GLfloat lightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	GLfloat lightPos0[] = {0.5f, 0.5f, 1.0f, 0.0f};
+	GLfloat lightColor0[] = {0.5f, 0.5f, 0.5f, 0.5f};
+	GLfloat lightPos0[] = {0.5f, 0.5f, 15.0f, 0.0f};
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 }
