@@ -735,6 +735,14 @@ void mouse(int btn, int mouseState, int x, int y){
 						wcout << path[i];
 					}
 				}
+				else if (mod == GLUT_ACTIVE_SHIFT)
+				{
+					vector<wstring> path = GetStrongestPath(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
+					for (int i = 0; i < path.size(); i++)
+					{
+						wcout << path[i];
+					}
+				}
 				else
 				{
 					wcout << L"Node: " + nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name << endl;

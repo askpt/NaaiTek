@@ -46,4 +46,5 @@ void buildGraph(json::value, json::value, wstring);
 bool sendFriendRequest(wstring, wstring);
 
 vector<wstring> GetShortPath(wstring, wstring);
+vector<wstring> GetStrongestPath(wstring, wstring);
 #endif

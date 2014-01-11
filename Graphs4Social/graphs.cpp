@@ -372,3 +372,33 @@ vector<wstring> GetShortPath(wstring user, wstring friendUser)
 
 	return path;
 }
+
+vector<wstring> GetStrongestPath(wstring user, wstring friendUser)
+{
+	vector<wstring> path;
+
+	wstring userWs(user.begin(), user.end());
+	wstring friendUserWs(friendUser.begin(), friendUser.end());
+
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/branch_and_bound?personA=" + userWs + L"&personB=" + friendUserWs;
+
+	json::value pathJs = RequestJSONValueAsync(url).get();
+	wstring status = pathJs[L"status"].to_string();
+
+	if (checkIfStatusOk(status))
+	{
+		path.resize(pathJs[L"path"].size());
+		int i = 0;
+		for (auto iter = pathJs[L"path"].begin(); iter != pathJs[L"path"].end(); ++iter)
+		{
+			path[i] = iter->second.as_string();
+			i++;
+		}
+	}
+	else
+	{
+		path.resize(0);
+	}
+
+	return path;
+}
