@@ -214,7 +214,8 @@ removeZeroTag([(_, 0)|T], R):-removeZeroTag(T, R).
 removeZeroTag([H|T], [H|R]):-removeZeroTag(T, R).
 
 %friend request
-requestFriend(User1, User2):-assert(pending(User1, User2, 'request')).
+requestFriend(User1, User2):-not(isConnected(User1, User2)),
+	 assert(pending(User1, User2, 'request')).
 
 %friend request game response
 gameResponseRequest(User1, User2):-pending(User2, User1, 'request'),
