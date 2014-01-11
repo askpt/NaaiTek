@@ -85,6 +85,8 @@ float topTranslationFactorHorizontal;
 float topTranslationFactorVertical;
 float bottomTranslationFactorVertical;
 char *menuOptions[4] = { "Get Help (h)", "Quit (q)", "---", "" };
+char *systemMsg[4] = { "Get to the target!", "Confirm quit? (Y/N)", "You Lost!", "You Won!" };
+int msgToDisplay = 0;
 
 
 //************************************************************************
@@ -128,6 +130,7 @@ void drawLabelAtScreenPositionWithText(float x, float y, char *str);
 float computeScaleForSquareSize(char* strs[], int numberOfStrings, float squareSize);
 void setupAmbientLight();
 void setupPositionedLight();
+void drawSystemMessage(int i);
 
 
 /**
@@ -272,6 +275,33 @@ void handleKeypress(unsigned char key, int x, int y)
             requestHelp();
             drawScene();
             break;
+            
+        // requesting quit
+        case 'q':
+        case 'Q':
+            msgToDisplay = 1;
+            drawScene();
+            break;
+            
+        // option NO when prompted to quit
+        case 'n':
+        case 'N':
+            if(msgToDisplay == 1)
+            {
+                msgToDisplay = 0;
+                drawScene();
+            }
+            break;
+        
+        // option YES when prompted to quit
+        case 'y':
+        case 'Y':
+            if(msgToDisplay == 1)
+            {
+                playerDidQuit = true;
+                exit(0);
+            }
+            break;
     }
 }
 
@@ -385,6 +415,9 @@ void drawScene()
     // draws menu
     drawMenu();
     
+    // draws standard system message
+    drawSystemMessage(msgToDisplay);
+    
 	glutSwapBuffers();
 }
 
@@ -447,7 +480,7 @@ void drawMaze()
             }
             
             // saving menu bottom limit
-            if(i == mazeSizeVertical - 1)
+            if(i == mazeSizeHorizontal - 1 && j == mazeSizeVertical - 1)
             {
                 bottomTranslationFactorVertical = g_translationFactorOnVerticalAxis;
             }
@@ -803,6 +836,12 @@ void drawMenu()
 }
 
 
+void drawSystemMessage(int i)
+{
+    drawLabelAtScreenPositionWithText(g_wallSize * topTranslationFactorHorizontal, g_wallSize * bottomTranslationFactorVertical, systemMsg[i]);
+}
+
+
 void drawLabelAtScreenPositionWithText(float x, float y, char *str)
 {
     glLoadIdentity();
@@ -824,7 +863,7 @@ void setupAmbientLight()
 	glTranslatef(0.0f, 0.0f, -8.0f);
 	
     // ambient light
-	GLfloat ambientColor[] = {0.5f, 0.5f, 0.5f, 1.0f};
+	GLfloat ambientColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 }
 
