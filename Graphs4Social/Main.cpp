@@ -519,7 +519,7 @@ void keyboard(unsigned char key, int x, int y)
 	case 'z':
 	case 'Z':
 		state.keys.z = !state.keys.z;
-		(state.keys.z) ? PlaySound(TEXT("enter_the_east.wav"), NULL, SND_LOOP | SND_FILENAME | SND_ASYNC) : PlaySound(NULL, 0, 0);;
+		(state.keys.z) ? PlaySound(TEXT("SidTheKid.wav"), NULL, SND_LOOP | SND_FILENAME | SND_ASYNC) : PlaySound(NULL, 0, 0);;
 		break;
 	}
 }
