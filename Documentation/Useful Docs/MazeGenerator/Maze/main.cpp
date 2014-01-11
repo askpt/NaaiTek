@@ -84,7 +84,7 @@ bool didRequestHelp;
 float topTranslationFactorHorizontal;
 float topTranslationFactorVertical;
 float bottomTranslationFactorVertical;
-char *menuOptions[4] = { "Get Help", "Quit", "", ""};
+char *menuOptions[4] = { "Get Help", "Quit", "", "" };
 
 
 //************************************************************************
@@ -484,11 +484,18 @@ void setTargetPosition(int x, int y)
  */
 bool isPossibleToMovePlayerToPosition(int x, int y)
 {
+    // player can't move beyond maze's limits
+    if(x < 0 || y < 0)
+    {
+        return false;
+    }
+    
     // player can't move if there's a wall
     if(maze[x][y] == 0)
     {
         return false;
     }
+
     return true;
 }
 
