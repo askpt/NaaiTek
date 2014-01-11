@@ -7,6 +7,7 @@
 #include <mmsystem.h>
 #include <stdio.h>
 #include "graphs.h"
+#include <vector>
 
 using namespace std;
 
@@ -82,6 +83,8 @@ typedef struct State{
 	GLint		pickedObjID;
 	Keys_t		keys;
 	GLint		timer;
+	GLboolean	strongestPathActive;
+	GLboolean	shortestPathActive;
 }State;
 
 typedef struct Model {
@@ -97,6 +100,7 @@ typedef struct Model {
 
 State state;
 Model model;
+std::vector<std::wstring> pathList;
 
 /* initial values of the state*/
 void initState(){
@@ -281,9 +285,21 @@ void drawGraph(){
 		drawNode(nodes[i]);
 		glPopName();
 	}
-	material(red_plastic);
 	int pathID = _MAX_PATHS_GRAPH;
 	for (int i = 0; i < numPaths; i++){
+		if (state.shortestPathActive && CheckIfConnectionExistsInPathList(pathList, nodes[paths[i].connection.nodei].user->name, nodes[paths[i].connection.nodef].user->name))
+		{
+			material(emerald);
+		}
+		else if (state.strongestPathActive && CheckIfConnectionExistsInPathList(pathList, nodes[paths[i].connection.nodei].user->name, nodes[paths[i].connection.nodef].user->name))
+		{
+			material(brass);
+		}
+		else
+		{
+			material(red_plastic);
+		}
+
 		glPushName(pathID + i);
 		Node* noi = &nodes[paths[i].connection.nodei];
 		Node* nof = &nodes[paths[i].connection.nodef];
@@ -570,6 +586,8 @@ void Special(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_F1:
 		readGraphUser(model.regUser);
+		state.shortestPathActive = GL_FALSE;
+		state.strongestPathActive = GL_FALSE;
 		break;
 	case GLUT_KEY_F2:
 		state.keys.f2 = GL_TRUE;
@@ -729,18 +747,22 @@ void mouse(int btn, int mouseState, int x, int y){
 				}
 				else if (mod == GLUT_ACTIVE_ALT)
 				{
-					vector<wstring> path = GetShortPath(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
-					for (int i = 0; i < path.size(); i++)
+					state.shortestPathActive = GL_FALSE;
+					state.strongestPathActive = GL_FALSE;
+					pathList = GetShortPath(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
+					if (pathList.size() > 0)
 					{
-						wcout << path[i];
+						state.shortestPathActive = GL_TRUE;
 					}
 				}
 				else if (mod == GLUT_ACTIVE_SHIFT)
 				{
-					vector<wstring> path = GetStrongestPath(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
-					for (int i = 0; i < path.size(); i++)
+					state.shortestPathActive = GL_FALSE;
+					state.strongestPathActive = GL_FALSE;
+					pathList = GetStrongestPath(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
+					if (pathList.size() > 0)
 					{
-						wcout << path[i];
+						state.strongestPathActive = GL_TRUE;
 					}
 				}
 				else
@@ -782,7 +804,7 @@ void main(int argc, char **argv)
 
 		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 		glutInitWindowSize(800, 450);
-		glutCreateWindow("OpenGL");
+		glutCreateWindow("Graphs4Social");
 		glutReshapeFunc(myReshape);
 		glutDisplayFunc(display);
 		glutKeyboardFunc(keyboard);

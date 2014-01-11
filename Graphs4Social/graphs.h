@@ -47,4 +47,5 @@ bool sendFriendRequest(wstring, wstring);
 
 vector<wstring> GetShortPath(wstring, wstring);
 vector<wstring> GetStrongestPath(wstring, wstring);
+bool CheckIfConnectionExistsInPathList(vector<wstring>, wstring, wstring);
 #endif

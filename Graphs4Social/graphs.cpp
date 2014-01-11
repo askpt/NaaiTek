@@ -402,3 +402,19 @@ vector<wstring> GetStrongestPath(wstring user, wstring friendUser)
 
 	return path;
 }
+
+bool CheckIfConnectionExistsInPathList(vector<wstring> paths, wstring user1, wstring user2)
+{
+	bool ret = false;
+
+	for (size_t i = 0; i < paths.size() - 1; i++)
+	{
+		if ((paths[i] == user1 && paths[i + 1] == user2) || (paths[i] == user2 && paths[i + 1] == user1))
+		{
+			ret = true;
+		}
+	}
+
+
+	return ret;
+}
