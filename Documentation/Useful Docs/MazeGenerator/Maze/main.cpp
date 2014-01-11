@@ -85,7 +85,7 @@ float topTranslationFactorHorizontal;
 float topTranslationFactorVertical;
 float bottomTranslationFactorVertical;
 char *menuOptions[4] = { "Get Help (h)", "Quit (q)", "---", "" };
-char *systemMsg[4] = { "Get to the target!", "Confirm quit? (Y/N)", "You Lost!", "You Won!" };
+char *systemMsg[4] = { "Get to the target!", "Confirm quit? (Y/N)", "You Lost! (press C)", "You Won! (press C)" };
 int msgToDisplay = 0;
 
 
@@ -299,9 +299,23 @@ void handleKeypress(unsigned char key, int x, int y)
             if(msgToDisplay == 1)
             {
                 playerDidQuit = true;
-                exit(0);
+                msgToDisplay = 2;
+                drawScene();
             }
             break;
+            
+        // c to exit when player wins or quits
+        case 'c':
+        case 'C':
+            if(msgToDisplay == 3)
+            {
+                exit(1);
+            }
+            if(msgToDisplay == 2)
+            {
+                exit(0);
+            }
+            
     }
 }
 
@@ -635,7 +649,7 @@ void checkIfPlayerWon()
     if(player.x == target.x && player.y == target.y)
     {
         playerDidWin = true;
-        exit(1);
+        msgToDisplay = 3;
     }
 }
 
