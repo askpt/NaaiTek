@@ -3,6 +3,9 @@
 #include <stdlib.h>     
 #include <GL\glut.h>
 #include <iostream>
+#include <windows.h>
+#include <mmsystem.h>
+#include <stdio.h>
 #include "graphs.h"
 
 using namespace std;
@@ -57,7 +60,7 @@ typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
 typedef struct Keys_t{
-	GLboolean   w, a, s, d, up, down, tictactoe;
+	GLboolean   w, a, s, d, up, down, tictactoe, z;
 }Keys_t;
 
 typedef struct Camera{
@@ -110,6 +113,7 @@ void initState(){
 	state.light = GL_FALSE;
 	state.lightViewer = 1;
 	state.timer = 100;
+	state.keys.z = GL_FALSE;
 }
 
 /* initial values of the model*/
@@ -178,6 +182,7 @@ void printHelp(void)
 	printf("e,E - PolygonMode Fill \n");
 	printf("q,Q - PolygonMode Wireframe \n");
 	printf("r,R - PolygonMode Point \n");
+	printf("z,Z - Music ON/OFF \n");
 	printf("******* Graphs ******* \n");
 	printf("F1  - Save graph to file \n");
 	printf("F2  - Read graph from file \n");
@@ -510,6 +515,11 @@ void keyboard(unsigned char key, int x, int y)
 	case 'd':
 	case 'D':
 		state.keys.d = GL_TRUE;
+		break;
+	case 'z':
+	case 'Z':
+		state.keys.z = !state.keys.z;
+		(state.keys.z) ? PlaySound(TEXT("enter_the_east.wav"), NULL, SND_LOOP | SND_FILENAME | SND_ASYNC) : PlaySound(NULL, 0, 0);;
 		break;
 	}
 }
