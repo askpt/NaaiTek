@@ -6,18 +6,35 @@ using System.Web;
 
 namespace DatabaseWs
 {
+    /// <summary>
+    /// Class used to access the database
+    /// </summary>
     public class DatabaseAccess : IDisposable
     {
+        /// <summary>
+        /// The database url string
+        /// </summary>
         private const string _dbUrl = @"data source=gandalf.dei.isep.ipp.pt\sqlexpress;initial catalog=ARQSI061;user id=ARQSI061;password=ARQSI061";
 
+        /// <summary>
+        /// The database connection object
+        /// </summary>
         private SqlConnection con;
 
+        /// <summary>
+        /// The main constructor of the database access class
+        /// </summary>
         public DatabaseAccess()
         {
             con = new SqlConnection(_dbUrl);
             con.Open();
         }
 
+        /// <summary>
+        /// Method to get the hashed password of the given user
+        /// </summary>
+        /// <param name="username">the username of the user</param>
+        /// <returns>the hashed password of the given user</returns>
         public string GetPasswordHash(string username)
         {
             string hashPwd = "";
@@ -34,6 +51,11 @@ namespace DatabaseWs
             return hashPwd;
         }
 
+        /// <summary>
+        /// Method to get the data of the given user
+        /// </summary>
+        /// <param name="username">the username of the user</param>
+        /// <returns>an object with the data of the given user</returns>
         public User GetUser(string username)
         {
             User user = new User();
@@ -67,7 +89,9 @@ namespace DatabaseWs
             return user;
         }
 
-
+        /// <summary>
+        /// Method to close the connection to the database
+        /// </summary>
         public void Dispose()
         {
             con.Close();
