@@ -10,10 +10,20 @@ using WebSocial.Models;
 
 namespace WebSocial.Helpers
 {
+    /// <summary>
+    /// The class responsible for the services connection (Prolog Webservice connection)
+    /// </summary>
     public class Services
     {
+        /// <summary>
+        /// The base url string of the prolog webservice
+        /// </summary>
         private const string _baseUrl = "http://uvm061.dei.isep.ipp.pt:5000";
 
+        /// <summary>
+        /// The method to get a list of the dimension network for all users
+        /// </summary>
+        /// <returns>an ordered list of the dimension of all users</returns>
         public static async Task<UserDimension> GetAllUsers()
         {
             UserDimension userGraph;
@@ -29,6 +39,10 @@ namespace WebSocial.Helpers
             return userGraph;
         }
 
+        /// <summary>
+        /// The method to get a list of the count of the connection tag occurences
+        /// </summary>
+        /// <returns>a list with a count of all connection tag occurences</returns>
         public static async Task<TagCountConnection> GetTagCountConnection()
         {
             TagCountConnection tagCount;
@@ -44,6 +58,11 @@ namespace WebSocial.Helpers
             return tagCount;
         }
 
+        /// <summary>
+        /// The method to get the user graph friends and 3rd level connections
+        /// </summary>
+        /// <param name="user">the user username</param>
+        /// <returns>a list of the friends and the connections</returns>
         public static async Task<UserGraph> GetUserGraph(string user)
         {
             UserGraph userGraph;
@@ -59,6 +78,11 @@ namespace WebSocial.Helpers
             return userGraph;
         }
 
+        /// <summary>
+        /// The method to get the connection tag count for the given user
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the count of the connection tag</returns>
         public static async Task<TagCountConnection> GetTagCountConnectionByUser(string username)
         {
             TagCountConnection tagCount;
@@ -74,6 +98,11 @@ namespace WebSocial.Helpers
             return tagCount;
         }
 
+        /// <summary>
+        /// The method to get the friend connection to the given user
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the friend connections</returns>
         public static async Task<List<Path>> GetOnlyFriends(string username)
         {
             UserGraph graph = await GetUserGraph(username);
@@ -91,6 +120,13 @@ namespace WebSocial.Helpers
             return friends;
         }
 
+        /// <summary>
+        /// The method that will edit a friendship by strenght between two users
+        /// </summary>
+        /// <param name="user1">the first user</param>
+        /// <param name="user2">the second user</param>
+        /// <param name="strenght">the connection strenght</param>
+        /// <returns>true if operation was succeed</returns>
         public static async Task<bool> EditConnection(string user1, string user2, int strenght)
         {
             HttpClient client = new HttpClient();
@@ -103,6 +139,10 @@ namespace WebSocial.Helpers
             return true;
         }
 
+        /// <summary>
+        /// The method to get all connection tags
+        /// </summary>
+        /// <returns>a list with all connection tags</returns>
         public static async Task<List<string>> GetAllTags()
         {
             HttpClient client = new HttpClient();
@@ -115,6 +155,13 @@ namespace WebSocial.Helpers
             return tags.tags;
         }
 
+        /// <summary>
+        /// The method that will edit a friendship by adding a tag
+        /// </summary>
+        /// <param name="user1">the first user</param>
+        /// <param name="user2">the second user</param>
+        /// <param name="tag">the tag to be added</param>
+        /// <returns>true if operation was succeed</returns>
         public static async Task<bool> AddTag(string user1, string user2, string tag)
         {
             HttpClient client = new HttpClient();
@@ -125,6 +172,13 @@ namespace WebSocial.Helpers
             return true;
         }
 
+        /// <summary>
+        /// The method that will edit a friendship by removing a tag
+        /// </summary>
+        /// <param name="user1">the first user</param>
+        /// <param name="user2">the second user</param>
+        /// <param name="tag">the tag to be removed</param>
+        /// <returns>true if operation was succeed</returns>
         public static async Task<bool> RemoveTag(string user1, string user2, string tag)
         {
             HttpClient client = new HttpClient();
@@ -135,6 +189,12 @@ namespace WebSocial.Helpers
             return true;
         }
 
+        /// <summary>
+        /// The method that will remove a friendship
+        /// </summary>
+        /// <param name="user1">the first user</param>
+        /// <param name="user2">the second user</param>
+        /// <returns>true if operation was succeed</returns>
         public static async Task<bool> RemoveFriend(string user1, string user2)
         {
             HttpClient client = new HttpClient();
@@ -145,6 +205,11 @@ namespace WebSocial.Helpers
             return true;
         }
 
+        /// <summary>
+        /// The method to get a list of the third level connections of the given username
+        /// </summary>
+        /// <param name="username">the given username</param>
+        /// <returns>a list with the usernames</returns>
         public static async Task<List<string>> GetThirdLevelFriends(string username)
         {
             UserGraph graph = await GetUserGraph(username);
@@ -180,6 +245,11 @@ namespace WebSocial.Helpers
             return thirdFriends;
         }
 
+        /// <summary>
+        /// The method to get all the pending requests of the given user
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the users that make the request</returns>
         public static async Task<List<string>> GetAllPendingRequests(string username)
         {
             HttpClient client = new HttpClient();
@@ -191,6 +261,12 @@ namespace WebSocial.Helpers
             return user.users;
         }
 
+        /// <summary>
+        /// The method to send a user friend request
+        /// </summary>
+        /// <param name="user">the user that makes the request</param>
+        /// <param name="friend">the user that will receive the request</param>
+        /// <returns></returns>
         public static async Task SendUserRequest(string user, string friend)
         {
             HttpClient client = new HttpClient();
@@ -199,6 +275,11 @@ namespace WebSocial.Helpers
             await client.GetAsync(url);
         }
 
+        /// <summary>
+        /// The method to get all the pending requests of the given user
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the users that make the request</returns>
         public static async Task<List<string>> CheckFriendRequests(string user)
         {
             HttpClient client = new HttpClient();
@@ -210,6 +291,11 @@ namespace WebSocial.Helpers
             return users.users;
         }
 
+        /// <summary>
+        /// The method to get all the pending game requests of the given user
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the users that respond the request</returns>
         public static async Task<List<string>> CheckGameFriendRequests(string user)
         {
             HttpClient client = new HttpClient();
@@ -221,6 +307,11 @@ namespace WebSocial.Helpers
             return users.users;
         }
 
+        /// <summary>
+        /// The method to get all the accepted requests of the given user
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the users that accepted the request</returns>
         public static async Task<List<string>> CheckAcceptedFriendRequests(string user)
         {
             HttpClient client = new HttpClient();
@@ -232,6 +323,12 @@ namespace WebSocial.Helpers
             return users.users;
         }
 
+        /// <summary>
+        /// The method that will delete the friend requests
+        /// </summary>
+        /// <param name="user">the user username</param>
+        /// <param name="friend">the requested friend username</param>
+        /// <returns></returns>
         public static async Task DeleteFriendRequest(string user, string friend)
         {
             HttpClient client = new HttpClient();
@@ -240,6 +337,12 @@ namespace WebSocial.Helpers
             await client.GetAsync(url);
         }
 
+        /// <summary>
+        /// The method that will respond the friend request with the game status
+        /// </summary>
+        /// <param name="user">the user username</param>
+        /// <param name="friend">the requested friend username</param>
+        /// <returns></returns>
         public static async Task GameResponseFriendRequest(string user, string friend)
         {
             HttpClient client = new HttpClient();
@@ -248,6 +351,12 @@ namespace WebSocial.Helpers
             await client.GetAsync(url);
         }
 
+        /// <summary>
+        /// The method that will accept an user friend request
+        /// </summary>
+        /// <param name="user">the user username</param>
+        /// <param name="friend">the requested friend username</param>
+        /// <returns></returns>
         public static async Task AcceptResponseFriendRequest(string user, string friend)
         {
             HttpClient client = new HttpClient();
