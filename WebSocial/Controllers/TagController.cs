@@ -15,8 +15,14 @@ using WebSocial.Helpers;
 
 namespace WebSocial.Controllers
 {
+    /// <summary>
+    /// The controller class for the tag
+    /// </summary>
     public class TagController : BaseController
     {
+        /// <summary>
+        /// The database context
+        /// </summary>
         private GameContext db = new GameContext();
 
         // GET: /Tag/
@@ -97,7 +103,11 @@ namespace WebSocial.Controllers
             base.Dispose(disposing);
         }
 
-        // returns treu if the user has  the selected tag
+        /// <summary>
+        /// the method that will check if the user has the selected tag
+        /// </summary>
+        /// <param name="id">the tag id</param>
+        /// <returns>returns true if the user has the selected tag</returns>
         public bool UserHasTag(int id)
         {
             // gets current user id

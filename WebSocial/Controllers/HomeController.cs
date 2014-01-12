@@ -13,11 +13,17 @@ using WebSocial.Helpers.Models;
 
 namespace WebSocial.Controllers
 {
+    /// <summary>
+    /// The Home Controller
+    /// </summary>
     public class HomeController : BaseController
     {
-
+        /// <summary>
+        /// The database Context
+        /// </summary>
         private GameContext db = new GameContext();
 
+        // GET: /
         public async Task<ActionResult> Index()
         {
             string userID = User.Identity.GetUserId();
@@ -41,6 +47,7 @@ namespace WebSocial.Controllers
             return View(user);
         }
 
+        // GET: /About
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -48,6 +55,7 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        // GET: /Contact
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -55,6 +63,7 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        // GET: /Statistics
         public async Task<ActionResult> Statistics()
         {
             UserDimension users = await Services.GetAllUsers();
@@ -83,6 +92,11 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        /// <summary>
+        /// The method that will set the culture of the entire website
+        /// </summary>
+        /// <param name="culture">the string with the culture result</param>
+        /// <returns></returns>
         public ActionResult SetCulture(string culture)
         {
             // Validate input
@@ -101,6 +115,11 @@ namespace WebSocial.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// The method to get the overall user tag count
+        /// </summary>
+        /// <param name="userCount">the number of registered users</param>
+        /// <returns>an object that associates the user tag and the count</returns>
         private List<TagCount> GetOverallUserTagCount(int userCount)
         {
             List<Tag> allTags = db.Tags.ToList();
@@ -124,6 +143,12 @@ namespace WebSocial.Controllers
             return tagsStatistics;
         }
 
+        /// <summary>
+        /// The method to get the overall user tag count for the registered user
+        /// </summary>
+        /// <param name="userCount">the number of registered friends</param>
+        /// <param name="friendIds">the name of the registered friends</param>
+        /// <returns>an object that associates the user tag and the count</returns>
         private List<TagCount> GetAuthenticatedUserTagCount(int userCount, List<string> friendIds)
         {
             List<Tag> allTags = db.Tags.ToList();
@@ -147,6 +172,10 @@ namespace WebSocial.Controllers
             return tagsStatistics;
         }
 
+        /// <summary>
+        /// The method to get the overall connection tag count
+        /// </summary>
+        /// <returns>an object that associates the connection tag and the count</returns>
         private static async Task<List<TagCount>> GetOverallConnectionTagCount()
         {
             TagCountConnection tag = await Services.GetTagCountConnection();
@@ -154,12 +183,22 @@ namespace WebSocial.Controllers
             return ConvertToTagCount(tag);
         }
 
+        /// <summary>
+        /// The method to get the overall connection tag count for the registered user
+        /// </summary>
+        /// <returns>an object that associates the connection tag and the count</returns>
         private static async Task<List<TagCount>> GetAuthenticatedConnectionTagCount(string username)
         {
             TagCountConnection tag = await Services.GetTagCountConnectionByUser(username);
 
             return ConvertToTagCount(tag);
         }
+
+        /// <summary>
+        /// The method that will convert a tag count connection into tag count object used in the html page
+        /// </summary>
+        /// <param name="tag">the tag count connection object</param>
+        /// <returns>the tag count connection object used in html page</returns>
         private static List<TagCount> ConvertToTagCount(TagCountConnection tag)
         {
             List<TagCount> listTags = new List<TagCount>();
@@ -177,6 +216,13 @@ namespace WebSocial.Controllers
             return listTags;
         }
 
+        /// <summary>
+        /// The method that will calculate the html class for the given tag.
+        /// Used by Tag Cloud.
+        /// </summary>
+        /// <param name="tagCount">the number of the occurences of the given tag</param>
+        /// <param name="usersCount">the number of the registered users</param>
+        /// <returns>a string with the class of the given tag</returns>
         private static string GetTagClass(int tagCount, int usersCount)
         {
             var result = (tagCount * 100) / usersCount;
@@ -195,6 +241,11 @@ namespace WebSocial.Controllers
             return result <= 50 ? "tag7" : "";
         }
 
+        /// <summary>
+        /// The method to get a list of the friend id's of the given user graph
+        /// </summary>
+        /// <param name="graph">the user graph</param>
+        /// <returns>a list of the friend id's</returns>
         private List<string> FindFriendIds(UserGraph graph)
         {
             List<string> usernames = graph.nodes;

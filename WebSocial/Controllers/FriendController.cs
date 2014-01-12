@@ -14,8 +14,14 @@ using System.Net;
 
 namespace WebSocial.Controllers
 {
+    /// <summary>
+    /// The friend controller
+    /// </summary>
     public class FriendController : BaseController
     {
+        /// <summary>
+        /// The database context
+        /// </summary>
         private GameContext db = new GameContext();
 
         //
@@ -41,6 +47,12 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        /// <summary>
+        /// The method to get the suggested friends list
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <param name="userId">the user userID</param>
+        /// <returns>a list with suggested friends</returns>
         private async Task<List<string>> GetSuggestedFriends(string username, string userId)
         {
             List<string> suggestedFriends = new List<string>();
@@ -57,6 +69,13 @@ namespace WebSocial.Controllers
             return suggestedFriends;
         }
 
+        /// <summary>
+        /// The method to get the suggested friend list of the all database
+        /// </summary>
+        /// <param name="username">the user name</param>
+        /// <param name="userTagIDs">the user tags id</param>
+        /// <param name="pendingRequests">the user pending requests</param>
+        /// <returns>a list with suggested friends</returns>
         private async Task<List<string>> GetAllFriendsSuggested(string username, IList<int> userTagIDs, List<string> pendingRequests)
         {
             List<string> suggestedFriends = new List<string>();
@@ -92,6 +111,11 @@ namespace WebSocial.Controllers
             return suggestedFriends;
         }
 
+        /// <summary>
+        /// The method to get all users of the database
+        /// </summary>
+        /// <param name="username">the user username</param>
+        /// <returns>a list of the all usernames of the database</returns>
         private async Task<List<string>> GetAllUsers(string username)
         {
             UserDimension usersDim = await Services.GetAllUsers();
@@ -109,6 +133,13 @@ namespace WebSocial.Controllers
             return usernames;
         }
 
+        /// <summary>
+        /// The method to get the suggested friend list of the third level connections
+        /// </summary>
+        /// <param name="username">the user name</param>
+        /// <param name="userTagIDs">the user tags id</param>
+        /// <param name="pendingRequests">the user pending requests</param>
+        /// <returns>a list with suggested friends</returns>
         private async Task<List<string>> GetFriendsSuggestedThirdLevel(string username, IList<int> userTagIDs, List<string> pendingRequests)
         {
             List<string> suggestedFriends = new List<string>();
@@ -148,6 +179,11 @@ namespace WebSocial.Controllers
             return suggestedFriends;
         }
 
+        /// <summary>
+        /// The method that will relates the username and the user id
+        /// </summary>
+        /// <param name="usernames">the list of the usernames</param>
+        /// <returns>the list of user id's</returns>
         private List<string> FindFriendIds(List<string> usernames)
         {
             List<string> userIds = new List<string>();
@@ -292,23 +328,50 @@ namespace WebSocial.Controllers
             }
         }
 
+        /// <summary>
+        /// Check if the connection have a tag
+        /// </summary>
+        /// <param name="allTag">the given tag</param>
+        /// <param name="tags">the list of the tags</param>
+        /// <returns>true if exists in the list</returns>
         public bool ConnectionHasTag(string allTag, List<string> tags)
         {
             return (tags.Contains(allTag));
         }
 
+        /// <summary>
+        /// Method to add a tag to a connection
+        /// </summary>
+        /// <param name="tag">the tag to be added</param>
+        /// <param name="user1">the user username</param>
+        /// <param name="user2">the friend username</param>
+        /// <param name="last">the last connection (to be redirected)</param>
+        /// <returns></returns>
         public async Task<ActionResult> AddTag(string tag, string user1, string user2, int last)
         {
             await Services.AddTag(user1, user2, tag);
             return RedirectToAction("Edit/" + last);
         }
 
+        /// <summary>
+        /// Method to remove a tag to a connection
+        /// </summary>
+        /// <param name="tag">the tag to be removed</param>
+        /// <param name="user1">the user username</param>
+        /// <param name="user2">the friend username</param>
+        /// <param name="last">the last connection (to be redirected)</param>
+        /// <returns></returns>
         public async Task<ActionResult> RemoveTag(string tag, string user1, string user2, int last)
         {
             await Services.RemoveTag(user1, user2, tag);
             return RedirectToAction("Edit/" + last);
         }
 
+        /// <summary>
+        /// Method to request a friend
+        /// </summary>
+        /// <param name="friend">the friend username</param>
+        /// <returns></returns>
         public async Task<ActionResult> RequestFriend(string friend)
         {
             string userID = User.Identity.GetUserId();
@@ -323,6 +386,7 @@ namespace WebSocial.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: /Friend/Notification
         [Authorize(Roles = "User")]
         public async Task<ActionResult> Notification()
         {
@@ -345,6 +409,11 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Method that will accept an user friend request
+        /// </summary>
+        /// <param name="friend">the friend username</param>
+        /// <returns></returns>
         public async Task<ActionResult> AcceptRequest(string friend)
         {
             string userID = User.Identity.GetUserId();
@@ -359,6 +428,11 @@ namespace WebSocial.Controllers
             return RedirectToAction("Notification");
         }
 
+        /// <summary>
+        /// Method that will respond to game an user friend request
+        /// </summary>
+        /// <param name="friend">the friend username</param>
+        /// <returns></returns>
         public async Task<ActionResult> GameResponse(string friend)
         {
             string userID = User.Identity.GetUserId();
@@ -373,6 +447,11 @@ namespace WebSocial.Controllers
             return RedirectToAction("Notification");
         }
 
+        /// <summary>
+        /// Method that will delete an user friend request
+        /// </summary>
+        /// <param name="friend">the friend username</param>
+        /// <returns></returns>
         public async Task<ActionResult> DeleteResponse(string friend)
         {
             string userID = User.Identity.GetUserId();
