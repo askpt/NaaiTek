@@ -264,3 +264,23 @@ listCommonNodes(User1, User2, [User1, User2 | L]):-listAllConnections(User1, F1)
 %list common connections
 listCommonPaths(User1, User2, L):-listCommonNodes(User1, User2, Nodes),
 	findall((U1, U2, S, Tag), (connects(U1, U2, S, Tag), member(U1, Nodes), member(U2, Nodes)), L).
+
+%ordered list by network Strenght
+networkStrenght(L):-listAllUsers(Users),
+	calculateStrenght(Users, L2),
+	sort(L2, L3),
+	reverse(L3, L).
+
+calculateStrenght([],[]).
+
+calculateStrenght([H|T], [(S, H)|L]):-findall(S1, (connects(H, _, S1, _); connects(_, H, S1, _)), R),
+	sumList(R, S),
+	calculateStrenght(T, L).
+
+% The sum of all elements in list in prolog
+
+% empty list
+sumList([], 0).
+
+sumList([H | T], S) :- sumList(T, S1),
+	S is H + S1.
