@@ -20,6 +20,8 @@
 #include <time.h>
 #include "text3d.h"
 #include "Maze.h"
+#include <SWI-cpp.h>
+#include <iostream>
 
 using namespace std;
 
@@ -134,6 +136,7 @@ void setupAmbientLight();
 void setupPositionedLight();
 void drawSystemMessage(int i);
 void drawInstructionMessages();
+vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y, double x_ini, double y_ini, double x_end, double y_end);
 
 
 /**
@@ -157,15 +160,15 @@ int main(int argc, char *argv[])
 	else if (dificultyLevel == 2)
 	{
 		g_wallSize = 0.045;
-		mazeSizeHorizontal = 40;
-		mazeSizeVertical = 40;
+		mazeSizeHorizontal = 30;
+		mazeSizeVertical = 30;
 	}
 	// "hard" mode
 	else if (dificultyLevel == 3)
 	{
-		g_wallSize = 0.020;
-		mazeSizeHorizontal = 80;
-		mazeSizeVertical = 80;
+		g_wallSize = 0.045;
+		mazeSizeHorizontal = 40;
+		mazeSizeVertical = 40;
 	}
 
 	// initializing GLUT
@@ -518,11 +521,15 @@ void drawMaze()
 */
 void requestHelp()
 {
+	/*
 	// bootstrap help (to be removed)
 	maze[1][1] = 2;
 	maze[2][2] = 2;
 	maze[3][3] = 2;
 	maze[4][4] = 2;
+	*/
+
+	maze = GetPath(maze, mazeSizeHorizontal, mazeSizeVertical, player.x, player.y, target.x, target.y);
 
 	didRequestHelp = true;
 	totalHelpRequest++;
@@ -910,4 +917,60 @@ void setupPositionedLight()
 	GLfloat lightPos0[] = { 0.5f, 0.5f, 15.0f, 0.0f };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+}
+
+vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y, double x_ini, double y_ini, double x_end, double y_end)
+{
+	char* argv[] = { "swipl.dll", "-s", "mz_off.pl", NULL };
+
+	PlEngine e(3, argv);
+
+	for (size_t x = 0; x < size_x; x++)
+	{
+		for (size_t y = 0; y < size_y; y++)
+		{
+			if (maze[x][y] == 1)
+			{
+				//PlFrame fr;
+				PlTermv av(1);
+
+				double cx = x, cy = y;
+
+				av[0] = PlCompound("pos", PlTermv(PlTerm(cx), PlTerm(cy)));
+				PlQuery q("assert", av);
+				q.next_solution();
+			}
+		}
+	}
+
+	PlTermv av1(6);
+
+	av1[2] = PlTerm(x_ini);
+	av1[3] = PlTerm(y_ini);
+	av1[4] = PlTerm(x_end);
+	av1[5] = PlTerm(y_end);
+
+	PlQuery qq("eachPosMazeSol", av1);
+	while (qq.next_solution())
+	{
+
+		int x = atoi((char*)av1[0]);
+		int y = atoi((char*)av1[1]);
+
+		maze[x][y] = 2;
+	}
+
+	/*
+	char *path;
+	PlTermv av2(1);
+	PlQuery qq1("findPath", av2);
+	while (qq1.next_solution())
+	{
+	cout << ((char*)av2[0]) << endl;
+	}
+	*/
+
+	//cout << path << endl;
+
+	return maze;
 }
