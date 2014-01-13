@@ -607,8 +607,9 @@ void Special(int key, int x, int y){
 	{
 		state.keys.tictactoe = GL_FALSE;
 		char ret[100];
-		sprintf_s(ret, "TicTacToe %s %s", "T1", "T2");
-		system(ret);
+		sprintf_s(ret, "TicTacToe");
+		int retN = system(ret);
+		cout << retN << endl;
 	}
 }
 

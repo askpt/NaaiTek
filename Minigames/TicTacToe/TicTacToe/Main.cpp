@@ -1,6 +1,5 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <stdlib.h>
 #include <string>
 #include <stdlib.h>     
 #include <GL\glut.h>
@@ -8,14 +7,13 @@
 #include <iostream>
 #include "ImageLoader.h"
 #include "text3d.h"
-#include "Json.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795
 #endif
 
 using namespace std;
-//#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 typedef struct
 {
 	char matrix[3][3];
@@ -31,8 +29,6 @@ float g_scale;
 bool requestSent = false;
 const char * stringVetor[2] = { "You won!", "You Loose!" };
 const char * stringHelp[2] = { "F1->New Game", "F10->Exit" };
-
-string user, friendUser;
 
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
@@ -94,7 +90,7 @@ void drawTextBox()
 
 void myInit()
 {
-	
+
 
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -102,7 +98,7 @@ void myInit()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0.0, (GLdouble)WindowWidth, (GLdouble)WindowHeight, 0.0);
-	
+
 }
 
 /*
@@ -271,7 +267,7 @@ void drawTable()
 
 	glEnd();
 	drawTextBox();
-	
+
 
 }
 
@@ -662,7 +658,14 @@ void keyBoard(int key, int x, int y)
 		initGameData();
 		break;
 	case GLUT_KEY_F10:
-		exit(0);
+		if (game.winUser)
+		{
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			exit(EXIT_SUCCESS);
+		}
 		break;
 	}
 
@@ -747,16 +750,6 @@ void checkUserWin()
 		game.winUser = true;
 	}
 }
-
-void SendRequest()
-{
-	wstring userWs(user.begin(), user.end());
-	wstring friendWs(friendUser.begin(), friendUser.end());
-
-	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/accept_response?personA=" + userWs + L"&personB=" + friendWs;
-	RequestJSONValueAsync(url).get();
-}
-
 
 /*function to update the bordergame*/
 
@@ -852,13 +845,7 @@ void updateBorderGame(string border)
 	}
 	if (game.winUser)
 	{
-		if (!requestSent)
-		{
-			SendRequest();
-			requestSent = true;
-		}
 		writeTextOnBox(60, 550, stringVetor[0]);
-
 	}
 
 }
@@ -905,9 +892,6 @@ void IAConnection(char play)
 
 int main(int argc, char **argv)
 {
-	user = argv[1];
-	friendUser = argv[2];
-
 	char fakeParam[] = "fake";
 	char *fakeargv[] = { fakeParam, NULL };
 	int fakeargc = 1;
@@ -923,5 +907,6 @@ int main(int argc, char **argv)
 	glutSpecialFunc(keyBoard);
 	myInit();
 	glutMainLoop();
+
 	return 0;
 }
