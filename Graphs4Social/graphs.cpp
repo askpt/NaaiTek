@@ -446,3 +446,63 @@ void SendRequest(wstring user, wstring friendUser)
 	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/accept_response?personA=" + user + L"&personB=" + friendUser;
 	RequestJSONValueAsync(url).get();
 }
+
+vector<wstring> GetFriendRequests(wstring user)
+{
+	vector<wstring> users;
+
+	wstring userWs(user.begin(), user.end());
+
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/check_requests?user=" + userWs;
+
+	json::value usersJs = RequestJSONValueAsync(url).get();
+	wstring status = usersJs[L"status"].to_string();
+
+	if (checkIfStatusOk(status))
+	{
+		users.resize(usersJs[L"users"].size());
+
+		int i = 0;
+		for (auto iter = usersJs[L"users"].begin(); iter != usersJs[L"users"].end(); ++iter)
+		{
+			users[i] = iter->second.as_string();
+			i++;
+		}
+	}
+	else
+	{
+		users.resize(0);
+	}
+
+	return users;
+}
+
+vector<wstring> GetFriendGameRequests(wstring user)
+{
+	vector<wstring> users;
+
+	wstring userWs(user.begin(), user.end());
+
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/check_game_requests?user=" + userWs;
+
+	json::value usersJs = RequestJSONValueAsync(url).get();
+	wstring status = usersJs[L"status"].to_string();
+
+	if (checkIfStatusOk(status))
+	{
+		users.resize(usersJs[L"users"].size());
+
+		int i = 0;
+		for (auto iter = usersJs[L"users"].begin(); iter != usersJs[L"users"].end(); ++iter)
+		{
+			users[i] = iter->second.as_string();
+			i++;
+		}
+	}
+	else
+	{
+		users.resize(0);
+	}
+
+	return users;
+}
