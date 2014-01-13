@@ -70,7 +70,7 @@
     }
 </div>
 
-@if (User.IsInRole("User"))
+@if (User.IsInRole("User") && ViewBag.nrFriends > 0)
 {
      <h2>@Resources.AuthUserTags</h2>
     <div id="tags">

@@ -41,6 +41,11 @@ namespace WebSocial.Controllers
                 // need to remove one because this dimension contains self user
                 int dimension = (graph.nodes.Count - 1);
 
+                if (dimension < 0)
+                {
+                    dimension++;
+                }
+
                 ViewBag.Dimension = dimension;
             }
 
@@ -88,13 +93,18 @@ namespace WebSocial.Controllers
             if (userID != null && User.IsInRole("User"))
             {
                 ApplicationUser user = db.Users.Find(userID);
-
-                ViewBag.AuthConnTag = await GetAuthenticatedConnectionTagCount(user.UserName);
-
                 UserGraph graph = await Services.GetUserGraph(user.UserName);
-                List<string> friendIds = FindFriendIds(graph);
+                int nrFriends = graph.nodes.Count;
+                ViewBag.nrFriends = nrFriends;
 
-                ViewBag.AuthUserTag = GetAuthenticatedUserTagCount(graph.nodes.Count, friendIds);
+                if (nrFriends > 0)
+                {
+                    ViewBag.AuthConnTag = await GetAuthenticatedConnectionTagCount(user.UserName);
+                    List<string> friendIds = FindFriendIds(graph);
+
+                    ViewBag.AuthUserTag = GetAuthenticatedUserTagCount(graph.nodes.Count, friendIds);
+                }
+                
             }
 
             return View();
