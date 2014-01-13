@@ -276,6 +276,40 @@ void drawPath(Node noi, Node nof, Path p)
 	glPopMatrix();
 }
 
+/* Actually draws the name in the place defined earlier */
+void drawText(Node node)
+{
+	int i;
+	int len = node.user->name.length();
+	glRasterPos3f(node.x, node.y, node.z + node.width + 0.2f);
+	for (i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, node.user->name.at(i));
+	}
+	glFlush();
+}
+
+/* Prepares the game to write the name */
+void drawBillboard(Node node)
+{
+	float modelview[16];
+	int i, j;
+
+	// save the current modelview matrix
+	glPushMatrix();
+
+	// get the current modelview matrix
+	glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+
+	// set the modelview with no rotations and scaling
+	glLoadMatrixf(modelview);
+
+	drawText(node);
+
+	// restores the modelview matrix
+	glPopMatrix();
+}
+
 /* Calls the drawNode and the drawPath method
  * One time for each existant node and path*/
 void drawGraph(){
@@ -285,6 +319,7 @@ void drawGraph(){
 		glPushName(nodeID + i);
 		drawNode(nodes[i]);
 		glPopName();
+		drawBillboard(nodes[i]);
 	}
 	int pathID = _MAX_PATHS_GRAPH;
 	for (int i = 0; i < numPaths; i++){
