@@ -63,6 +63,9 @@
 % request for get all users with dimension
 :- http_handler(root(get_users_dimension), get_users_dimension, []).
 
+% request to get all users with strenght
+:- http_handler(root(get_users_strenght), get_users_strenght, []).
+
 % request for get tag count
 :- http_handler(root(get_tag_count), get_tag_count, []).
 
@@ -252,6 +255,12 @@ create_json_users([],[]).
 
 create_json_users([(S, U)|T], [Json_ret|Lj]):-prolog_to_json(user(U,S), Json_ret),
                 create_json_users(T, Lj).
+
+%get all users with strenght
+get_users_strenght(_Request) :- networkStrenght(List),
+                create_json_users(List, List_Json),
+                prolog_to_json(users(List_Json, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
 
 %get tag count
 get_tag_count(_Request):-getCountTags(L),
