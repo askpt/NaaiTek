@@ -636,7 +636,7 @@ void myReshape(int w, int h){
 /* Used to rotate the camera */
 void motionRotate(int x, int y){
 #define DRAG_SCALE	0.01
-	double lim = M_PI / 4 - 0.1;
+	double lim = M_PI / 2 - 0.1;
 	state.camera.dir_long += (state.xMouse - x)*DRAG_SCALE;
 	state.camera.dir_lat += (state.yMouse - y)*DRAG_SCALE*0.5;
 	if (state.camera.dir_lat > lim)
