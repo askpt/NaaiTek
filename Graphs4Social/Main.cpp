@@ -101,6 +101,7 @@ typedef struct Model {
 State state;
 Model model;
 std::vector<std::wstring> pathList;
+std::vector<string> minigames;
 
 /* initial values of the state*/
 void initState(){
@@ -607,7 +608,9 @@ void Special(int key, int x, int y){
 	{
 		state.keys.tictactoe = GL_FALSE;
 		char ret[100];
-		sprintf_s(ret, "Maze");
+		srand(time(0));
+		int index = rand() % minigames.capacity() + 1;
+		sprintf_s(ret, minigames[index - 1].c_str());
 		int retN = system(ret);
 		cout << retN << endl;
 	}
@@ -787,6 +790,8 @@ void mouse(int btn, int mouseState, int x, int y){
 /* Main, runs in a loop. */
 void main(int argc, char **argv)
 {
+	minigames = GetMinigamesList();
+
 	string username, pass;
 
 	cout << "username" << endl;

@@ -9,6 +9,7 @@
 #include <math.h>
 
 #define __GRAFO__FILE__ "example.graph"
+#define __MINIGAMES_CONFIG_FILE__ "minigames.config"
 
 Node nodes[_MAX_NODES_GRAPH];
 Path paths[_MAX_PATHS_GRAPH];
@@ -417,4 +418,31 @@ bool CheckIfConnectionExistsInPathList(vector<wstring> paths, wstring user1, wst
 
 
 	return ret;
+}
+
+vector<string> GetMinigamesList()
+{
+	ifstream myfile;
+	int numGames;
+	vector<string> minigames;
+
+	myfile.open(__MINIGAMES_CONFIG_FILE__, ios::in);
+	if (!myfile.is_open()) {
+		cout << "Error oppening " << __MINIGAMES_CONFIG_FILE__ << " to write" << endl;
+		exit(1);
+	}
+	myfile >> numGames;
+	minigames.resize(numGames);
+	for (int i = 0; i < numGames; i++)
+	{
+		myfile >> minigames[i];
+	}
+
+	return minigames;
+}
+
+void SendRequest(wstring user, wstring friendUser)
+{
+	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/accept_response?personA=" + user + L"&personB=" + friendUser;
+	RequestJSONValueAsync(url).get();
 }

@@ -48,4 +48,8 @@ bool sendFriendRequest(wstring, wstring);
 vector<wstring> GetShortPath(wstring, wstring);
 vector<wstring> GetStrongestPath(wstring, wstring);
 bool CheckIfConnectionExistsInPathList(vector<wstring>, wstring, wstring);
+vector<string> GetMinigamesList();
+
+void SendRequest(wstring user, wstring friendUser);
+
 #endif
