@@ -185,111 +185,139 @@ void readCommonGraph(wstring user, wstring friendUser)
 void buildGraph(json::value graph, json::value usersDim, wstring userWs)
 {
 	numNodes = graph[L"nodes"].size();
-	//numNodes = 2;
 	wstring usersNodes[_MAX_NODES_GRAPH];
 
-	userWs = L'\"' + userWs + L'\"';
-	int nodePos = 1;
-	float t = 2.0 * M_PI / numNodes;
-
-	for (auto iter = graph[L"nodes"].begin(); iter != graph[L"nodes"].end(); ++iter)
+	if (numNodes == 0)
 	{
-		for (auto iterDim = usersDim[L"users"].begin(); iterDim != usersDim[L"users"].end(); ++iterDim)
+		numNodes = 1;
+		utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + userWs;
+		json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
+
+		wstring userName = userInfo[L"Username"].as_string();
+		wstring email = userInfo[L"Email"].as_string();
+		wstring country = userInfo[L"Country"].as_string();
+		wstring city = userInfo[L"City"].as_string();
+		int day = userInfo[L"Day"].as_integer();
+		int month = userInfo[L"Month"].as_integer();
+		int year = userInfo[L"Year"].as_integer();
+		int number = userInfo[L"Number"].as_integer();
+
+		nodes[0].x = 0;
+		nodes[0].y = 0;
+		nodes[0].z = 0;
+		nodes[0].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
+
+		nodes[0].user = new User(userName, email, country, city, number, day, month, year);
+
+		usersNodes[0] = userName;
+	}
+	else{
+		//numNodes = 2;
+
+		userWs = L'\"' + userWs + L'\"';
+		int nodePos = 1;
+		float t = 2.0 * M_PI / numNodes;
+
+		for (auto iter = graph[L"nodes"].begin(); iter != graph[L"nodes"].end(); ++iter)
 		{
-			if (iterDim->second[L"user"] == iter->second)
+			for (auto iterDim = usersDim[L"users"].begin(); iterDim != usersDim[L"users"].end(); ++iterDim)
 			{
-
-				utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
-				json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
-
-				wstring userName = userInfo[L"Username"].as_string();
-				wstring email = userInfo[L"Email"].as_string();
-				wstring country = userInfo[L"Country"].as_string();
-				wstring city = userInfo[L"City"].as_string();
-				int day = userInfo[L"Day"].as_integer();
-				int month = userInfo[L"Month"].as_integer();
-				int year = userInfo[L"Year"].as_integer();
-				int number = userInfo[L"Number"].as_integer();
-
-				if (iterDim->second[L"user"].to_string().compare(userWs) == 0)
+				if (iterDim->second[L"user"] == iter->second)
 				{
-					//pos i = 0 is authenticated user
 
-					nodes[0].x = 0;
-					nodes[0].y = 0;
-					nodes[0].z = iterDim->second[L"dimension"].as_integer() * 4;
-					nodes[0].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
+					utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
+					json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
 
-					nodes[0].user = new User(userName, email, country, city, number, day, month, year);
+					wstring userName = userInfo[L"Username"].as_string();
+					wstring email = userInfo[L"Email"].as_string();
+					wstring country = userInfo[L"Country"].as_string();
+					wstring city = userInfo[L"City"].as_string();
+					int day = userInfo[L"Day"].as_integer();
+					int month = userInfo[L"Month"].as_integer();
+					int year = userInfo[L"Year"].as_integer();
+					int number = userInfo[L"Number"].as_integer();
 
-					usersNodes[0] = userName;
-				}
-				else
-				{
-					float r = numNodes * 3.0;
+					if (iterDim->second[L"user"].to_string().compare(userWs) == 0)
+					{
+						//pos i = 0 is authenticated user
 
-					nodes[nodePos].x = r * cos(t);
-					nodes[nodePos].y = r * sin(t);
-					nodes[nodePos].z = iterDim->second[L"dimension"].as_integer() * 4;
-					nodes[nodePos].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
+						nodes[0].x = 0;
+						nodes[0].y = 0;
+						nodes[0].z = iterDim->second[L"dimension"].as_integer() * 4;
+						nodes[0].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
 
-					nodes[nodePos].user = new User(userName, email, country, city, number, day, month, year);
-					usersNodes[nodePos] = userName;
+						nodes[0].user = new User(userName, email, country, city, number, day, month, year);
 
-					nodePos++;
-					t += 2.0*M_PI / numNodes;
-					//wcout << iter->first; //Pos
-					//wcout << iter->second; // Nome
-					//wcout << iterDim->second[L"dimension"]; //dimensao
+						usersNodes[0] = userName;
 
-					//utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
+					}
+					else
+					{
+						float r = numNodes * 3.0;
 
-					//json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
-					//wcout << userInfo[L"Username"];
-					//wcout << userInfo[L"City"];
-					//wcout << userInfo[L"Country"];
-					//wcout << userInfo[L"Day"];
-					//wcout << userInfo[L"Email"];
-					//cin.get();
+						nodes[nodePos].x = r * cos(t);
+						nodes[nodePos].y = r * sin(t);
+						nodes[nodePos].z = iterDim->second[L"dimension"].as_integer() * 4;
+						nodes[nodePos].width = calcNodeWidth(userInfo[L"numTags"].as_integer());
+
+						nodes[nodePos].user = new User(userName, email, country, city, number, day, month, year);
+						usersNodes[nodePos] = userName;
+
+						nodePos++;
+						t += 2.0*M_PI / numNodes;
+						//wcout << iter->first; //Pos
+						//wcout << iter->second; // Nome
+						//wcout << iterDim->second[L"dimension"]; //dimensao
+
+						//utility::string_t urlUserInfo = L"http://wvm061.dei.isep.ipp.pt/databaseWS/Database.svc/user/" + iter->second.as_string();
+
+						//json::value userInfo = RequestJSONValueAsync(urlUserInfo).get();
+						//wcout << userInfo[L"Username"];
+						//wcout << userInfo[L"City"];
+						//wcout << userInfo[L"Country"];
+						//wcout << userInfo[L"Day"];
+						//wcout << userInfo[L"Email"];
+						//cin.get();
+					}
 				}
 			}
 		}
-	}
-	int p = 0;
-	for (auto iter = graph[L"paths"].begin(); iter != graph[L"paths"].end(); ++iter)
-	{
-		int user1Pos = 0;
-		int user2Pos = 0;
-		wstring user1Name = iter->second[L"user1"].as_string();
-		wstring user2Name = iter->second[L"user2"].as_string();
-
-
-		for (size_t i = 0; i < numNodes; i++)
+		int p = 0;
+		for (auto iter = graph[L"paths"].begin(); iter != graph[L"paths"].end(); ++iter)
 		{
-			if (user1Name.compare(usersNodes[i]) == 0)
+			int user1Pos = 0;
+			int user2Pos = 0;
+			wstring user1Name = iter->second[L"user1"].as_string();
+			wstring user2Name = iter->second[L"user2"].as_string();
+
+
+			for (size_t i = 0; i < numNodes; i++)
 			{
-				user1Pos = i;
+				if (user1Name.compare(usersNodes[i]) == 0)
+				{
+					user1Pos = i;
+				}
+				if (user2Name.compare(usersNodes[i]) == 0)
+				{
+					user2Pos = i;
+				}
 			}
-			if (user2Name.compare(usersNodes[i]) == 0)
-			{
-				user2Pos = i;
-			}
+
+			paths[p].width = calcPathWidth(iter->second[L"connection"].as_integer());
+			paths[p].connection.nodei = user1Pos;
+			paths[p].connection.nodef = user2Pos;
+			paths[p].connection.strength = iter->second[L"connection"].as_integer();
+
+			/*wcout << iter->second[L"user1"];
+			wcout << iter->second[L"user2"];
+			wcout << iter->second[L"connection"];
+			wcout << iter->second[L"tags"] << endl;*/
+
+			p++;
 		}
 
-		paths[p].width = calcPathWidth(iter->second[L"connection"].as_integer());
-		paths[p].connection.nodei = user1Pos;
-		paths[p].connection.nodef = user2Pos;
-		paths[p].connection.strength = iter->second[L"connection"].as_integer();
-
-		/*wcout << iter->second[L"user1"];
-		wcout << iter->second[L"user2"];
-		wcout << iter->second[L"connection"];
-		wcout << iter->second[L"tags"] << endl;*/
-
-		p++;
+		numPaths = graph[L"paths"].size();
 	}
-
-	numPaths = graph[L"paths"].size();
 }
 
 bool TryAuth(string username, string password)
