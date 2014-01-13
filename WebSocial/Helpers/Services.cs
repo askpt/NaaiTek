@@ -116,6 +116,15 @@ namespace WebSocial.Helpers
 
             return tagCount;
         }
+        public static async Task AddWordToHangman(string word)
+        {
+
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/add_word_hangman?word={0}", word);
+
+            string responseJson = await client.GetStringAsync(url);
+        }
 
         /// <summary>
         /// The method to get the friend connection to the given user

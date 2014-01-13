@@ -307,6 +307,7 @@
     <Content Include="Views\Friend\Edit.cshtml" />
     <Content Include="Views\Friend\Delete.cshtml" />
     <Content Include="Views\Friend\Notification.cshtml" />
+    <Content Include="Views\Home\Hangman.cshtml" />
     <None Include="Web.wvm061.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

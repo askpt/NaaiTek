@@ -410,4 +410,10 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="NetworkStrenght" xml:space="preserve">
     <value>Força da Rede</value>
   </data>
+  <data name="Hangman" xml:space="preserve">
+    <value>Enforcado</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Inserir</value>
+  </data>
 </root>

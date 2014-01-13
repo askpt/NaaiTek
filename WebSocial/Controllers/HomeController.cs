@@ -62,6 +62,11 @@ namespace WebSocial.Controllers
 
             return View();
         }
+        public ActionResult Hangman()
+        {
+            return View();
+
+        }
 
         // GET: /Statistics
         public async Task<ActionResult> Statistics()
@@ -93,6 +98,14 @@ namespace WebSocial.Controllers
             }
 
             return View();
+        }
+
+        public async Task<ActionResult> InsertWord(string word)
+        {
+            ViewBag.Message = "Palavra inserida com sucesso!";
+
+            await Services.AddWordToHangman(word);
+            return View("Hangman");
         }
 
         /// <summary>
