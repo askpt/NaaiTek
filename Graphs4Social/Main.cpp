@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "graphs.h"
 #include <vector>
+#include <conio.h>
 
 using namespace std;
 
@@ -822,6 +823,43 @@ void mouse(int btn, int mouseState, int x, int y){
 	}
 }
 
+/* Method to hide the typed password */
+void getPassword(string &get)
+{
+	get.erase();
+	char key;
+
+	do
+	{
+		key = _getch();
+
+
+		switch (key)
+		{
+		case '\b': //backspace typed
+			if (get.length() > 0)
+			{
+				get.erase(get.length() - 1, 1);
+				//deletes the last char in the password
+				cout << '\b' << " " << '\b';
+			}
+
+
+			break;
+
+
+		default:
+			if (key > 31 && key < 127)
+			{
+				get.push_back(key);
+				cout << "*";
+			}
+		}
+	} while (key != '\r'); //exits if enter is pressed
+	cout << endl;
+}
+
+
 /* Main, runs in a loop. */
 void main(int argc, char **argv)
 {
@@ -832,7 +870,7 @@ void main(int argc, char **argv)
 	cout << "username" << endl;
 	cin >> username;
 	cout << "password" << endl;
-	cin >> pass;
+	getPassword(pass);
 
 
 	if (TryAuth(username, pass))
