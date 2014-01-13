@@ -25,6 +25,8 @@
 
 using namespace std;
 
+/*instructions to hide console when the project are executing*/
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
 //************************************************************************
 // global variables

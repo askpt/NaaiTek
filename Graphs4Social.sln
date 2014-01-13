@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TicTacToe", "Minigames\TicT
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hangman", "Minigames\Hangman\Hangman\Hangman.vcxproj", "{9A01B653-A5AC-403F-BA9E-67B3C56448B3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maze", "Minigames\Maze\Maze\Maze.vcxproj", "{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,16 @@ Global
 		{9A01B653-A5AC-403F-BA9E-67B3C56448B3}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{9A01B653-A5AC-403F-BA9E-67B3C56448B3}.Release|Win32.ActiveCfg = Release|Win32
 		{9A01B653-A5AC-403F-BA9E-67B3C56448B3}.Release|Win32.Build.0 = Release|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Debug|Win32.Build.0 = Debug|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Release|Win32.ActiveCfg = Release|Win32
+		{38FE4EA9-2F01-404A-B9EB-8ED2CA755F6E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

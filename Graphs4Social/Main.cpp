@@ -607,7 +607,7 @@ void Special(int key, int x, int y){
 	{
 		state.keys.tictactoe = GL_FALSE;
 		char ret[100];
-		sprintf_s(ret, "Hangman");
+		sprintf_s(ret, "Maze");
 		int retN = system(ret);
 		cout << retN << endl;
 	}
