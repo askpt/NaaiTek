@@ -30,9 +30,6 @@ using namespace std;
 float g_angle = -30.0f;
 float g_cameraAngle = 0.0f;
 
-// textures
-GLuint g_textureId;
-
 // scale for drawing text
 float g_scale;
 
@@ -45,25 +42,36 @@ const char *stringForLabel = "GAME PAUSED";
 // windows
 int mainWindow;
 
-// "button" coordinates
+// "button" strongest path
+float xMinStrongestPath = 308;
+float xMaxStrongestPath = 514;
+float yMinStrongestPath = 280;
+float yMaxStrongestPath = 308;
 
+// "button" shortest path
+float xMinShortestPath = 319;
+float xMaxShortestPath = 507;
+float yMinShortestPath = 334;
+float yMaxShortestPath = 361;
 
-float xMinOnlineMode = 350;
-float xMaxOnlineMode = 480;
-float yMinOnlineMode = 310;
-float yMaxOnlineMode = 325;
+// "button" add friend
+float xMinAddFriend = 344;
+float xMaxAddFriend = 484;
+float yMinAddFriend = 395;
+float yMaxAddFriend = 413;
 
-float xMinOfflineMode = xMinOnlineMode;
-float xMaxOfflineMode = xMaxOnlineMode;
-float yMinOfflineMode = 361;
-float yMaxOfflineMode = 376;
+// "button" show friends in common
+float xMinShowFriends = 242;
+float xMaxShowFriends = 576;
+float yMinShowFriends = 430;
+float yMaxShowFriends = 474;
 
-float xMinExit = 392;
-float xMaxExit = 431;
-float yMinExit = 411;
-float yMaxExit = 430;
+// "button" resume game
+float xMinResume = 319;
+float xMaxResume = 503;
+float yMinResume = 500;
+float yMaxResume = 524;
  
-
 
 //************************************************************************
 // forward declarations of OpenGL callback functions
@@ -128,15 +136,7 @@ int main(int argc, char *argv[])
  */
 void handleKeypress(unsigned char key, int x, int y)
 {
-	switch (key)
-	{
-            // ESC key
-		case 27:
-			exit(0);
-            
-            //default:
-            //  cout << key << endl;
-	}
+    // ONLY MOUSE CLICKS
 }
 
 
@@ -149,38 +149,61 @@ void handleKeypress(unsigned char key, int x, int y)
  */
 void handleMouseButtonClicks(int button, int state, int x, int y)
 {
+    /*
     cout << "Button: " << button << endl;
     cout << "State:" << state << endl;
     cout << "X = " << x << endl;
     cout << "Y = " << y << endl;
-    
-    // online mode "button"
-    if(x > xMinOnlineMode && x < xMaxOnlineMode)
+    */
+     
+    // strongest path "button"
+    if(x > xMinStrongestPath && x < xMaxStrongestPath)
     {
-        if(y > yMinOnlineMode && y < yMaxOnlineMode)
+        if(y > yMinStrongestPath && y < yMaxStrongestPath)
         {
-            // add code to go online
-            cout << "online mode" << endl;
+            // add code to get strongest path
+            cout << "strongest path" << endl;
         }
     }
     
-    // offline mode "button"
-    if(x > xMinOfflineMode && x < xMaxOfflineMode)
+    // shortest path "button"
+    if(x > xMinShortestPath  && x < xMaxShortestPath)
     {
-        if(y > yMinOfflineMode && y < yMaxOfflineMode)
+        if(y > yMinShortestPath && y < yMaxShortestPath)
         {
-            // add code to go to offline mode
-            cout << "offline mode" << endl;
+            // add code to shortest path
+            cout << "shortest path" << endl;
         }
     }
     
-    // quit "button"
-    if(x > xMinExit && x < xMaxExit)
+    // add friend "button"
+    if(x > xMinAddFriend && x < xMaxAddFriend)
     {
-        if(y > yMinExit && y < yMaxExit)
+        if(y > yMinAddFriend && y < yMaxAddFriend)
         {
-            // add code to go to offline mode
-            cout << "quiting" << endl;
+            // add code to submit freind request
+            cout << "add friend" << endl;
+        }
+    }
+    
+    // show friend in common "button"
+    if(x > xMinShowFriends && x < xMaxShowFriends)
+    {
+        if(y > yMinShowFriends && y < yMaxShowFriends)
+        {
+            // add code to show friends in common
+            cout << "show friends" << endl;
+        }
+    }
+    
+    // resume game button "button"
+    if(x > xMinResume && x < xMaxResume)
+    {
+        cout << "inside x " << endl;
+        if(y > yMinResume && y < yMaxResume)
+        {
+            cout << "inside y" << endl;
+            cout << "resume game" << endl;
             exit(0);
         }
     }
@@ -192,8 +215,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
  */
 void handleMouseMovement(int x, int y)
 {
-    cout << "Mouse movement = " << x << endl;
-    cout << "Mouse movement = " << y << endl;
+    // NO MOUSE MOVEMENT
 }
 
 
@@ -266,7 +288,6 @@ void drawScene()
     
     // colors
     float whiteColor[3] = { 1.0f, 1.0f, 1.0f };
-    float greyColor[3] = { 0.7f, 0.7f, 0.7f };
     float brickColor[3] = {0.58f, 0.2f, 0.2f};
     
     // text with game modes
@@ -275,7 +296,6 @@ void drawScene()
     drawTextAtScreenPositionWithColor("Add Friend", 0.0, -1.5, -15.0, brickColor);
     drawTextAtScreenPositionWithColor("Show Friends in Common", 0.0, -2.5, -15.0, brickColor);
     drawTextAtScreenPositionWithColor("Resume Game", 0.0, -3.5, -15.0, whiteColor);
-    
     
     glutSwapBuffers();
 }
@@ -365,8 +385,6 @@ void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float
     // putting the box in the correct position
 	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
     
-    
-    
     // drawing the faces
     glBegin(GL_QUADS);
     
@@ -388,7 +406,6 @@ void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float
     glVertex3f(-w / 2, w / 2, -h / 2);
     
     glEnd();
-    
 }
 
 
