@@ -37,6 +37,23 @@
     }
 </table>
 
+<h2>@Resources.Leaderboard</h2>
+<table class="table">
+    <tr>
+        <td>@Resources.Position</td>
+        <td>@Resources.UserName</td>
+        <td>@Resources.NetworkStrenght</td>
+    </tr>
+    @for (int i = 0; i < 10; i++)
+    {
+        <tr>
+            <td>@(i + 1)</td>
+            <td>@ViewBag.Strenght[i].user</td>
+            <td>@ViewBag.Strenght[i].dimension</td>
+        </tr>
+    }
+</table>
+
 <h2>@Resources.OverallUserTags</h2>
 <div id="tags">
     @foreach (TagCount tag in ViewBag.AnomUserTag)

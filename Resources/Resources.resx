@@ -407,4 +407,7 @@
   <data name="NoNotifications" xml:space="preserve">
     <value>No new notifications available!</value>
   </data>
+  <data name="NetworkStrenght" xml:space="preserve">
+    <value>Network Strenght</value>
+  </data>
 </root>

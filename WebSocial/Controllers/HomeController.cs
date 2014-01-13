@@ -69,6 +69,9 @@ namespace WebSocial.Controllers
             UserDimension users = await Services.GetAllUsers();
             ViewBag.Dimension = users.users.Count;
 
+            UserDimension userStrenght = await Services.GetAllUsersStrenght();
+            ViewBag.Strenght = userStrenght.users;
+
             ViewBag.Users = users.users;
 
             ViewBag.AnomUserTag = GetOverallUserTagCount(users.users.Count);

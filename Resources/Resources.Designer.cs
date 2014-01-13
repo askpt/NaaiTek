@@ -620,6 +620,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Network Strenght.
+        /// </summary>
+        public static string NetworkStrenght {
+            get {
+                return ResourceManager.GetString("NetworkStrenght", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         public static string NewF {

@@ -407,4 +407,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="NoNotifications" xml:space="preserve">
     <value>Sem Novas Notificações Disponíveis!</value>
   </data>
+  <data name="NetworkStrenght" xml:space="preserve">
+    <value>Força da Rede</value>
+  </data>
 </root>

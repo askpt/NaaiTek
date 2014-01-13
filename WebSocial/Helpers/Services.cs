@@ -40,6 +40,25 @@ namespace WebSocial.Helpers
         }
 
         /// <summary>
+        /// The method to get a list of the strenght network for all users
+        /// </summary>
+        /// <returns>an ordered list of the strenght of all users </returns>
+        public static async Task<UserDimension> GetAllUsersStrenght()
+        {
+            UserDimension userGraph;
+
+            HttpClient client = new HttpClient();
+
+            var url = string.Format(_baseUrl + "/get_users_strenght");
+
+            string responseJson = await client.GetStringAsync(url);
+
+            userGraph = JsonConvert.DeserializeObject<UserDimension>(responseJson);
+
+            return userGraph;
+        }
+
+        /// <summary>
         /// The method to get a list of the count of the connection tag occurences
         /// </summary>
         /// <returns>a list with a count of all connection tag occurences</returns>
