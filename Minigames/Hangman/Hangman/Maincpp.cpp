@@ -34,11 +34,10 @@ int WindowWidth = 1000;
 int WindowHeight = 600;
 const float DEG2RAD = 314159 / 180;
 int GLUTWindowHandle = 0;
-const string help[3] = { "F1->New Game", "Choose a category and play!", "F10->Exit" };
 Game game;
 
 /*instructions to hide console when the project are executing*/
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+//#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
 /*initial declaration of some importante functions*/
 void drawScene();
@@ -52,9 +51,9 @@ void drawChar(int x, int y, char c);
 void initGameData();
 void drawErrorChar();
 void drawWord(string word);
+void drawCompleteWord();
 void drawHangman();
 void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, string text);
-void drawGameInstructions();
 void IAGetCategories();
 void IAGetPhrases(string category);
 void IACheckIfBelongs(char c, string word);
@@ -109,26 +108,6 @@ void handleResize(int x, int y)
 	gluPerspective(45.0, (double)x / (double)y, 1.0, 1.0);
 }
 
-/*function to draw main Instructions*/
-void drawGameInstructions()
-{
-	glColor3b(0.0, 0.0, 0.0);
-	glRasterPos2d(10, 20);
-	for (int i = 0; i < help[0].size(); i++)
-
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, help[0].at(i));
-
-	glRasterPos2d(10, 40);
-	for (int i = 0; i < help[1].size(); i++)
-
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, help[1].at(i));
-
-	glRasterPos2d(10, 60);
-	for (int i = 0; i < help[2].size(); i++)
-
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, help[2].at(i));
-	glFlush();
-}
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -217,23 +196,39 @@ void drawErrorChar()
 /*function to draw char lines of a word*/
 void drawWord()
 {
+	if (game.endGame == false){
+		for (int i = 0; i < 25; i++)
+		{
 
-	for (int i = 0; i < 25; i++)
-	{
-		if (game.halfWord[i] != NULL){
-			if (game.halfWord[i] == '*')
-				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+			if (game.halfWord[i] != NULL){
+				if (game.halfWord[i] == '*')
+					drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
 
-			else{
-				glColor3d(1.0, 1.0, 1.0);
-				drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
-				glColor3b(0.0, 0.0, 0.0);
-				drawChar(20 + (i * 40), 550, game.halfWord[i]);
+				else{
+					glColor3d(1.0, 1.0, 1.0);
+					drawLine(20 + (i * 40), 550, 40 + (i * 40), 550, 3.0);
+					glColor3b(0.0, 0.0, 0.0);
+					drawChar(20 + (i * 40), 550, game.halfWord[i]);
+				}
 			}
 		}
+		glFlush();
+	}
+}
+
+/*function to draw completed word when user lost*/
+void drawCompleteWord()
+{
+	glColor3d(0.0, 3.0, 0.0);
+	for (int i = 0; i < game.word.size(); i++)
+	{
+
+		drawChar(20 + (i * 40), 500, game.word.at(i));
 	}
 	glFlush();
+	//glColor3d(0.0, 0.0, 0.0);
 }
+
 /*function to draw hangman parts*/
 void drawHangman()
 {
@@ -355,17 +350,6 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 
 
 }
-void drawCompleteWord()
-{
-	glColor3d(0.0, 3.0, 0.0);
-	for (int i = 0; i < game.word.size(); i++)
-	{
-
-		drawChar(20 + (i * 40), 520, game.word.at(i));
-	}
-	glFlush();
-	glColor3d(0.0, 0.0, 0.0);
-}
 /*function to draw main Menu with all categories for the user select one of them to can play*/
 void drawMainMenu()
 {
@@ -455,15 +439,15 @@ void drawMainMenu()
 	{
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game.categories[4].at(i));
 	}
-	glFlush();
+	glutSwapBuffers();
+
 
 
 }
 /*function to draw the main scene*/
 void drawScene()
 {
-	//glColor3b(1.0, 0.0, 0.0);
-	drawGameInstructions();
+	glColor3b(1.0, 0.0, 0.0);
 	if (game.chooseCategories == false){
 		IAGetCategories();
 		drawMainMenu();
@@ -526,12 +510,19 @@ void keyboardSpecial(int key, int x, int y)
 	case GLUT_KEY_F1:
 		glutPostRedisplay();
 		initGameData();
-		initHalfWord(game.word.size());
 		break;
 	case GLUT_KEY_F10:
-		exit(0);
-		break;
 
+		initGameData();
+		initHalfWord(game.word.size());
+		//game.numErrors++;
+		//drawHangman();
+		//IAGetPhrases();
+
+		break;
+	case GLUT_KEY_F2:
+		//IAGetPhrases();
+		break;
 	}
 }
 /*function to check if that char c are already on the list*/
@@ -550,6 +541,7 @@ void keyBoard(unsigned char key, int x, int y)
 	if (((int)key>96 && (int)key < 123) && game.word != "" && game.numErrors <9 && game.endGame == false){
 		if (!checkIfWrong(key))
 			IACheckIfBelongs(key, game.word);
+		cout << key << endl;
 	}
 	else
 	if ((int)key > 64 && (int)key < 91 && game.word != "" && game.numErrors < 9 && game.endGame == false)
@@ -557,6 +549,7 @@ void keyBoard(unsigned char key, int x, int y)
 
 		if (!checkIfWrong((int)key + 32))
 			IACheckIfBelongs((int)key + 32, game.word);
+		cout << key << endl;
 	}
 }
 
@@ -594,6 +587,7 @@ void IAGetPhrases(string category)
 	try{
 		while (q.next_solution()){
 			game.word = (string)av[1];
+			cout << game.word << endl;
 			initHalfWord(game.word.size());
 		}
 	}
@@ -610,11 +604,15 @@ void IACheckIfBelongs(char c, string word)
 	char *plargv[] = { "swipl.dll", "-s", "h-off.pl", NULL };
 	PlEngine e(3, plargv);
 	PlTermv av(3);
+
 	char *ct = &c;
+
 	char* cs = new char[word.size() + 1];
 	strcpy_s(cs, word.size() + 1, word.c_str());
+
 	av[0] = PlTerm(ct);
 	av[1] = PlTerm(cs);
+
 	PlQuery q("checkIfBelongs", av);
 	try{
 		while (q.next_solution()){
@@ -627,6 +625,9 @@ void IACheckIfBelongs(char c, string word)
 	catch (PlException &ex){
 		cout << (char *)ex << endl;
 	}
+
+
+
 }
 
 /*function to read the word returned by the prolog and compare with the last return*/
