@@ -89,6 +89,10 @@ namespace DatabaseWs
             return user;
         }
 
+        /// <summary>
+        /// Method that will return the number of the registered users
+        /// </summary>
+        /// <returns>the number of registered users</returns>
         public int GetNumberOfRegisteredUsers()
         {
             int ret = 0;
