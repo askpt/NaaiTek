@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #define _USE_MATH_DEFINES
 #include <SWI-cpp.h>
 #include <math.h>
@@ -5,13 +6,9 @@
 #include <string>
 #include <stdlib.h>    
 #include <GL\glut.h>
-//#include <SWI-cpp.h>
 #include <iostream>
-
-
-#ifndef M_PI
-#define M_PI 3.1415926535897932384626433832795
-#endif
+#include <fstream>
+#include "Json.h"
 
 using namespace std;
 
@@ -58,11 +55,10 @@ void drawGameInstructions();
 void IAGetCategories();
 void IAGetPhrases(string category);
 void IACheckIfBelongs(char c, string word);
+void wsGetPhrases();
 void checkWord(string word, char c);
 void checkError(char c, string word);
 void initHalfWord(int size);
-
-
 
 /*function to init game data*/
 
@@ -491,27 +487,26 @@ void mouse(int btn, int mouseState, int x, int y)
 				glClear(GL_COLOR_BUFFER_BIT);
 				IAGetPhrases(game.categories[1]);
 				game.chooseCategories = true;
-				game.chooseCategories = true;
+
 			}
 			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>190 && y < 240 && game.chooseCategories == false)
 			{
 				glClear(GL_COLOR_BUFFER_BIT);
 				IAGetPhrases(game.categories[2]);
 				game.chooseCategories = true;
-				game.chooseCategories = true;
+
 			}
 			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>260 && y < 310 && game.chooseCategories == false)
 			{
 				glClear(GL_COLOR_BUFFER_BIT);
 				IAGetPhrases(game.categories[3]);
 				game.chooseCategories = true;
-				game.chooseCategories = true;
+
 			}
 			if ((x > WindowWidth / 2.0 - 200) && (x<WindowWidth / 2.0 + 100) && y>330 && y < 380 && game.chooseCategories == false)
 			{
 				glClear(GL_COLOR_BUFFER_BIT);
-				IAGetPhrases(game.categories[4]);
-				game.chooseCategories = true;
+				wsGetPhrases();
 				game.chooseCategories = true;
 			}
 
@@ -563,6 +558,24 @@ void keyBoard(unsigned char key, int x, int y)
 	}
 }
 
+/*function to call webservice and get phrases from the category user_added*/
+void wsGetPhrases()
+{
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/get_user_added";
+
+	json::value obj = RequestJSONValueAsync(url).get();
+
+
+	wstring words = obj[L"details"].to_string();
+	int size = words.size();
+	char c_mb_str[80];
+	wcstombs(c_mb_str, &words[1], 80);
+	string s(c_mb_str);
+	game.word = s.substr(0, size - 2);
+	initHalfWord(game.word.size());
+	drawWord();
+
+}
 /*function to connect with prolog file and get alll categories on knowledge basis*/
 void IAGetCategories()
 {
@@ -699,12 +712,10 @@ int main(int argc, char**argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WindowWidth, WindowHeight);
 	glutCreateWindow("HANGMAN");
-
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyBoard);
 	glutMouseFunc(mouse);
 	glutSpecialFunc(keyboardSpecial);
-
 	myInit();
 	glutMainLoop();
 	return 0;
