@@ -525,9 +525,9 @@ void keyboardSpecial(int key, int x, int y)
 		break;
 	case GLUT_KEY_F10:
 		if (game.userWin)
-			exit(1);
+			exit(5);
 		else
-			exit(0);
+			exit(6);
 		break;
 
 	}

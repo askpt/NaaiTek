@@ -59,4 +59,5 @@ bool CheckGameVersion(string gameversion);
 
 void RemoveRequest(wstring user, wstring friendUser);
 void AcceptRequest(wstring user, wstring friendUser);
+void SendGameRequest(wstring user, wstring friendUser);
 #endif

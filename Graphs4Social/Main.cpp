@@ -63,7 +63,7 @@ typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
 typedef struct Keys_t{
-	GLboolean   w, a, s, d, up, down, z, minigameRandom, n;
+	GLboolean   w, a, s, d, up, down, z, n, g;
 }Keys_t;
 
 typedef struct Camera{
@@ -167,7 +167,6 @@ void myInit(string user)
 
 	initModel();
 	initState();
-	state.keys.minigameRandom = 0;
 
 }
 
@@ -500,6 +499,19 @@ void display(void)
 	glutSwapBuffers();
 }
 
+/* Randomly starts a mini-game */
+int callRandomGame()
+{
+	int retN = 0;
+	char ret[100];
+	srand(time(0));
+	int index = rand() % minigames.capacity() + 1;
+	sprintf_s(ret, minigames[index - 1].c_str());
+	retN = system(ret);
+
+	return retN;
+}
+
 /* Where the keyboard keys use is defined */
 void keyboard(unsigned char key, int x, int y)
 {
@@ -507,10 +519,15 @@ void keyboard(unsigned char key, int x, int y)
 	std::string callInString;
 	std::wstring wStringUser(model.regUser.begin(), model.regUser.end());
 	vector<wstring> wsRequests = GetFriendRequests(wStringUser);
-	bool hasNotifications = false;
+	vector<wstring> wsGameRequests = GetFriendGameRequests(wStringUser);
+	bool hasNotifications = false, hasGameNotifications = false;
 	if (wsRequests.size() > 0)
 	{
 		hasNotifications = true;
+	}
+	if (wsGameRequests.size() > 0)
+	{
+		hasGameNotifications = true;
 	}
 
 	switch (key)
@@ -603,11 +620,22 @@ void keyboard(unsigned char key, int x, int y)
 				RemoveRequest(wStringUser, wsRequests.at(0));
 				break;
 			case 7:
-				cout << "im working boss" << endl;
+				SendGameRequest(wStringUser, wsRequests.at(0));
 				break;
 			}
 		}
 		//cout << res << endl;
+		break;
+	case 'g':
+	case 'G':
+		if (hasGameNotifications)
+		{
+			int retN = callRandomGame();
+			if (retN == 5)
+			{
+				AcceptRequest(wStringUser, wsGameRequests.at(0));
+			}
+		}
 		break;
 	case 'z':
 	case 'Z':
@@ -667,7 +695,7 @@ void Special(int key, int x, int y){
 		state.strongestPathActive = GL_FALSE;
 		break;
 	case GLUT_KEY_F3:
-		state.keys.minigameRandom = GL_TRUE;
+		callRandomGame();
 		break;
 	case GLUT_KEY_UP:
 		state.keys.up = GL_TRUE;
@@ -675,16 +703,6 @@ void Special(int key, int x, int y){
 	case GLUT_KEY_DOWN:
 		state.keys.down = GL_TRUE;
 		break;
-	}
-
-	if (state.keys.minigameRandom)
-	{
-		state.keys.minigameRandom = GL_FALSE;
-		char ret[100];
-		srand(time(0));
-		int index = rand() % minigames.capacity() + 1;
-		sprintf_s(ret, minigames[index - 1].c_str());
-		int retN = system(ret);
 	}
 }
 

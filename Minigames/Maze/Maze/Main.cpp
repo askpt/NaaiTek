@@ -144,7 +144,7 @@ vector<vector<int>> GetPath(vector<vector<int>> maze, int size_x, int size_y, do
 /**
 * main
 *
-* @return: 0 (player quit), 1 (player won), 2 (error building maze)
+* @return: 6 (player quit), 5 (player won), 2 (error building maze)
 */
 int main(int argc, char *argv[])
 {
@@ -218,7 +218,7 @@ void handleKeypress(unsigned char key, int x, int y)
 		// ESC key
 	case 27:
 		playerDidQuit = true;
-		exit(0);
+		exit(6);
 		break;
 
 		// UP
@@ -317,11 +317,11 @@ void handleKeypress(unsigned char key, int x, int y)
 	case 'C':
 		if (msgToDisplay == 3)
 		{
-			exit(1);
+			exit(5);
 		}
 		if (msgToDisplay == 2)
 		{
-			exit(0);
+			exit(6);
 		}
 	}
 }
@@ -594,7 +594,7 @@ int getFirstPossibleX()
 			}
 		}
 	}
-	exit(2);
+	exit(1);
 }
 
 
@@ -613,7 +613,7 @@ int getFirstPossibleY()
 			}
 		}
 	}
-	exit(2);
+	exit(1);
 }
 
 
@@ -632,7 +632,7 @@ int getLastPossibleX()
 			}
 		}
 	}
-	exit(2);
+	exit(1);
 }
 
 
@@ -651,7 +651,7 @@ int getLastPossibleY()
 			}
 		}
 	}
-	exit(2);
+	exit(1);
 }
 
 

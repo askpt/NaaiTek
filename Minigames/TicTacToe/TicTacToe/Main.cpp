@@ -660,11 +660,11 @@ void keyBoard(int key, int x, int y)
 	case GLUT_KEY_F10:
 		if (game.winUser)
 		{
-			exit(EXIT_FAILURE);
+			exit(5);
 		}
 		else
 		{
-			exit(EXIT_SUCCESS);
+			exit(6);
 		}
 		break;
 	}
@@ -890,6 +890,7 @@ void IAConnection(char play)
 
 }
 
+/* if the user won, exit(5) else exit(6) */
 int main(int argc, char **argv)
 {
 	char fakeParam[] = "fake";
