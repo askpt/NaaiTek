@@ -534,3 +534,16 @@ vector<wstring> GetFriendGameRequests(wstring user)
 
 	return users;
 }
+
+bool CheckGameVersion(string gameversion)
+{
+	wstring gameVersionWS(gameversion.begin(), gameversion.end());
+
+	utility::string_t url = L"http://wvm061.dei.isep.ipp.pt/DatabaseWs/Database.svc/version";
+
+	json::value versionJS = RequestJSONValueAsync(url).get();
+	wstring status = versionJS[L"Msg"].to_string();
+	gameVersionWS = L"\"" + gameVersionWS + L"\"";
+
+	return status.compare(gameVersionWS) == 0;
+}

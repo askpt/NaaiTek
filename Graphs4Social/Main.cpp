@@ -15,6 +15,7 @@ using namespace std;
 #define degrees(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_SPHERE 2.1
+#define __GAME_VERSION__ "1.0.0"
 
 // lights and materials
 
@@ -863,42 +864,50 @@ void getPassword(string &get)
 /* Main, runs in a loop. */
 void main(int argc, char **argv)
 {
-	minigames = GetMinigamesList();
-
-	string username, pass;
-
-	cout << "username" << endl;
-	cin >> username;
-	cout << "password" << endl;
-	getPassword(pass);
-
-
-	if (TryAuth(username, pass))
+	if (CheckGameVersion(__GAME_VERSION__))
 	{
-		glutInit(&argc, argv);
+		minigames = GetMinigamesList();
+
+		string username, pass;
+
+		cout << "username" << endl;
+		cin >> username;
+		cout << "password" << endl;
+		getPassword(pass);
+
+
+		if (TryAuth(username, pass))
+		{
+			glutInit(&argc, argv);
 
 
 
-		/* need both double buffering and z buffer */
+			/* need both double buffering and z buffer */
 
-		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-		glutInitWindowSize(800, 450);
-		glutCreateWindow("Graphs4Social");
-		glutReshapeFunc(myReshape);
-		glutDisplayFunc(display);
-		glutKeyboardFunc(keyboard);
-		glutKeyboardUpFunc(keyboardUp);
-		glutSpecialFunc(Special);
-		glutSpecialUpFunc(SpecialUp);
-		glutMouseFunc(mouse);
+			glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+			glutInitWindowSize(800, 450);
+			glutCreateWindow("Graphs4Social");
+			glutReshapeFunc(myReshape);
+			glutDisplayFunc(display);
+			glutKeyboardFunc(keyboard);
+			glutKeyboardUpFunc(keyboardUp);
+			glutSpecialFunc(Special);
+			glutSpecialUpFunc(SpecialUp);
+			glutMouseFunc(mouse);
 
-		glutTimerFunc(state.timer, Timer, 0);
+			glutTimerFunc(state.timer, Timer, 0);
 
-		myInit(username);
-		printHelp();
+			myInit(username);
+			printHelp();
 
-		glutMainLoop();
+			glutMainLoop();
 
+		}
+	}
+	else
+	{
+		cout << "Your game is outdated" << endl;
+		cin.get();
 	}
 
 }

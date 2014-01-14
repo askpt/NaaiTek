@@ -55,4 +55,5 @@ void SendRequest(wstring user, wstring friendUser);
 vector<wstring> GetFriendRequests(wstring);
 vector<wstring> GetFriendGameRequests(wstring);
 
+bool CheckGameVersion(string gameversion);
 #endif
