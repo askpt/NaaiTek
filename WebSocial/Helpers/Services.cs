@@ -120,8 +120,8 @@ namespace WebSocial.Helpers
         {
 
             HttpClient client = new HttpClient();
-
-            var url = string.Format(_baseUrl + "/add_word_hangman?word={0}", word);
+            var wordLower = word.ToLower();
+            var url = string.Format(_baseUrl + "/add_word_hangman?word={0}", wordLower);
 
             string responseJson = await client.GetStringAsync(url);
         }
