@@ -61,11 +61,17 @@ float xMaxDenyRequest = 449;
 float yMinDenyRequest = 339;
 float yMaxDenyRequest = 358;
 
+// "button" require game
+float xMinRequireGame = 239;
+float xMaxRequireGame = 575;
+float yMinRequireGame = 384;
+float yMaxRequireGame = 424;
+
 // "button" decide later
 float xMinDecideLater = 327;
 float xMaxDecideLater = 496;
-float yMinDecideLater = 395;
-float yMaxDecideLater = 413;
+float yMinDecideLater = 449;
+float yMaxDecideLater = 468;
 
 
 
@@ -100,7 +106,7 @@ vector<wstring> GetFriendGameRequests(wstring user);
 /**
 * main
 *
-*@return: 5, accepted request; 6, request denied; 0, decide later
+*@return: 5, accepted request; 6, request denied; 7, require game challenge; 0, decide later
 */
 int main(int argc, char *argv[])
 {
@@ -160,15 +166,15 @@ void handleKeypress(unsigned char key, int x, int y)
 */
 void handleMouseButtonClicks(int button, int state, int x, int y)
 {
-	/*
-	cout << "Button: " << button << endl;
+	
+	/*cout << "Button: " << button << endl;
 	cout << "State:" << state << endl;
 	cout << "X = " << x << endl;
 	cout << "Y = " << y << endl;
 
 
-	cout << "STATE = " << state << endl;
-	*/
+	cout << "STATE = " << state << endl;*/
+	
 
 	if (button == GLUT_LEFT_BUTTON){
 		if (state == GLUT_DOWN){
@@ -192,6 +198,17 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 					//cout << "request denied" << endl;
 					// uncomment below when fully-working to get proper exit code
 					exit(6);
+				}
+			}
+
+			// require game "button"
+			if (x > xMinRequireGame && x < xMaxRequireGame)
+			{
+				if (y > yMinRequireGame && y < yMaxRequireGame)
+				{
+					//cout << "require game" << endl;
+					// uncomment below when fully-working to get proper exit code
+					exit(7);
 				}
 			}
 
@@ -294,7 +311,8 @@ void drawScene()
 	// text with game modes
 	drawTextAtScreenPositionWithColor("Accept", 0.0, 0.5, -15.0, brickColor);
 	drawTextAtScreenPositionWithColor("Deny", 0.0, -0.5, -15.0, brickColor);
-	drawTextAtScreenPositionWithColor("Decide Later", 0.0, -1.5, -15.0, whiteColor);
+	drawTextAtScreenPositionWithColor("Require game", 0.0f, -1.5f, -15.0, brickColor);
+	drawTextAtScreenPositionWithColor("Decide Later", 0.0, -2.5, -15.0, whiteColor);
 
 	glutSwapBuffers();
 }

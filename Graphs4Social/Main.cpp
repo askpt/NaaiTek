@@ -602,6 +602,9 @@ void keyboard(unsigned char key, int x, int y)
 			case 6:
 				RemoveRequest(wStringUser, wsRequests.at(0));
 				break;
+			case 7:
+				cout << "im working boss" << endl;
+				break;
 			}
 		}
 		//cout << res << endl;
