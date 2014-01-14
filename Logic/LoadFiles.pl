@@ -16,3 +16,6 @@
 
 % loads word base
 :- compile('WordBase.pl').
+
+% loads the hangman Logic
+:- compile('h-off.pl').

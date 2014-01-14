@@ -105,6 +105,9 @@
 % request for get common friends graph
 :- http_handler(root(get_common_graph), get_common_graph, []).
 
+% request the user_added words from the server
+:- http_handler(root(get_user_added), get_user_added, []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementaion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -357,4 +360,9 @@ get_common_graph(_Request) :-  http_parameters(_Request, [personA(PersonA, []), 
                 create_json_paths(List, ListJsonP),
                 listCommonNodes(PersonA, PersonB, ListN),
                 prolog_to_json(graph(ListN, ListJsonP, 'ok'), JSON_Object),
+                reply_json(JSON_Object).
+
+% request the user_added words from the server
+get_user_added(_Request) :-  getPhrase(user_added, W),
+                prolog_to_json(message(W,'ok'), JSON_Object),
                 reply_json(JSON_Object).
