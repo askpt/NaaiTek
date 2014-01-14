@@ -547,3 +547,9 @@ bool CheckGameVersion(string gameversion)
 
 	return status.compare(gameVersionWS) == 0;
 }
+
+void RemoveRequest(wstring user, wstring friendUser)
+{
+	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/remove_request?personA=" + user + L"&personB=" + friendUser;
+	RequestJSONValueAsync(url).get();
+}
