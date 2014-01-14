@@ -163,7 +163,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinOnlineMode && y < yMaxOnlineMode)
 				{
 					// add code to go online
-					cout << "online mode" << endl;
+					exit(5);
 				}
 			}
 
@@ -173,7 +173,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinOfflineMode && y < yMaxOfflineMode)
 				{
 					// add code to go to offline mode
-					cout << "offline mode" << endl;
+					exit(6);
 				}
 			}
 

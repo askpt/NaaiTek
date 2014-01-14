@@ -875,39 +875,48 @@ void main(int argc, char **argv)
 		cout << "password" << endl;
 		getPassword(pass);
 
-
 		if (TryAuth(username, pass))
 		{
-			glutInit(&argc, argv);
+			int ret = system("MainMenu");
+
+			if (ret == 5)
+			{
+				glutInit(&argc, argv);
 
 
 
-			/* need both double buffering and z buffer */
+				/* need both double buffering and z buffer */
 
-			glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-			glutInitWindowSize(800, 450);
-			glutCreateWindow("Graphs4Social");
-			glutReshapeFunc(myReshape);
-			glutDisplayFunc(display);
-			glutKeyboardFunc(keyboard);
-			glutKeyboardUpFunc(keyboardUp);
-			glutSpecialFunc(Special);
-			glutSpecialUpFunc(SpecialUp);
-			glutMouseFunc(mouse);
+				glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+				glutInitWindowSize(800, 450);
+				glutCreateWindow("Graphs4Social");
+				glutReshapeFunc(myReshape);
+				glutDisplayFunc(display);
+				glutKeyboardFunc(keyboard);
+				glutKeyboardUpFunc(keyboardUp);
+				glutSpecialFunc(Special);
+				glutSpecialUpFunc(SpecialUp);
+				glutMouseFunc(mouse);
 
-			glutTimerFunc(state.timer, Timer, 0);
+				glutTimerFunc(state.timer, Timer, 0);
 
-			myInit(username);
-			printHelp();
+				myInit(username);
+				printHelp();
 
-			glutMainLoop();
+				glutMainLoop();
 
+			}
+			else if (ret == 6)
+			{
+				cout << "Normal mode not implemented yet!" << endl;
+				system("pause");
+			}
 		}
 	}
 	else
 	{
 		cout << "Your game is outdated" << endl;
-		cin.get();
+		system("pause");
 	}
 
 }
