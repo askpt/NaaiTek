@@ -24,12 +24,11 @@ typedef struct
 	int loose;
 }Game;
 
+/*global variables*/
 float g_scale;
-
 bool requestSent = false;
 const char * stringVetor[2] = { "You won!", "You Loose!" };
 const char * stringHelp[2] = { "F1->New Game", "F10->Exit" };
-
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
 int WindowHeight = 600;
@@ -54,6 +53,7 @@ void initGameData()
 
 }
 
+/*function to connect with the artificial intelligence of the minigame*/
 void IAConnection(char play);
 
 /*function to draw the result of the game*/
@@ -618,6 +618,7 @@ void drawO(int x, int y)
 	}
 
 }
+/*display callback*/
 void display(void)
 {
 
@@ -627,6 +628,7 @@ void display(void)
 
 
 }
+/*callback redisplay window (not working)*/
 void myReshape(int w, int h){
 
 	glViewport(0, 0, w, h);
@@ -896,8 +898,6 @@ int main(int argc, char **argv)
 	char fakeParam[] = "fake";
 	char *fakeargv[] = { fakeParam, NULL };
 	int fakeargc = 1;
-
-
 	initGameData();
 	glutInit(&fakeargc, fakeargv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -908,6 +908,5 @@ int main(int argc, char **argv)
 	glutSpecialFunc(keyBoard);
 	myInit();
 	glutMainLoop();
-
 	return 0;
 }
