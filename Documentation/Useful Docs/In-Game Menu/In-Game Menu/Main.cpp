@@ -164,7 +164,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinStrongestPath && y < yMaxStrongestPath)
 				{
 					// add code to get strongest path
-					cout << "strongest path" << endl;
+					exit(5);
 				}
 			}
 
@@ -175,7 +175,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinShortestPath && y < yMaxShortestPath)
 				{
 					// add code to shortest path
-					cout << "shortest path" << endl;
+					exit(6);
 				}
 			}
 
@@ -185,7 +185,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinAddFriend && y < yMaxAddFriend)
 				{
 					// add code to submit freind request
-					cout << "add friend" << endl;
+					exit(7);
 				}
 			}
 
@@ -195,7 +195,7 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinShowFriends && y < yMaxShowFriends)
 				{
 					// add code to show friends in common
-					cout << "show friends" << endl;
+					exit(8);
 				}
 			}
 
@@ -206,7 +206,6 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinResume && y < yMaxResume)
 				{
 					//cout << "inside y" << endl;
-					cout << "resume game" << endl;
 					exit(0);
 				}
 			}

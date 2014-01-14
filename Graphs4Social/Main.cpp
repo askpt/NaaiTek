@@ -776,17 +776,19 @@ void mouse(int btn, int mouseState, int x, int y){
 			}
 			else if (state.pickedObjID >= _MAX_NODES_GRAPH)
 			{
-				int mod = glutGetModifiers();
+				//int mod = glutGetModifiers();
 
-				if (state.keys.f2)
+				int ret = system("InGameMenu");
+
+				if (ret == 8)
 				{
 					readCommonGraph(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
 				}
-				else if (mod == GLUT_ACTIVE_CTRL)
+				else if (ret == 7)
 				{
 					sendFriendRequest(nodes[0].user->name, nodes[state.pickedObjID - _MAX_NODES_GRAPH].user->name);
 				}
-				else if (mod == GLUT_ACTIVE_ALT)
+				else if (ret == 6)
 				{
 					state.shortestPathActive = GL_FALSE;
 					state.strongestPathActive = GL_FALSE;
@@ -796,7 +798,7 @@ void mouse(int btn, int mouseState, int x, int y){
 						state.shortestPathActive = GL_TRUE;
 					}
 				}
-				else if (mod == GLUT_ACTIVE_SHIFT)
+				else if (ret == 5)
 				{
 					state.shortestPathActive = GL_FALSE;
 					state.strongestPathActive = GL_FALSE;
@@ -904,7 +906,7 @@ void main(int argc, char **argv)
 				printHelp();
 
 				glutMainLoop();
-
+				
 			}
 			else if (ret == 6)
 			{
