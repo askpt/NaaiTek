@@ -593,10 +593,10 @@ void keyboard(unsigned char key, int x, int y)
 			switch (res)
 			{
 			case 5:
-
+				// Accept Request
+				AcceptRequest(wStringUser, wsRequests.at(0));
 				break;
 			case 6:
-
 				RemoveRequest(wStringUser, wsRequests.at(0));
 				break;
 			}
