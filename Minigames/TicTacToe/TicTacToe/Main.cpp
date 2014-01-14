@@ -24,12 +24,11 @@ typedef struct
 	int loose;
 }Game;
 
-float g_scale;
 
+float g_scale;
 bool requestSent = false;
 const char * stringVetor[2] = { "You won!", "You Loose!" };
 const char * stringHelp[2] = { "F1->New Game", "F10->Exit" };
-
 const float DEG2RAD = 3.14159 / 180;
 int WindowWidth = 600;
 int WindowHeight = 600;
@@ -618,6 +617,7 @@ void drawO(int x, int y)
 	}
 
 }
+/*callback display*/
 void display(void)
 {
 
@@ -627,6 +627,7 @@ void display(void)
 
 
 }
+/*callback to reshape the window (not working)*/
 void myReshape(int w, int h){
 
 	glViewport(0, 0, w, h);
@@ -896,7 +897,6 @@ int main(int argc, char **argv)
 	char fakeParam[] = "fake";
 	char *fakeargv[] = { fakeParam, NULL };
 	int fakeargc = 1;
-
 
 	initGameData();
 	glutInit(&fakeargc, fakeargv);
