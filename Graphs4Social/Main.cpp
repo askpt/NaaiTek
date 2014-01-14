@@ -595,6 +595,9 @@ void keyboard(unsigned char key, int x, int y)
 			case 5:
 				// Accept Request
 				AcceptRequest(wStringUser, wsRequests.at(0));
+				readGraphUser(model.regUser);
+				state.shortestPathActive = GL_FALSE;
+				state.strongestPathActive = GL_FALSE;
 				break;
 			case 6:
 				RemoveRequest(wStringUser, wsRequests.at(0));
