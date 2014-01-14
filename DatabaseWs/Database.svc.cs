@@ -7,6 +7,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Web.Helpers;
+using System.IO;
 
 namespace DatabaseWs
 {
@@ -83,6 +84,22 @@ namespace DatabaseWs
         {
             var doesPasswordMatch = Crypto.VerifyHashedPassword(hashedPassword, password);
             return doesPasswordMatch;
+        }
+
+        /// <summary>
+        /// Method to get the game version information
+        /// </summary>
+        /// <returns>the game version</returns>
+        public Message GetVersion()
+        {
+            Message ret;
+            TextReader tr = new StreamReader(@"C:\version.txt");
+            string version = tr.ReadLine();
+            tr.Close();
+
+            ret = new Message() { Status = "ok", Msg = version };
+
+            return ret;
         }
     }
 

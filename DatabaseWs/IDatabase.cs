@@ -32,5 +32,12 @@ namespace DatabaseWs
                     RequestFormat = WebMessageFormat.Json,
                     UriTemplate = "auth?user={user}&pass={pass}")]
         Message Authenticate(string user, string pass);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+                RequestFormat = WebMessageFormat.Json,
+                ResponseFormat = WebMessageFormat.Json,
+                UriTemplate = "version")]
+        Message GetVersion();
     }
 }
