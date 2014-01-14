@@ -806,7 +806,7 @@ void mouse(int btn, int mouseState, int x, int y){
 				wcout << L"User2: " + nodes[paths[state.pickedObjID - _MAX_PATHS_GRAPH].connection.nodef].user->name << endl;
 
 			}
-			else if (state.pickedObjID >= _MAX_NODES_GRAPH)
+			else if (state.pickedObjID > _MAX_NODES_GRAPH && state.pickedObjID < _MAX_PATHS_GRAPH)
 			{
 				//int mod = glutGetModifiers();
 
