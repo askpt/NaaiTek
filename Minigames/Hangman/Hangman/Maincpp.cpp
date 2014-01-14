@@ -125,6 +125,7 @@ void drawGameInstructions()
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, help[2].at(i));
 	glFlush();
 }
+/*callback display*/
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -351,6 +352,7 @@ void drawRectangleWithText(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
 
 
 }
+/*function to draw the complete word when user lost*/
 void drawCompleteWord()
 {
 	glColor3d(0.0, 3.0, 0.0);
@@ -705,6 +707,7 @@ void checkWord(string word, char c)
 
 	drawWord();
 }
+
 int main(int argc, char**argv)
 {
 	initGameData();
