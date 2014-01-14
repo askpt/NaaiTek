@@ -105,10 +105,10 @@ int main(int argc, char *argv[])
 	glutInitWindowSize(800, 600);
 
 	// getting the player
-	//player = argv[1];
+	player = argv[1];
 
 	// getting all requests (FIX THIS)
-	allRequests = { "Jose Cid" };
+	allRequests = { player };
 
 
 	// creating the main window

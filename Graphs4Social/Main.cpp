@@ -63,7 +63,7 @@ typedef	GLdouble Vertex[3];
 typedef	GLdouble Vector[4];
 
 typedef struct Keys_t{
-	GLboolean   w, a, s, d, up, down, tictactoe, z, f2;
+	GLboolean   w, a, s, d, up, down, z, minigameRandom, n;
 }Keys_t;
 
 typedef struct Camera{
@@ -167,7 +167,7 @@ void myInit(string user)
 
 	initModel();
 	initState();
-	state.keys.tictactoe = 0;
+	state.keys.minigameRandom = 0;
 
 }
 
@@ -503,7 +503,8 @@ void display(void)
 /* Where the keyboard keys use is defined */
 void keyboard(unsigned char key, int x, int y)
 {
-
+	int res;
+	std::string temp;
 	switch (key)
 	{
 	case 27:
@@ -567,6 +568,18 @@ void keyboard(unsigned char key, int x, int y)
 	case 'D':
 		state.keys.d = GL_TRUE;
 		break;
+	case 'n':
+	case 'N':
+		const char *call;
+		//sprintf_s(call, "NotificationsMenu.exe %s", model.regUser);
+		//cout << call << endl;
+		//cout << model.regUser << endl;
+		temp = std::string("NotificationsMenu.exe ") + model.regUser;
+		call = temp.c_str();
+
+		res = system(call);
+		cout << res << endl;
+		break;
 	case 'z':
 	case 'Z':
 		state.keys.z = !state.keys.z;
@@ -611,9 +624,6 @@ void SpecialUp(int key, int x, int y)
 	case GLUT_KEY_DOWN:
 		state.keys.down = GL_FALSE;
 		break;
-	case GLUT_KEY_F2:
-		state.keys.f2 = GL_FALSE;
-		break;
 	}
 
 }
@@ -627,11 +637,8 @@ void Special(int key, int x, int y){
 		state.shortestPathActive = GL_FALSE;
 		state.strongestPathActive = GL_FALSE;
 		break;
-	case GLUT_KEY_F2:
-		state.keys.f2 = GL_TRUE;
-		break;
 	case GLUT_KEY_F3:
-		state.keys.tictactoe = GL_TRUE;
+		state.keys.minigameRandom = GL_TRUE;
 		break;
 	case GLUT_KEY_UP:
 		state.keys.up = GL_TRUE;
@@ -641,15 +648,14 @@ void Special(int key, int x, int y){
 		break;
 	}
 
-	if (state.keys.tictactoe)
+	if (state.keys.minigameRandom)
 	{
-		state.keys.tictactoe = GL_FALSE;
+		state.keys.minigameRandom = GL_FALSE;
 		char ret[100];
 		srand(time(0));
 		int index = rand() % minigames.capacity() + 1;
 		sprintf_s(ret, minigames[index - 1].c_str());
 		int retN = system(ret);
-		cout << retN << endl;
 	}
 }
 
@@ -906,7 +912,7 @@ void main(int argc, char **argv)
 				printHelp();
 
 				glutMainLoop();
-				
+
 			}
 			else if (ret == 6)
 			{
