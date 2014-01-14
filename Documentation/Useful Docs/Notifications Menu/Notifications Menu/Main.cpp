@@ -5,7 +5,7 @@
 //  Created by João Carreira on 13/01/14.
 //  Copyright (c) 2014 João Carreira. All rights reserved.
 //
-
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 #include <stdlib.h>
@@ -18,6 +18,7 @@
 #endif
 
 #include "text3d.h"
+#include "Json.h"
 #include <string>
 #include <vector>
 
@@ -45,7 +46,7 @@ const char *stringVectorForRotatingCube[4] = { "NaaiTek", "NaaiTek", "NaaiTek", 
 int mainWindow;
 
 // player request
-string player;
+string request;
 vector<string> allRequests;
 
 // "button" accept request
@@ -91,11 +92,15 @@ void drawBackgroundAtScreenPosition(float x, float y, float z);
 void drawSolidWithTextAtScreenPosition(float w, float h, float x, float y, float z);
 void drawTextAtScreenPositionWithColor(char *str, float x, float y, float z, float color[]);
 
+// call WS
+bool checkIfStatusOk(wstring status);
+vector<wstring> GetFriendRequests(wstring user);
+vector<wstring> GetFriendGameRequests(wstring user);
 
 /**
 * main
 *
-*@return: 5, accepted request; 6, request denied; 7, decide later
+*@return: 5, accepted request; 6, request denied; 0, decide later
 */
 int main(int argc, char *argv[])
 {
@@ -104,11 +109,12 @@ int main(int argc, char *argv[])
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 
-	// getting the player
-	player = argv[1];
+	// getting the request
+	request = argv[1];
 
-	// getting all requests (FIX THIS)
-	allRequests = { player };
+	// getting all requests
+	//std::wstring wsTmp(player.begin(), player.end());
+	allRequests = { request };
 
 
 	// creating the main window
@@ -171,10 +177,10 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 			{
 				if (y > yMinAcceptRequest && y < yMaxAcceptRequest)
 				{
-					cout << "request accepted" << endl;
+					//cout << "request accepted" << endl;
 
 					// uncomment below when fully-working to get proper exit code
-					//exit(5);
+					exit(5);
 				}
 			}
 
@@ -183,9 +189,9 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 			{
 				if (y > yMinDenyRequest && y < yMaxDenyRequest)
 				{
-					cout << "request denied" << endl;
+					//cout << "request denied" << endl;
 					// uncomment below when fully-working to get proper exit code
-					//exit(6);
+					exit(6);
 				}
 			}
 
@@ -195,9 +201,9 @@ void handleMouseButtonClicks(int button, int state, int x, int y)
 				if (y > yMinDecideLater && y < yMaxDecideLater)
 				{
 					// add code to submit freind request
-					cout << "decide later" << endl;
+					//cout << "decide later" << endl;
 					// uncomment below when fully-working to get proper exit code
-					exit(7);
+					exit(0);
 				}
 			}
 		}
@@ -347,7 +353,7 @@ void drawRotatingCubeAtScreenPosition(float x, float y, float z)
 }
 
 
-void drawTitleWithPlayerName(float x, float y, float z, string player)
+void drawTitleWithPlayerName(float x, float y, float z, string request)
 {
 	glLoadIdentity();
 	glTranslatef(x, y, z);
@@ -362,7 +368,11 @@ void drawTitleWithPlayerName(float x, float y, float z, string player)
 	glColor3f(0.0f, 0.0f, 0.0f);
 
 	// string to present
-	string str = "Friend request from " + player;
+	/*char c_mb_str[80];
+	wcstombs(c_mb_str, &player[0], 80);
+	string s(c_mb_str);
+	string str = std::string("Friend request from ") + s;*/
+	string str = "Friend request from " + request;
 
 	glPushMatrix();
 	glTranslatef(0, 0, 1.5f / g_scale);
@@ -463,3 +473,85 @@ void cleanUp()
 	t3dCleanup();
 }
 
+
+bool checkIfStatusOk(wstring status)
+{
+	int retBool = true;
+
+	char c_mb_str[80];
+	wcstombs(c_mb_str, &status[0], 80);
+	string s(c_mb_str);
+	s[4] = 0;
+
+	char test[] = { '"', 'o', 'k', '"' };
+
+	for (size_t i = 0; i < 4; i++)
+	{
+		if (s[i] != test[i])
+		{
+			retBool = false;
+		}
+	}
+
+	return (retBool);
+}
+
+vector<wstring> GetFriendRequests(wstring user)
+{
+	vector<wstring> users;
+
+	wstring userWs(user.begin(), user.end());
+
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/check_requests?user=" + userWs;
+
+	json::value usersJs = RequestJSONValueAsync(url).get();
+	wstring status = usersJs[L"status"].to_string();
+
+	if (checkIfStatusOk(status))
+	{
+		users.resize(usersJs[L"users"].size());
+
+		int i = 0;
+		for (auto iter = usersJs[L"users"].begin(); iter != usersJs[L"users"].end(); ++iter)
+		{
+			users[i] = iter->second.as_string();
+			i++;
+		}
+	}
+	else
+	{
+		users.resize(0);
+	}
+
+	return users;
+}
+
+vector<wstring> GetFriendGameRequests(wstring user)
+{
+	vector<wstring> users;
+
+	wstring userWs(user.begin(), user.end());
+
+	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/check_game_requests?user=" + userWs;
+
+	json::value usersJs = RequestJSONValueAsync(url).get();
+	wstring status = usersJs[L"status"].to_string();
+
+	if (checkIfStatusOk(status))
+	{
+		users.resize(usersJs[L"users"].size());
+
+		int i = 0;
+		for (auto iter = usersJs[L"users"].begin(); iter != usersJs[L"users"].end(); ++iter)
+		{
+			users[i] = iter->second.as_string();
+			i++;
+		}
+	}
+	else
+	{
+		users.resize(0);
+	}
+
+	return users;
+}

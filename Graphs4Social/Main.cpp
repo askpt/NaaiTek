@@ -504,7 +504,15 @@ void display(void)
 void keyboard(unsigned char key, int x, int y)
 {
 	int res;
-	std::string temp;
+	std::string callInString;
+	std::wstring wStringUser(model.regUser.begin(), model.regUser.end());
+	vector<wstring> wsRequests = GetFriendRequests(wStringUser);
+	bool hasNotifications = false;
+	if (wsRequests.size() > 0)
+	{
+		hasNotifications = true;
+	}
+
 	switch (key)
 	{
 	case 27:
@@ -570,15 +578,30 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'n':
 	case 'N':
-		const char *call;
-		//sprintf_s(call, "NotificationsMenu.exe %s", model.regUser);
-		//cout << call << endl;
-		//cout << model.regUser << endl;
-		temp = std::string("NotificationsMenu.exe ") + model.regUser;
-		call = temp.c_str();
+		if (hasNotifications)
+		{
+			const char *call;
+			string request(wsRequests.at(0).begin(), wsRequests.at(0).end());
+			//sprintf_s(call, "NotificationsMenu.exe %s", model.regUser);
+			//cout << call << endl;
+			//cout << model.regUser << endl;
+			callInString = "NotificationsMenu.exe " + request;
+			call = callInString.c_str();
 
-		res = system(call);
-		cout << res << endl;
+			res = system(call);
+
+			switch (res)
+			{
+			case 5:
+
+				break;
+			case 6:
+
+				RemoveRequest(wStringUser, wsRequests.at(0));
+				break;
+			}
+		}
+		//cout << res << endl;
 		break;
 	case 'z':
 	case 'Z':
