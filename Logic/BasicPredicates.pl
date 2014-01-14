@@ -104,7 +104,8 @@ hasTag([Tag|_], Tag).
 hasTag([_|List], Tag):-hasTag(List, Tag).
 
 %create connections
-createConnection(UserA, UserB, ConnectionStrenght):-assert(connects(UserA, UserB, ConnectionStrenght, [])).
+createConnection(UserA, UserB, ConnectionStrenght):-not(isConnected(UserA, UserB)),
+	assert(connects(UserA, UserB, ConnectionStrenght, [])).
 
 %remove connections
 removeConnection(UserA, UserB):-(connects(UserA, UserB, Strenght, TagList),
