@@ -101,6 +101,18 @@ namespace DatabaseWs
 
             return ret;
         }
+
+
+        public int GetRegisteredUsers()
+        {
+            int ret = 0;
+            using (var db = new DatabaseAccess())
+            {
+                ret = db.GetNumberOfRegisteredUsers();
+            }
+
+            return ret;
+        }
     }
 
     /// <summary>

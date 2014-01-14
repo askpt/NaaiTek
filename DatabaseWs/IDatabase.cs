@@ -39,5 +39,12 @@ namespace DatabaseWs
                 ResponseFormat = WebMessageFormat.Json,
                 UriTemplate = "version")]
         Message GetVersion();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+                RequestFormat = WebMessageFormat.Json,
+                ResponseFormat = WebMessageFormat.Json,
+                UriTemplate = "numberusers")]
+        int GetRegisteredUsers();
     }
 }

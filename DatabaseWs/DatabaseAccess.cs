@@ -60,7 +60,7 @@ namespace DatabaseWs
         {
             User user = new User();
 
-            string queryString = "SELECT u.UserName, u.Email, u.Number, u.Country, u.City, u.BirthDate, "+
+            string queryString = "SELECT u.UserName, u.Email, u.Number, u.Country, u.City, u.BirthDate, " +
                                  "(SELECT Count(ut.TagId) " +
                                  "FROM dbo.AspNetUsers u, dbo.UserTags ut " +
                                  "WHERE u.UserName='" + username + "' AND u.Id = ut.UserID) AS countUserTags " +
@@ -87,6 +87,21 @@ namespace DatabaseWs
             }
 
             return user;
+        }
+
+        public int GetNumberOfRegisteredUsers()
+        {
+            int ret = 0;
+            string queryString = "select count(*) from AspNetUsers";
+
+            SqlCommand cmd = new SqlCommand(queryString, con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ret = (int)reader[0];
+            }
+
+            return ret;
         }
 
         /// <summary>
