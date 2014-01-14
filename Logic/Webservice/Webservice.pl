@@ -179,7 +179,8 @@ branch_and_bound(_Request) :-
 %create connection
 create_connection(_Request) :-
                 http_parameters(_Request, [personA(PersonA, []), personB(PersonB, []), strenght(Strenght, [])]),
-               (createConnection(PersonA, PersonB, Strenght),
+                atom_number(Strenght, X),
+               (createConnection(PersonA, PersonB, X),
                 prolog_to_json(message('connection created', 'ok'), JSON_Object);
                 prolog_to_json(message('connection not created', 'error'), JSON_Object)), 
         reply_json(JSON_Object).
