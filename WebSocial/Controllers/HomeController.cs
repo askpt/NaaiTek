@@ -110,9 +110,10 @@ namespace WebSocial.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult> InsertWord(string word)
         {
-            ViewBag.Message = "Palavra inserida com sucesso!";
+            ViewBag.Message = Resources.Resources.WordInsertedSuccessfully;
 
             await Services.AddWordToHangman(word);
             return View("Hangman");

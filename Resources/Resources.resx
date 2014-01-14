@@ -414,6 +414,9 @@
     <value>Hangman</value>
   </data>
   <data name="Insert" xml:space="preserve">
-    <value>Inserir</value>
+    <value>Insert</value>
+  </data>
+  <data name="WordInsertedSuccessfully" xml:space="preserve">
+    <value>Word inserted successfully!</value>
   </data>
 </root>

@@ -416,4 +416,7 @@ uma conta local para que possa autenticar-se sem um login externo.</value>
   <data name="Insert" xml:space="preserve">
     <value>Inserir</value>
   </data>
+  <data name="WordInsertedSuccessfully" xml:space="preserve">
+    <value>Palavra Inserida com sucesso!</value>
+  </data>
 </root>

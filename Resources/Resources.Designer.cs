@@ -539,7 +539,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inserir.
+        ///   Looks up a localized string similar to Insert.
         /// </summary>
         public static string Insert {
             get {
@@ -940,6 +940,15 @@ namespace Resources {
         public static string UserNameRequired {
             get {
                 return ResourceManager.GetString("UserNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word inserted successfully!.
+        /// </summary>
+        public static string WordInsertedSuccessfully {
+            get {
+                return ResourceManager.GetString("WordInsertedSuccessfully", resourceCulture);
             }
         }
         

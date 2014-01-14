@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Hangman";
+    ViewBag.Title = @Resources.Hangman;
 }
 
-<h2>Hangman</h2>
+<h2>@Resources.Hangman</h2>
 
 @using (Html.BeginForm("InsertWord", "Home"))
 {
     @Html.TextBox("Word")
-    <input type="submit" value="Insert" class="search-button" />
+    <input type="submit" value=@Resources.Insert class="search-button" />
 }
 
 @ViewBag.Message
