@@ -290,11 +290,41 @@ void drawText(Node node)
 	glFlush();
 }
 
+
+void drawNotifications(Node node, int nrFriendReq, int nrGameReq)
+{
+	char ret[100];
+	sprintf_s(ret, "You have %d requests! Press 'n' to see them!", nrFriendReq);
+	string notific = string(ret);
+
+	if (nrFriendReq != 0){
+		glRasterPos3f(node.x, node.y, node.z + node.width + 1.0f);
+		for (int i = 0; i < notific.size(); i++)
+		{
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, notific.at(i));
+		}
+	}
+
+	char ret2[100];
+	sprintf_s(ret2, "You have %d game requests! Press 'g' to play them!", nrGameReq);
+	string notificGames = string(ret2);
+
+	if (nrGameReq != 0){
+		glRasterPos3f(node.x, node.y, node.z + node.width + 2.0f);
+		for (int i = 0; i < notificGames.size(); i++)
+		{
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, notificGames.at(i));
+		}
+	}
+}
+
+
+
 /* Prepares the game to write the name */
 void drawBillboard(Node node)
 {
 	float modelview[16];
-	int i, j;
+	//int i, j;
 
 	// save the current modelview matrix
 	glPushMatrix();
@@ -307,9 +337,17 @@ void drawBillboard(Node node)
 
 	drawText(node);
 
+	wstring tmp(model.regUser.begin(), model.regUser.end());
+	if (node.user->name == tmp){
+		int nrFriendReq = GetFriendRequests(node.user->name).size();
+		int nrGameReq = GetFriendGameRequests(node.user->name).size();
+		drawNotifications(node, nrFriendReq, nrGameReq);
+	}
+
 	// restores the modelview matrix
 	glPopMatrix();
 }
+
 
 /* Calls the drawNode and the drawPath method
  * One time for each existant node and path*/
