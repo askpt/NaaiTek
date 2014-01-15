@@ -290,7 +290,7 @@ void drawText(Node node)
 	glFlush();
 }
 
-
+/* Draws the request notifications on the top of the node */
 void drawNotifications(Node node, int nrFriendReq, int nrGameReq)
 {
 	char ret[100];
@@ -317,8 +317,6 @@ void drawNotifications(Node node, int nrFriendReq, int nrGameReq)
 		}
 	}
 }
-
-
 
 /* Prepares the game to write the name */
 void drawBillboard(Node node)
@@ -444,8 +442,6 @@ int detectCameraColision(GLfloat xp, GLfloat yp, GLfloat zp){
 	}*/
 	return objid;
 }
-
-
 
 /* Used to see if the camera colides with some part of the graph */
 void Timer(int value)

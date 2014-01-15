@@ -19,8 +19,7 @@ Connection connections[_MAX_PATHS_GRAPH];
 
 using namespace std;
 
-//Node
-
+/* Adds the node to the nodes array */
 void addNode(Node node){
 	if (numNodes < _MAX_NODES_GRAPH){
 		nodes[numNodes] = node;
@@ -31,6 +30,7 @@ void addNode(Node node){
 	}
 }
 
+/* Deletes the node from the nodes array */
 void deleteNode(int indNode){
 	if (indNode >= 0 && indNode < numNodes){
 		for (int i = indNode; i < numNodes; nodes[i++] = nodes[i + i]);
@@ -41,14 +41,17 @@ void deleteNode(int indNode){
 	}
 }
 
+/* Prints the node coordinates */
 void printNode(Node node){
 	cout << "X:" << node.x << "Y:" << node.y << "Z:" << node.z << endl;
 }
 
+/* Prints all the nodes from the nodes list */
 void printNodes(){
 	for (int i = 0; i < numNodes; printNode(nodes[i++]));
 }
 
+/* Creates a node */
 Node createNode(float x, float y, float z, User *user){
 	Node node;
 	node.x = x;
@@ -58,6 +61,7 @@ Node createNode(float x, float y, float z, User *user){
 	return node;
 }
 
+/* Adds the path to the paths array */
 void addPath(Path path){
 	if (numPaths < _MAX_PATHS_GRAPH){
 		paths[numPaths] = path;
@@ -68,8 +72,7 @@ void addPath(Path path){
 	}
 }
 
-//Path
-
+/* Deletes the path from the paths array */
 void deletePath(int indPath){
 	if (indPath >= 0 && indPath < numPaths){
 		for (int i = indPath; i < numPaths; paths[i++] = paths[i + i]);
@@ -80,15 +83,18 @@ void deletePath(int indPath){
 	}
 }
 
+/* Prints the path corresponding nodes, strenght and width */
 void printPath(Path path){
 	cout << "Start node:" << path.connection.nodei << "End node:" << path.connection.nodef
 		<< "Strength:" << path.connection.strength << "Width:" << path.width << endl;
 }
 
+/* Prints all the paths from the paths list */
 void listPaths(){
 	for (int i = 0; i < numPaths; printPath(paths[i++]));
 }
 
+/* Creates a path */
 Path createPath(float width, Connection connection){
 	Path path;
 	path.connection = connection;
@@ -96,8 +102,7 @@ Path createPath(float width, Connection connection){
 	return path;
 }
 
-//Graph
-
+/* Saves the graph to a file */
 void saveGraph(){
 	ofstream myfile;
 
@@ -115,6 +120,7 @@ void saveGraph(){
 	myfile.close();
 }
 
+/* Saves the graph from a file */
 void readGraph(){
 
 	/*
@@ -143,17 +149,19 @@ void readGraph(){
 	}
 }
 
-
+/* Calculates the node width depending on the number of tags */
 float calcNodeWidth(int param)
 {
 	return (param + 2.5) * 0.3;
 }
 
+/* Calculates the path width depending on the connection strength */
 float calcPathWidth(int param)
 {
 	return (param + 1) * 0.25;
 }
 
+/* Reads the graph from the PROLOG WS depending on the Registered User */
 void readGraphUser(std::string user)
 {
 	wstring userWs(user.begin(), user.end());
@@ -169,6 +177,7 @@ void readGraphUser(std::string user)
 	buildGraph(graph, usersDim, userWs);
 }
 
+/* Reads the graph from the PROLOG WS depending on the Registered User and a Friend to the 3rd degree */
 void readCommonGraph(wstring user, wstring friendUser)
 {
 	utility::string_t url = L"http://uvm061.dei.isep.ipp.pt:5000/get_common_graph?personA=" + user + L"&personB=" + friendUser;
@@ -182,6 +191,10 @@ void readCommonGraph(wstring user, wstring friendUser)
 	buildGraph(graph, usersDim, user);
 }
 
+/* Actually fills the "nodes" and "paths" using:
+ * the graph of the registered user to the 2nd degree friends
+ * the userDim that is the number of users in the registered user graph
+ * the userWs that is the registered user converted to wide string */
 void buildGraph(json::value graph, json::value usersDim, wstring userWs)
 {
 	numNodes = graph[L"nodes"].size();
@@ -320,6 +333,7 @@ void buildGraph(json::value graph, json::value usersDim, wstring userWs)
 	}
 }
 
+/* Checks if the user credentials are correct */
 bool TryAuth(string username, string password)
 {
 	wstring userWs(username.begin(), username.end());
@@ -336,6 +350,7 @@ bool TryAuth(string username, string password)
 
 }
 
+/* Checks if the correct JSON was returned */
 bool checkIfStatusOk(wstring status)
 {
 	int retBool = true;
@@ -358,7 +373,7 @@ bool checkIfStatusOk(wstring status)
 	return (retBool);
 }
 
-
+/* Sends a friend request from the registered user to a possible friend */
 bool sendFriendRequest(wstring user, wstring friendUser)
 {
 	wstring userWs(user.begin(), user.end());
@@ -372,6 +387,7 @@ bool sendFriendRequest(wstring user, wstring friendUser)
 	return checkIfStatusOk(status);
 }
 
+/* Retrieves the shortest path from the registered user to a friend till the 2nd degree */
 vector<wstring> GetShortPath(wstring user, wstring friendUser)
 {
 	vector<wstring> path;
@@ -402,6 +418,7 @@ vector<wstring> GetShortPath(wstring user, wstring friendUser)
 	return path;
 }
 
+/* Retrieves the strongest path from the registered user to a friend till the 2nd degree */
 vector<wstring> GetStrongestPath(wstring user, wstring friendUser)
 {
 	vector<wstring> path;
@@ -432,6 +449,7 @@ vector<wstring> GetStrongestPath(wstring user, wstring friendUser)
 	return path;
 }
 
+/* Checks if the connection exists in path list */
 bool CheckIfConnectionExistsInPathList(vector<wstring> paths, wstring user1, wstring user2)
 {
 	bool ret = false;
@@ -448,6 +466,7 @@ bool CheckIfConnectionExistsInPathList(vector<wstring> paths, wstring user1, wst
 	return ret;
 }
 
+/* Gets the names of the mini-games that can be played */
 vector<string> GetMinigamesList()
 {
 	ifstream myfile;
@@ -469,12 +488,14 @@ vector<string> GetMinigamesList()
 	return minigames;
 }
 
+/* The registered user accepts the 'friendUser' as a friend */
 void SendRequest(wstring user, wstring friendUser)
 {
 	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/accept_response?personA=" + user + L"&personB=" + friendUser;
 	RequestJSONValueAsync(url).get();
 }
 
+/* Retrieves the friendships requests from the PROLOG WS */
 vector<wstring> GetFriendRequests(wstring user)
 {
 	vector<wstring> users;
@@ -505,6 +526,7 @@ vector<wstring> GetFriendRequests(wstring user)
 	return users;
 }
 
+/* Retrieves the game requests from the PROLOG WS */
 vector<wstring> GetFriendGameRequests(wstring user)
 {
 	vector<wstring> users;
@@ -535,6 +557,7 @@ vector<wstring> GetFriendGameRequests(wstring user)
 	return users;
 }
 
+/* Checks the current game version in the Windows WS */
 bool CheckGameVersion(string gameversion)
 {
 	wstring gameVersionWS(gameversion.begin(), gameversion.end());
@@ -548,18 +571,21 @@ bool CheckGameVersion(string gameversion)
 	return status.compare(gameVersionWS) == 0;
 }
 
+/* Removes/Denies the friendship request from the PROLOG WS */
 void RemoveRequest(wstring user, wstring friendUser)
 {
 	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/remove_request?personA=" + user + L"&personB=" + friendUser;
 	RequestJSONValueAsync(url).get();
 }
 
+/* Accepts the friendship request from the PROLOG WS */
 void AcceptRequest(wstring user, wstring friendUser)
 {
 	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/accept_response?personA=" + user + L"&personB=" + friendUser;
 	RequestJSONValueAsync(url).get();
 }
 
+/* Sends the game request to the PROLOG WS */
 void SendGameRequest(wstring user, wstring friendUser)
 {
 	wstring url = L"http://uvm061.dei.isep.ipp.pt:5000/game_response?personA=" + user + L"&personB=" + friendUser;
