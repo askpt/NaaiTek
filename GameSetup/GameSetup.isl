@@ -348,9 +348,13 @@
 		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{AAAE1674-12FA-404E-B526-396B0F428FCA}</td><td>MAZE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{E9971D51-9BEB-4412-BB9E-8E692C33D378}</td><td>TICTACTOE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{A230A625-AC35-4329-B0A5-811EA6FEB001}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>InGameMenu.exe</td><td>{F46B6FBE-5828-4F6D-9DF3-0E5CE2F898AF}</td><td>INSTALLDIR</td><td>2</td><td/><td>ingamemenu.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>MainMenu.exe</td><td>{19D08E67-6499-4B04-B8BB-937FEE77D82F}</td><td>INSTALLDIR</td><td>2</td><td/><td>mainmenu.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Maze.exe</td><td>{02706BF7-67E0-42E5-A6AC-28F4E04BDE0C}</td><td>MAZE</td><td>2</td><td/><td>maze.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>NotificationsMenu.exe</td><td>{E7265AA5-023F-47E5-9923-F751B8F15EEB}</td><td>INSTALLDIR</td><td>2</td><td/><td>notificationsmenu.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>TicTacToe.exe</td><td>{584559D5-7CB2-4BA7-A810-185980796C97}</td><td>TICTACTOE</td><td>2</td><td/><td>tictactoe.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>cpprest120_1_4.dll2</td><td>{6D344469-49B3-4F37-81FE-EC155209D2A6}</td><td>INSTALLDIR</td><td>2</td><td/><td>cpprest120_1_4.dll2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>cpprest120d_1_4.dll</td><td>{D6E5C8F4-A582-4283-AD88-CD966A78CF83}</td><td>HANGMAN</td><td>2</td><td/><td>cpprest120d_1_4.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>glut32.dll2</td><td>{36FE5365-27D1-4060-8AC8-17DE7A7F0BC3}</td><td>INSTALLDIR</td><td>2</td><td/><td>glut32.dll2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
@@ -1891,9 +1895,13 @@
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT3</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT4</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT5</td></row>
+		<row><td>AlwaysInstall</td><td>InGameMenu.exe</td></row>
+		<row><td>AlwaysInstall</td><td>MainMenu.exe</td></row>
 		<row><td>AlwaysInstall</td><td>Maze.exe</td></row>
+		<row><td>AlwaysInstall</td><td>NotificationsMenu.exe</td></row>
 		<row><td>AlwaysInstall</td><td>TicTacToe.exe</td></row>
 		<row><td>AlwaysInstall</td><td>cpprest120_1_4.dll2</td></row>
+		<row><td>AlwaysInstall</td><td>cpprest120d_1_4.dll</td></row>
 		<row><td>AlwaysInstall</td><td>glut32.dll2</td></row>
 	</table>
 
@@ -1911,16 +1919,23 @@
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>charset2</td><td>ISX_DEFAULTCOMPONENT5</td><td>charset</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\charset</td><td>1</td><td/></row>
 		<row><td>cpprest120_1_4.dll2</td><td>cpprest120_1_4.dll2</td><td>CPPRES~1.DLL|cpprest120_1_4.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\cpprest120_1_4.dll</td><td>1</td><td/></row>
+		<row><td>cpprest120d_1_4.dll</td><td>cpprest120d_1_4.dll</td><td>CPPRES~1.DLL|cpprest120d_1_4.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Debug\cpprest120d_1_4.dll</td><td>1</td><td/></row>
 		<row><td>example.graph2</td><td>ISX_DEFAULTCOMPONENT5</td><td>EXAMPL~1.GRA|example.graph</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\example.graph</td><td>1</td><td/></row>
 		<row><td>example_all.graph2</td><td>ISX_DEFAULTCOMPONENT5</td><td>EXAMPL~1.GRA|example_all.graph</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\example_all.graph</td><td>1</td><td/></row>
+		<row><td>gamemenu.1</td><td>ISX_DEFAULTCOMPONENT5</td><td>GameMenu.1</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\GameMenu.1</td><td>1</td><td/></row>
 		<row><td>glut32.dll2</td><td>glut32.dll2</td><td>glut32.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\glut32.dll</td><td>1</td><td/></row>
+		<row><td>graph.bmp</td><td>ISX_DEFAULTCOMPONENT5</td><td>graph.bmp</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\graph.bmp</td><td>1</td><td/></row>
 		<row><td>graphs4social.exe2</td><td>Graphs4Social.exe2</td><td>GRAPHS~1.EXE|Graphs4Social.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\Graphs4Social.exe</td><td>1</td><td/></row>
 		<row><td>h_off.pl2</td><td>ISX_DEFAULTCOMPONENT5</td><td>h-off.pl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\h-off.pl</td><td>1</td><td/></row>
 		<row><td>hangman.exe</td><td>Hangman.exe</td><td>Hangman.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\Minigames\Hangman\Hangman.exe</td><td>1</td><td/></row>
+		<row><td>ingamemenu.exe</td><td>InGameMenu.exe</td><td>INGAME~1.EXE|InGameMenu.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\InGameMenu.exe</td><td>1</td><td/></row>
+		<row><td>mainmenu.exe</td><td>MainMenu.exe</td><td>MainMenu.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\MainMenu.exe</td><td>1</td><td/></row>
 		<row><td>maze.12</td><td>ISX_DEFAULTCOMPONENT5</td><td>Maze.1</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\Maze.1</td><td>1</td><td/></row>
 		<row><td>maze.exe</td><td>Maze.exe</td><td>Maze.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\Minigames\Maze\Maze.exe</td><td>1</td><td/></row>
 		<row><td>minigames.config2</td><td>ISX_DEFAULTCOMPONENT5</td><td>MINIGA~1.CON|minigames.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\minigames.config</td><td>1</td><td/></row>
 		<row><td>mz_off.pl2</td><td>ISX_DEFAULTCOMPONENT5</td><td>mz_off.pl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\mz_off.pl</td><td>1</td><td/></row>
+		<row><td>notificationsmenu.1</td><td>ISX_DEFAULTCOMPONENT5</td><td>NOTIFI~1.1|NotificationsMenu.1</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\NotificationsMenu.1</td><td>1</td><td/></row>
+		<row><td>notificationsmenu.exe</td><td>NotificationsMenu.exe</td><td>NOTIFI~1.EXE|NotificationsMenu.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\NotificationsMenu.exe</td><td>1</td><td/></row>
 		<row><td>sidthekid.wav2</td><td>ISX_DEFAULTCOMPONENT5</td><td>SIDTHE~1.WAV|SidTheKid.wav</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\SidTheKid.wav</td><td>1</td><td/></row>
 		<row><td>tictactoe.exe</td><td>TicTacToe.exe</td><td>TICTAC~1.EXE|TicTacToe.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\Minigames\TicTacToe\TicTacToe.exe</td><td>1</td><td/></row>
 		<row><td>ttt_off.pl2</td><td>ISX_DEFAULTCOMPONENT5</td><td>ttt-off.pl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\andre_000\Documents\Repositories\NaaiTek\Release\ttt-off.pl</td><td>1</td><td/></row>
@@ -2077,9 +2092,13 @@
 		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_DE68CAD3_A053_4B2B_89DC_6456B0BB5E7F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_2487A398_2909_440D_879E_8E7EBF63F884_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_C698AD47_82F7_4552_A359_2354F1F4895E_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>InGameMenu.exe</td><td/><td/><td>_824F6C23_5DFF_428A_A265_0280DBD0CAC5_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>MainMenu.exe</td><td/><td/><td>_55C7695C_2905_48A0_AC2B_C37A0B84E657_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Maze.exe</td><td/><td/><td>_17F5A8EB_6874_481C_913B_33D733EBCD5B_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>NotificationsMenu.exe</td><td/><td/><td>_18404FB3_3322_459C_819B_AE7DF8E18242_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>TicTacToe.exe</td><td/><td/><td>_C48AAF6B_5E19_4EFD_A579_9928DB94403D_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>cpprest120_1_4.dll2</td><td/><td/><td>_25A934EA_87C9_4182_8F6E_04EFE055A1C7_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>cpprest120d_1_4.dll</td><td/><td/><td>_BA2C5B16_AA36_4836_88B3_235117CC69A7_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>glut32.dll2</td><td/><td/><td>_2FCEDB4F_77CD_49C4_A978_F07258C82EA3_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
